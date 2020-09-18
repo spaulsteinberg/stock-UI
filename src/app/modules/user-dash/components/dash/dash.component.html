@@ -1,0 +1,11 @@
+<div class="success-content" *ngIf="!isError; else errBlock">
+    <ul *ngIf="watchList.length > 0; else emptyBlock">
+        <li *ngFor="let stock of watchList">{{stock}}</li>
+    </ul>
+    <ng-template #emptyBlock>
+        <p>No stocks added yet!</p>
+    </ng-template>
+</div>
+<ng-template #errBlock>
+    <p class="text-danger">An error occurred fetching stocks. Please reload the page and try again.</p>
+</ng-template>

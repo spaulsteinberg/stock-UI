@@ -15,7 +15,16 @@ export class RegisterUserService {
     return this.http.post<any>(registerUrl, formData).pipe(catchError(this.errorRegisterUser));
   }
 
+  loginUser(formData){
+    const loginUrl = `${this._url}/login`;
+    return this.http.post<any>(loginUrl, formData).pipe(catchError(this.errorLogin));
+  }
+
   errorRegisterUser(error: HttpErrorResponse){
     return throwError(error || "Something went wrong registering the user");
+  }
+
+  errorLogin(error: HttpErrorResponse){
+    return throwError(error.message || "Something went wrong logging in. Please try again.");
   }
 }

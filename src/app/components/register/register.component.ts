@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { RegisterUserService } from 'src/app/shared/services/register-user.service';
+import {ThemePalette} from '@angular/material/core';
+import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-register',
@@ -8,7 +11,7 @@ import { RegisterUserService } from 'src/app/shared/services/register-user.servi
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  constructor(private fb: FormBuilder, private _register: RegisterUserService) { }
+  constructor(private fb: FormBuilder, private _register: RegisterUserService, private router: Router) { }
 
 
   registerForm = this.fb.group({
@@ -17,7 +20,10 @@ export class RegisterComponent implements OnInit {
   });
   errorOccurred:boolean = false;
   errorMessage:string;
-  
+  successMessage:string;
+  mode: ProgressSpinnerMode = "indeterminate";
+  color: ThemePalette = "warn";
+  reqCompleted:boolean = true;
   ngOnInit(): void {
   }
 
@@ -29,6 +35,7 @@ export class RegisterComponent implements OnInit {
   }
 
   submitRegisterUserData(){
+    this.reqCompleted = false;
     this.errorOccurred = false;
     let objSend = {
       username: this.registerForm.get('username').value,
@@ -36,14 +43,25 @@ export class RegisterComponent implements OnInit {
     };
     this._register.registerUser(objSend)
       .subscribe({
-        next: (data) => console.log(data),
+        next: (response) => {
+          this.successMessage = "Registered successfully!";
+          localStorage.removeItem('username');
+          localStorage.setItem('token', response.token); //store the jwt token
+          localStorage.setItem('username', this.registerForm.get('username').value);
+          this.registerForm.reset();
+          this.router.navigate(['/dash']);
+        },
         error: (error) => {
           this.errorOccurred = true;
+          this.reqCompleted = true;
           this.errorMessage = error.status === 401 ? 
           "Username already exists. Please choose another and try again." : 
-          "Something went wrong registering you. Please try again."
+          "Something went wrong registering you. Please try again.";
         },
-        complete: () => console.log("Done.")
+        complete: () => {
+          this.reqCompleted = true;
+          console.log("Done.");
+        }
       });
   }
 
