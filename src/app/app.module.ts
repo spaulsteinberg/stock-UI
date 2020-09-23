@@ -12,9 +12,11 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { UserDashModule } from './modules/user-dash/UserDashboard.module';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AuthGuard } from './auth.guard';
+import { TokenInterceptorService } from './shared/services/token-interceptor.service';
 
 
 
@@ -38,7 +40,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     UserDashModule,
     MatProgressSpinnerModule
   ],
-  providers: [],
+  providers: [AuthGuard, {
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptorService,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

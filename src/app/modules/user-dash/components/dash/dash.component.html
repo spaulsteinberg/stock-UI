@@ -1,11 +1,47 @@
-<div class="success-content" *ngIf="!isError; else errBlock">
-    <ul *ngIf="watchList.length > 0; else emptyBlock">
-        <li *ngFor="let stock of watchList">{{stock}}</li>
-    </ul>
-    <ng-template #emptyBlock>
-        <p>No stocks added yet!</p>
-    </ng-template>
+<div class="row">
+    <!-- cols for 'MyList' -->
+    <div class="col col-lg-3">
+        <div class="success-content" *ngIf="!isError; else errBlock">
+            <ul *ngIf="finishedLoadingFlag === true; else emptyBlock">
+                <li *ngFor="let quote of quotes">{{renderStockItem(quote.companyName, quote.symbol)}}</li>
+            </ul>
+            <ng-template #emptyBlock>
+                <p *ngIf="quotes.length > 0">No stocks added yet!</p>
+            </ng-template>
+        </div>
+        <ng-template #errBlock>
+            <p class="text-danger">{{errorOnList}}</p>
+        </ng-template>
+    </div>
+    <!-- cols for search and other components-->
+    <div class="col col-lg-6 offset-lg-1">
+        <!-- if user wants to add give them all stock options, or else only the ones they already have added -->
+        <mat-form-field appearance="fill" *ngIf="selectBoxAction === 'Add' || selectBoxAction === undefined; else deleteField">
+            <mat-label>Select A Quote</mat-label>
+            <mat-select [(ngModel)]="selectBoxValue">
+              <mat-option *ngFor="let quote of fillerQuotes" [value]="quote">
+                {{quote}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <ng-template #deleteField>
+            <mat-form-field appearance="fill">
+                <mat-label>Select A Quote</mat-label>
+                <mat-select [(ngModel)]="selectBoxValue">
+                  <mat-option *ngFor="let quote of quotes" [value]="quote.symbol">
+                    {{quote.symbol}}
+                  </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </ng-template>
+        <mat-form-field class="mx-2" appearance="fill">
+            <mat-label>Action</mat-label>
+            <mat-select [(ngModel)]="selectBoxAction">
+                <mat-option *ngFor="let action of actions" [value]="action">
+                {{action}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <button class="btn btn-primary mx-3" type="submit" [disabled]="selectBoxValue === undefined || selectBoxAction === undefined" (click)="executeAction()">Execute</button>
+    </div>
 </div>
-<ng-template #errBlock>
-    <p class="text-danger">An error occurred fetching stocks. Please reload the page and try again.</p>
-</ng-template>

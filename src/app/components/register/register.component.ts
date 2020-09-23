@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { RegisterUserService } from 'src/app/shared/services/register-user.service';
 import {ThemePalette} from '@angular/material/core';
 import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
+import * as $ from 'jquery/dist/jquery.min.js';
 
 @Component({
   selector: 'app-register',
@@ -44,10 +45,10 @@ export class RegisterComponent implements OnInit {
     this._register.registerUser(objSend)
       .subscribe({
         next: (response) => {
+          console.log(response);
           this.successMessage = "Registered successfully!";
-          localStorage.removeItem('username');
           localStorage.setItem('token', response.token); //store the jwt token
-          localStorage.setItem('username', this.registerForm.get('username').value);
+          localStorage.setItem('u', response.id);
           this.registerForm.reset();
           this.router.navigate(['/dash']);
         },

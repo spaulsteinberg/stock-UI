@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { DashboardService } from 'src/app/shared/services/dashboard.service';
+import { ListServiceService } from '../../shared/services/list-service.service';
+import { IQuote } from '../../shared/models/IQuote';
+import { BackendService } from '../../shared/services/backend.service';
+import * as $ from 'jquery/dist/jquery.min.js';
+import * as toastr from 'toastr';
 
 @Component({
   selector: 'app-dash',
@@ -8,13 +14,22 @@ import { DashboardService } from 'src/app/shared/services/dashboard.service';
 })
 export class DashComponent implements OnInit {
 
-  constructor(private _dash: DashboardService) { }
+  constructor(private _dash: DashboardService, 
+              private router: Router, 
+              private _stocks: ListServiceService,
+              private _backend: BackendService) { }
   watchList = [];
   isError:boolean = false;
+  errorOnList:string;
+  quotes:IQuote[] = [];
+  finishedLoadingFlag:boolean = false;
   ngOnInit(): void {
     this._dash.getUserList()
     .subscribe(response => {
-      if (response.stocksTracking !== null || response.stocksTracking !== undefined){
+      if (response === null || response === undefined){
+        console.log("Nothing in response to dash");
+      }
+      else if (response.stocksTracking !== null || response.stocksTracking !== undefined){
         this.watchList = response.stocksTracking;
       }
       else {
@@ -22,8 +37,98 @@ export class DashComponent implements OnInit {
       }
       this.isError = false;
     },
-    error => this.isError = true,
-    () => console.log("Stock list req complete."));
+    error => {
+      this.isError = true;
+      if (error.status === 401) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('u');
+        this.router.navigate(['/login']);
+      }
+      this.errorOnList = error.status === 500 ? "Server error. Please login and try again." : "Error fetching stocks.";
+    },
+    () => {
+      this.getWatchList();
+      this.finishedLoadingFlag = true;
+    });
   }
 
+  getWatchList(){
+    this.watchList.forEach(element => {
+      this._stocks.getUserListQuotes(element)
+          .subscribe
+          (quote => {
+            console.log(quote);
+            let q = new IQuote(quote.companyName, quote.symbol, quote.iexRealtimePrice, quote.change, quote.changePercent);
+            this.quotes.push(q);
+          },
+          error => {
+            this.isError = true;
+            this.errorOnList = "Error fetching stock quotes.";
+          },
+          () => console.log("Complete."))
+    });
+  }
+
+  renderStockItem(fullName:string, symbol:string):string {
+    return `${fullName} (${symbol})`;
+  }
+
+  /***********************Testing stuff */
+
+  fillerQuotes = ['JPM', 'WDC', 'AAPL', 'WFC', 'UBER', 'LYFT', 'WMT', 'DAL', 'ROKU'];
+  actions = ['Add', 'Remove'];
+  selectBoxValue;
+  selectBoxAction;
+  isAddError:boolean = false;
+  executeAction(){
+    console.log(this.selectBoxValue);
+    if (this.selectBoxAction === 'Add'){
+      this._backend.addStockToUserList(this.selectBoxValue)
+      .subscribe(
+        data => {
+          this.toastSuccessAdd(this.selectBoxValue);
+        },
+        error => {
+          if (error.status === 400){
+            this.isAddError = true;
+            this.toastErrorAdd(this.selectBoxValue);
+          }
+          if (error.status === 401) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('u');
+            this.router.navigate(['/login']);
+          }
+        },
+        () => console.log("Patch Complete"));
+    }
+    else {
+      this._backend.deleteFromUserList(this.selectBoxValue)
+      .subscribe(
+        data => this.toastSuccessDelete(this.selectBoxValue),
+        error => this.toastErrorDelete(this.selectBoxValue),
+        () => console.log("Done w delete")
+      )
+    }
+  }
+
+  toastErrorAdd(value){
+    $(function(){
+      toastr.error(`${value} already in watch list!`, 'Cannot add stock');
+    });
+  }
+  toastSuccessAdd(value){
+    $(function(){
+      toastr.success(`${value} added to watch list`, 'Stock added');
+    });
+  }
+  toastErrorDelete(value){
+    $(function(){
+      toastr.error(`Failed to delete ${value}`, 'Deletion Failure');
+    });
+  }
+  toastSuccessDelete(value){
+    $(function(){
+      toastr.info(`Deleted ${value}`, 'Item deleted');
+    });
+  }
 }

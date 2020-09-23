@@ -1,5 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -8,7 +9,7 @@ import { catchError } from 'rxjs/operators';
 })
 export class RegisterUserService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
   private _url = "http://localhost:3000/api";
   registerUser(formData){
     const registerUrl = `${this._url}/register`;
@@ -18,6 +19,23 @@ export class RegisterUserService {
   loginUser(formData){
     const loginUrl = `${this._url}/login`;
     return this.http.post<any>(loginUrl, formData).pipe(catchError(this.errorLogin));
+  }
+
+  // double negation: localStorage.get() -> val, !local -> inverted bool, !!local -> true bool value
+  isUserLoggedIn(){
+    return !!localStorage.getItem('token');
+  }
+
+  // return the token
+  getToken(){
+    return localStorage.getItem('token');
+  }
+
+  //log the user out
+  logoutUser(){
+    localStorage.removeItem('token');
+    localStorage.removeItem('u');
+    this.router.navigate(['/login']);
   }
 
   errorRegisterUser(error: HttpErrorResponse){

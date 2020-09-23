@@ -40,9 +40,8 @@ export class LoginComponent implements OnInit {
     this._login.loginUser(objSend).subscribe({
       next: (response) => {
         console.log(response);
-        localStorage.removeItem('username'); // remove the old username if exists
         localStorage.setItem('token', response.token);
-        localStorage.setItem('username', this.loginForm.get('username').value);
+        localStorage.setItem('u', response.id);
         this.loginForm.reset();
         this.router.navigate(['/dash']);
       },

@@ -4,8 +4,9 @@
     <a class="navbar-brand" routerLinkActive="active" routerLink="dash">Dashboard</a>
     <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-            <a class="navbar-brand" routerLink="login" routerLinkActive="active">Login</a>
-            <a class="navbar-brand" routerLink="register" routerLinkActive="active">Register</a>
+            <a class="navbar-brand" *ngIf="!_auth.isUserLoggedIn()" routerLink="login" routerLinkActive="active">Login</a>
+            <a class="navbar-brand" *ngIf="!_auth.isUserLoggedIn()" routerLink="register" routerLinkActive="active">Register</a>
+            <a class="navbar-brand" *ngIf="_auth.isUserLoggedIn()" (click)="_auth.logoutUser()" style="color:white">Logout</a>
         </li>
     </ul>
 </nav>
