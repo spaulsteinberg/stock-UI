@@ -6,6 +6,7 @@ import { IQuote } from '../../shared/models/IQuote';
 import { BackendService } from '../../shared/services/backend.service';
 import * as $ from 'jquery/dist/jquery.min.js';
 import * as toastr from 'toastr';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-dash',
@@ -24,8 +25,13 @@ export class DashComponent implements OnInit {
   quotes:IQuote[] = [];
   finishedLoadingFlag:boolean = false;
   ngOnInit(): void {
+    this.getUserList();
+  }
+
+  getUserList(){
     this._dash.getUserList()
     .subscribe(response => {
+      console.log("I am the response");
       if (response === null || response === undefined){
         console.log("Nothing in response to dash");
       }
@@ -47,12 +53,14 @@ export class DashComponent implements OnInit {
       this.errorOnList = error.status === 500 ? "Server error. Please login and try again." : "Error fetching stocks.";
     },
     () => {
+      console.log("here after update");
       this.getWatchList();
       this.finishedLoadingFlag = true;
     });
   }
 
   getWatchList(){
+    this.quotes = [];
     this.watchList.forEach(element => {
       this._stocks.getUserListQuotes(element)
           .subscribe
@@ -99,14 +107,17 @@ export class DashComponent implements OnInit {
             this.router.navigate(['/login']);
           }
         },
-        () => console.log("Patch Complete"));
+        () => {
+          console.log("Patch Complete");
+          this.getUserList();
+        });
     }
     else {
       this._backend.deleteFromUserList(this.selectBoxValue)
       .subscribe(
         data => this.toastSuccessDelete(this.selectBoxValue),
         error => this.toastErrorDelete(this.selectBoxValue),
-        () => console.log("Done w delete")
+        () => this.getUserList()
       )
     }
   }
@@ -130,5 +141,8 @@ export class DashComponent implements OnInit {
     $(function(){
       toastr.info(`Deleted ${value}`, 'Item deleted');
     });
+  }
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.quotes, event.previousIndex, event.currentIndex);
   }
 }
