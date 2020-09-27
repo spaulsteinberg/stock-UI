@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { RegisterUserService } from 'src/app/shared/services/register-user.service';
 import {ThemePalette} from '@angular/material/core';
 import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
-import * as $ from 'jquery/dist/jquery.min.js';
+import { validatePassword } from '../../shared/validators/password.validator'
 
 @Component({
   selector: 'app-register',
@@ -17,7 +17,7 @@ export class RegisterComponent implements OnInit {
 
   registerForm = this.fb.group({
     username: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(15)]],
-    password: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(15)]]
+    password: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(15), validatePassword]]
   });
   errorOccurred:boolean = false;
   errorMessage:string;

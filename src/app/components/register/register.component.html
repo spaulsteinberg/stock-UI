@@ -22,6 +22,7 @@
                             <small class="text-danger" *ngIf="password.errors?.required">Password field is required</small>
                             <small class="text-danger" *ngIf="password.errors?.minlength">Must be at least 5 characters</small>
                             <small class="text-danger" *ngIf="password.errors?.maxlength">Cannot be more than 15 characters</small>
+                            <small class="text-danger" *ngIf="password.errors?.notValid">{{password.errors?.notValid.value}}</small>
                         </span>
                     </div>
                     <div class="form-group">
