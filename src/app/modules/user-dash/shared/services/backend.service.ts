@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
+/* Service for server-side calls */
 export class BackendService {
 
   constructor(private http: HttpClient) { }

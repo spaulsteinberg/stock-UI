@@ -20,6 +20,11 @@ export class ListServiceService {
     return this.http.get<any>(url).pipe(catchError(this.errorOnQuotes));
   }
 
+  getIndividualQuote(symbol){
+    const url = `https://cloud.iexapis.com/v1/stock/${symbol}/quote?token=pk_37940397ebe547018bb0721e95c37432`;
+    return this.http.get<any>(url);
+  }
+
   errorOnQuotes(error: HttpErrorResponse){
     return throwError(error.message || "Error retrieving quotes.");
   }

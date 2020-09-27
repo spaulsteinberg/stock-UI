@@ -94,7 +94,21 @@ export class DashComponent implements OnInit {
       this._backend.addStockToUserList(this.selectBoxValue)
       .subscribe(
         data => {
-          this.toastSuccessAdd(this.selectBoxValue);
+          this._stocks.getIndividualQuote(this.selectBoxValue)
+          .toPromise()
+          .then(quote => {
+            console.log("quote is:", quote);
+            let q = new IQuote(quote.companyName, quote.symbol, quote.iexRealtimePrice, quote.change, quote.changePercent);
+            this.quotes.push(q);
+            this.toastSuccessAdd(this.selectBoxValue);
+          })
+          .catch(error => {
+            console.log(error);
+            this.toastPartialSuccess(this.selectBoxValue);
+          })
+          .then(() => {
+            console.log("Promise complete.");
+          })
         },
         error => {
           if (error.status === 400){
@@ -108,16 +122,24 @@ export class DashComponent implements OnInit {
           }
         },
         () => {
-          console.log("Patch Complete");
-          this.getUserList();
+          console.log("Patch Complete")
         });
     }
     else {
       this._backend.deleteFromUserList(this.selectBoxValue)
       .subscribe(
-        data => this.toastSuccessDelete(this.selectBoxValue),
+        data => {
+          for (let i = 0; i < this.quotes.length; i++){
+            if (this.selectBoxValue === this.quotes[i].symbol){
+              this.quotes.splice(i, 1);
+              this.toastSuccessDelete(this.selectBoxValue);
+              break;
+            }
+          }
+          console.log(this.quotes);
+        },
         error => this.toastErrorDelete(this.selectBoxValue),
-        () => this.getUserList()
+        () => console.log("Delete complete")
       )
     }
   }
@@ -141,6 +163,13 @@ export class DashComponent implements OnInit {
     $(function(){
       toastr.info(`Deleted ${value}`, 'Item deleted');
     });
+  }
+  //success for db, failure adding to real-time list. on a refresh it will show up
+  toastPartialSuccess(value){
+    $(function(){
+      toastr.warning(`${value} added to list but failed rendering. Please refresh.`);
+      
+    })
   }
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.quotes, event.previousIndex, event.currentIndex);
