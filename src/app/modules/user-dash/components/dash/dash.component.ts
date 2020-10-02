@@ -14,9 +14,9 @@ export class DashComponent implements OnInit {
   constructor(private router: Router,
               private _dash: DashboardService,
               public _stocks: ListServiceService){ }
-  // hydrate the service
+  // hydrate the service only init once
   ngOnInit(){
-    this.getUserList();
+    if (this._stocks.getQuotes() === undefined) this.getUserList();
   }
 
   watchList = [];
@@ -25,6 +25,7 @@ export class DashComponent implements OnInit {
   quotes:IQuote[] = [];
   finishedLoadingFlag:boolean = false;
   getUserList(){
+    console.log("here");
     // get initial user list from DB
     this._dash.getUserList()
     .subscribe

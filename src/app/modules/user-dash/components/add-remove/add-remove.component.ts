@@ -19,10 +19,9 @@ export class AddRemoveComponent implements OnInit {
     private _stocks: ListServiceService,
     private _backend: BackendService) { }
 
-    watchList = [];
-    errorOnList:string;
-    quotes:IQuote[] = [];
-    finishedLoadingFlag:boolean = true;
+
+  quotes:IQuote[] = [];
+  finishedLoadingFlag:boolean = true;
 
   ngOnInit(): void {
     // protect against direct navigation
@@ -59,7 +58,7 @@ export class AddRemoveComponent implements OnInit {
         console.log("quote is:", quote);
         let q = new IQuote(quote.companyName, quote.symbol, quote.iexRealtimePrice, quote.change, quote.changePercent);
         this.quotes.push(q);
-        this._stocks.updateQuoteList(this.quotes);
+        this._stocks.updateQuoteList(this.quotes); //update shared quote list
         this.toastSuccessAdd(this.selectBoxValue);
       })
       .catch(error => {
