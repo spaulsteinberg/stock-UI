@@ -6,18 +6,42 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { RegisterComponent } from './components/register/register.component';
+import { AddRemoveComponent } from './modules/user-dash/components/add-remove/add-remove.component';
 import { DashComponent } from './modules/user-dash/components/dash/dash.component';
 import { UserDashModule } from './modules/user-dash/UserDashboard.module';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full'},
-  { path: 'home', component: HomeComponent },
-  { path: 'about', component: AboutComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'dash', component: DashComponent, canActivate: [AuthGuard] },
-  { path: '**', component: PageNotFoundComponent }
+  { 
+    path: '', 
+    redirectTo: '/home', 
+    pathMatch: 'full'
+  },
+  { 
+    path: 'home', 
+    component: HomeComponent 
+  },
+  { 
+    path: 'about', 
+    component: AboutComponent 
+  },
+  { 
+    path: 'register', 
+    component: RegisterComponent 
+  },
+  { 
+    path: 'login', 
+    component: LoginComponent 
+  },
+  {
+    path: 'dash',
+    loadChildren: () => import('./modules/user-dash/UserDashboard.module').then(m => m.UserDashModule),
+    canActivate: [AuthGuard]
+  },
+  { 
+    path: '**', 
+    component: PageNotFoundComponent 
+  }
 ];
 
 @NgModule({

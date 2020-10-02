@@ -1,4 +1,3 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 
@@ -13,10 +12,10 @@ import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { UserDashModule } from './modules/user-dash/UserDashboard.module';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthGuard } from './auth.guard';
 import { TokenInterceptorService } from './shared/services/token-interceptor.service';
+import { SharedModule } from './shared/shared/shared.module';
 
 
 
@@ -31,13 +30,12 @@ import { TokenInterceptorService } from './shared/services/token-interceptor.ser
     LoginComponent
   ],
   imports: [
-    BrowserModule,
+    SharedModule,
     AppRoutingModule,
     MatProgressBarModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    UserDashModule,
     MatProgressSpinnerModule
   ],
   providers: [AuthGuard, {

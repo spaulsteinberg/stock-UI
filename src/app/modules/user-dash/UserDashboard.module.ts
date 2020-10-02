@@ -2,20 +2,20 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashComponent } from './components/dash/dash.component';
 import { MatSelectModule } from '@angular/material/select';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import { FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { AddRemoveComponent } from './components/add-remove/add-remove.component';
+import { DashRoutingModule } from './dash-routing.module';
+
 
 @NgModule({
-  declarations: [DashComponent],
+  declarations: [DashComponent, AddRemoveComponent],
   imports: [
     CommonModule,
-    BrowserModule,
-    BrowserAnimationsModule,
+    DashRoutingModule,
     MatSelectModule,
     FormsModule,
-    DragDropModule
+    DragDropModule,
   ],
   exports: [
     DashComponent

@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpBackend } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError } from 'rxjs/operators';
-import { throwError, pipe } from 'rxjs';
+import { throwError, pipe, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +9,9 @@ import { throwError, pipe } from 'rxjs';
 export class ListServiceService {
 
   private http: HttpClient;
+  private _base = "https://cloud.iexapis.com/v1/stock";
+  private _token = "pk_37940397ebe547018bb0721e95c37432";
+  private _sandboxToken = "Tpk_fd6c779103b3400b96861977097e17de";
   //http backend will ignore HTTP_INTERCEPTORS from core module
   constructor(private handler: HttpBackend){
     this.http = new HttpClient(handler);
@@ -16,13 +19,20 @@ export class ListServiceService {
   //
   //https://sandbox.iexapis.com/stable/stock/${symbol}/quote?token=Tpk_fd6c779103b3400b96861977097e17de
   getUserListQuotes(symbol){
-    const url = `https://cloud.iexapis.com/v1/stock/${symbol}/quote?token=pk_37940397ebe547018bb0721e95c37432`;
+    const url = `${this._base}/${symbol}/quote?token=${this._token}`;
     return this.http.get<any>(url).pipe(catchError(this.errorOnQuotes));
   }
 
   getIndividualQuote(symbol){
-    const url = `https://cloud.iexapis.com/v1/stock/${symbol}/quote?token=pk_37940397ebe547018bb0721e95c37432`;
+    const url = `${this._base}/${symbol}/quote?token=${this._token}`;
     return this.http.get<any>(url);
+  }
+
+  // get a batch list of quotes...stocks need to go in comma separated (hence join())
+  getBatchQuotes(symbolList: string[]): Observable<any>{
+    const batchSymbols = symbolList.join();
+    const url = `${this._base}/market/batch?&types=quote&symbols=${batchSymbols}&token=${this._token}`;
+    return this.http.get<any>(url).pipe(catchError(this.errorOnQuotes));
   }
 
   errorOnQuotes(error: HttpErrorResponse){
