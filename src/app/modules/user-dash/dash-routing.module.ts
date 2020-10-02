@@ -15,7 +15,7 @@ const routes: Routes = [
         ]*/
     },
     {
-        path: 'dash/configstocks',
+        path: 'configstocks',
         component: AddRemoveComponent
     }
 ]; // sets up routes constant where you define your routes

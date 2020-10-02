@@ -6,10 +6,11 @@ import { FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { AddRemoveComponent } from './components/add-remove/add-remove.component';
 import { DashRoutingModule } from './dash-routing.module';
+import { DashNavigationComponent } from './components/dash-navigation/dash-navigation.component';
 
 
 @NgModule({
-  declarations: [DashComponent, AddRemoveComponent],
+  declarations: [DashComponent, AddRemoveComponent, DashNavigationComponent],
   imports: [
     CommonModule,
     DashRoutingModule,

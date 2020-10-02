@@ -15,74 +15,24 @@ import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 })
 export class AddRemoveComponent implements OnInit {
 
-  constructor(private _dash: DashboardService, 
-    private router: Router, 
+  constructor(private router: Router, 
     private _stocks: ListServiceService,
     private _backend: BackendService) { }
 
     watchList = [];
-    isError:boolean = false;
     errorOnList:string;
     quotes:IQuote[] = [];
-    finishedLoadingFlag:boolean = false;
+    finishedLoadingFlag:boolean = true;
 
   ngOnInit(): void {
-    this.getUserList();
+    // protect against direct navigation
+    if (this._stocks.getQuotes() === undefined){
+      this.router.navigate(['dash']);
+    }
+    this.quotes = this._stocks.getQuotes();
   }
 
-  getUserList(){
-    // get initial user list from DB
-    this._dash.getUserList()
-    .subscribe
-    (response => {
-        console.log("I am the response");
-        if (response === null || response === undefined){
-            console.log("Nothing in response to dash");
-        }
-        else if (response.stocksTracking !== null || response.stocksTracking !== undefined){
-            this.watchList = response.stocksTracking;
-        }
-        else {
-            console.log(response);
-        }
-        this.isError = false;
-        },
-        error => {
-            this.isError = true;
-            if (error.status === 401) {
-                localStorage.removeItem('token');
-                localStorage.removeItem('u');
-                this.router.navigate(['/login']);
-            }
-            this.errorOnList = error.status === 500 ? "Server error. Please login and try again." : "Error fetching stocks.";
-        },
-        () => {
-            console.log("here after update");
-            this.getBatchQuotesFromStoredPreferences();
-            this.finishedLoadingFlag = true;
-        });
-  }
-
-  // get the batch request and map to IQuote structure
-  getBatchQuotesFromStoredPreferences(){
-    this._stocks.getBatchQuotes(this.watchList)
-    .subscribe(
-      quotes => {
-        console.log(quotes);
-        Object.keys(quotes).forEach((key, index) => {
-          const min = quotes[key].quote;
-          let q = new IQuote(min.companyName, min.symbol, min.iexRealtimePrice, min.change, min.changePercent);
-          this.quotes.push(q);
-        });
-      },
-      error => {
-        this.isError = true;
-        this.errorOnList = "Error fetching stock quotes.";
-      },
-      () => console.log("Batch complete")
-    );
-  }
-
+  
   //render function helper
   renderStockItem(fullName:string, symbol:string):string {
       return `${fullName} (${symbol})`;
@@ -103,21 +53,22 @@ export class AddRemoveComponent implements OnInit {
     this._backend.addStockToUserList(this.selectBoxValue)
     .subscribe(
     data => {
-    this._stocks.getIndividualQuote(this.selectBoxValue)
-    .toPromise()
-    .then(quote => {
-      console.log("quote is:", quote);
-      let q = new IQuote(quote.companyName, quote.symbol, quote.iexRealtimePrice, quote.change, quote.changePercent);
-      this.quotes.push(q);
-      this.toastSuccessAdd(this.selectBoxValue);
-    })
-    .catch(error => {
-      console.log(error);
-      this.toastPartialSuccess(this.selectBoxValue);
-    })
-    .then(() => {
-      console.log("Promise complete.");
-    })
+      this._stocks.getIndividualQuote(this.selectBoxValue)
+      .toPromise()
+      .then(quote => {
+        console.log("quote is:", quote);
+        let q = new IQuote(quote.companyName, quote.symbol, quote.iexRealtimePrice, quote.change, quote.changePercent);
+        this.quotes.push(q);
+        this._stocks.updateQuoteList(this.quotes);
+        this.toastSuccessAdd(this.selectBoxValue);
+      })
+      .catch(error => {
+        console.log(error);
+        this.toastPartialSuccess(this.selectBoxValue);
+      })
+      .then(() => {
+        console.log("Promise complete.");
+      })
     },
     error => {
     if (error.status === 400){
@@ -145,6 +96,7 @@ export class AddRemoveComponent implements OnInit {
         break;
       }
     }
+    this._stocks.updateQuoteList(this.quotes);
     console.log(this.quotes);
     },
     error => this.toastErrorDelete(this.selectBoxValue),
@@ -181,6 +133,9 @@ export class AddRemoveComponent implements OnInit {
   }
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.quotes, event.previousIndex, event.currentIndex);
+  }
+  backButton(){
+    this.router.navigate(['dash']);
   }
 
 }
