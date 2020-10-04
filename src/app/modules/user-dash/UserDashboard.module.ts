@@ -10,11 +10,13 @@ import { DashNavigationComponent } from './components/dash-navigation/dash-navig
 import { SymbolFilterPipe } from './shared/symbol-filter.pipe';
 import {MatRadioModule} from '@angular/material/radio';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { OwlModule } from 'ngx-owl-carousel';
+import { TickerComponent } from './components/ticker/ticker.component';
 
 
 
 @NgModule({
-  declarations: [DashComponent, AddRemoveComponent, DashNavigationComponent, SymbolFilterPipe],
+  declarations: [DashComponent, AddRemoveComponent, DashNavigationComponent, SymbolFilterPipe, TickerComponent],
   imports: [
     CommonModule,
     DashRoutingModule,
@@ -22,7 +24,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     FormsModule,
     DragDropModule,
     MatRadioModule,
-    ScrollingModule
+    ScrollingModule,
+    OwlModule
   ],
   exports: [
     DashComponent

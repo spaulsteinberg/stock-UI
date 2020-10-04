@@ -35,9 +35,9 @@ export class BackendService {
     return this.http.delete<any>(url, options).pipe(catchError(this.errorDeletingUser));
   }
 
-  getStockList():Observable<any>{
+  getStockList():Promise<any>{
     const url = `${this._url}/retrievestocks`;
-    return this.http.get<any>(url).pipe(catchError(this.errorStockMasterList));
+    return this.http.get<any>(url).toPromise();
   }
 
   errorAddingUser(error: HttpErrorResponse){

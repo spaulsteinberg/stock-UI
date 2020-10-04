@@ -1,0 +1,7 @@
+<div class="mx-auto text-center">
+    <owl-carousel [options]="options" [carouselClasses]="carouselClasses">
+        <div class="item" *ngFor="let quote of quotes">
+            {{quote.symbol}}
+        </div>
+    </owl-carousel>
+</div>

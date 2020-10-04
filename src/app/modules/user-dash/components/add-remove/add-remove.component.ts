@@ -35,14 +35,15 @@ export class AddRemoveComponent implements OnInit {
     this.retrieveValidStockSymbols();
   }
 
+  // Get stock lists
   retrieveValidStockSymbols(){
     this._backend.getStockList()
-    .subscribe(response => {
+    .then(response => {
       this.nyseList = response.nyse;
       this.nasdaqList = response.nasdaq;
-    },
-    error => {
-      console.log(error);
+    })
+    .catch(err => {
+      console.log(err);
       this.stockSymbolRetrieveError = true;
     });
   }

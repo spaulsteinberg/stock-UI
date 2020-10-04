@@ -23,6 +23,7 @@ export class DashComponent implements OnInit {
   isError:boolean = false;
   errorOnList:string;
   quotes:IQuote[] = [];
+  quotesHydratedFlag:boolean = false;
   finishedLoadingFlag:boolean = false;
   getUserList(){
     // get initial user list from DB
@@ -75,10 +76,12 @@ export class DashComponent implements OnInit {
         this.isError = true;
         this.errorOnList = "Error fetching stock quotes.";
       },
-      () => console.log("Batch complete")
+      () => {
+        console.log("Batch complete");
+        this.quotesHydratedFlag = true;
+      }
     );
   }
-
 
   /*reRoute(){
     console.log(this.route.snapshot['_routerState'].url);
