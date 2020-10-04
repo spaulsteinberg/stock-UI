@@ -25,7 +25,6 @@ export class DashComponent implements OnInit {
   quotes:IQuote[] = [];
   finishedLoadingFlag:boolean = false;
   getUserList(){
-    console.log("here");
     // get initial user list from DB
     this._dash.getUserList()
     .subscribe

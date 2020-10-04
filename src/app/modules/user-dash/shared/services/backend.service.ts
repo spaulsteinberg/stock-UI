@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 @Injectable({
@@ -35,12 +35,21 @@ export class BackendService {
     return this.http.delete<any>(url, options).pipe(catchError(this.errorDeletingUser));
   }
 
+  getStockList():Observable<any>{
+    const url = `${this._url}/retrievestocks`;
+    return this.http.get<any>(url).pipe(catchError(this.errorStockMasterList));
+  }
+
   errorAddingUser(error: HttpErrorResponse){
     return throwError(error || "Something went wrong adding a stock. Please try again.");
   }
 
   errorDeletingUser(error: HttpErrorResponse){
     return throwError(error || "Something went wrong deleting a stock. Please try again.");
+  }
+
+  errorStockMasterList(error: HttpErrorResponse){
+    return throwError(error || "Trouble retrieving master list of stocks.");
   }
 
 }

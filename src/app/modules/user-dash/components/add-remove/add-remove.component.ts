@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { DashboardService } from 'src/app/shared/services/dashboard.service';
 import { ListServiceService } from '../../shared/services/list-service.service';
 import { IQuote } from '../../shared/models/IQuote';
 import { BackendService } from '../../shared/services/backend.service';
@@ -14,32 +13,49 @@ import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
   styleUrls: ['./add-remove.component.css']
 })
 export class AddRemoveComponent implements OnInit {
-
+  
   constructor(private router: Router, 
     private _stocks: ListServiceService,
     private _backend: BackendService) { }
-
+   
 
   quotes:IQuote[] = [];
   finishedLoadingFlag:boolean = true;
-
+  inputFilter="";
+  chooseList:string;
+  nyseList:string[] = [];
+  nasdaqList:string[] = [];
+  stockSymbolRetrieveError:boolean = false;
   ngOnInit(): void {
     // protect against direct navigation
     if (this._stocks.getQuotes() === undefined){
       this.router.navigate(['dash']);
     }
     this.quotes = this._stocks.getQuotes();
+    this.retrieveValidStockSymbols();
   }
 
-  
+  retrieveValidStockSymbols(){
+    this._backend.getStockList()
+    .subscribe(response => {
+      this.nyseList = response.nyse;
+      this.nasdaqList = response.nasdaq;
+    },
+    error => {
+      console.log(error);
+      this.stockSymbolRetrieveError = true;
+    });
+  }
+
   //render function helper
   renderStockItem(fullName:string, symbol:string):string {
       return `${fullName} (${symbol})`;
   }
 
-/***********************Testing stuff */
+  updateValue(market){
+    this.chooseList = market;
+  }
 
-  fillerQuotes = ['JPM', 'WDC', 'AAPL', 'WFC', 'UBER', 'LYFT', 'WMT', 'DAL', 'ROKU'];
   actions = ['Add', 'Remove'];
   selectBoxValue;
   selectBoxAction;
@@ -99,10 +115,10 @@ export class AddRemoveComponent implements OnInit {
     console.log(this.quotes);
     },
     error => this.toastErrorDelete(this.selectBoxValue),
-    () => console.log("Delete complete")
-    )
+    () => console.log("Delete complete"));
     }
   }
+
 
   toastErrorAdd(value){
       $(function(){

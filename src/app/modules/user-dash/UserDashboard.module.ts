@@ -7,16 +7,22 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { AddRemoveComponent } from './components/add-remove/add-remove.component';
 import { DashRoutingModule } from './dash-routing.module';
 import { DashNavigationComponent } from './components/dash-navigation/dash-navigation.component';
+import { SymbolFilterPipe } from './shared/symbol-filter.pipe';
+import {MatRadioModule} from '@angular/material/radio';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+
 
 
 @NgModule({
-  declarations: [DashComponent, AddRemoveComponent, DashNavigationComponent],
+  declarations: [DashComponent, AddRemoveComponent, DashNavigationComponent, SymbolFilterPipe],
   imports: [
     CommonModule,
     DashRoutingModule,
     MatSelectModule,
     FormsModule,
     DragDropModule,
+    MatRadioModule,
+    ScrollingModule
   ],
   exports: [
     DashComponent
