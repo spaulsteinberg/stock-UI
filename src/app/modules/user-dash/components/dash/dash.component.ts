@@ -66,7 +66,7 @@ export class DashComponent implements OnInit {
         console.log(quotes);
         Object.keys(quotes).forEach((key, index) => {
           const min = quotes[key].quote;
-          let q = new IQuote(min.companyName, min.symbol, min.iexRealtimePrice, min.change, min.changePercent);
+          let q = new IQuote(min.companyName, min.symbol, min.iexRealtimePrice, min.change, min.changePercent, min.latestPrice);
           this.quotes.push(q);
         });
         this._stocks.updateQuoteList(this.quotes);

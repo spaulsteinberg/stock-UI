@@ -17,14 +17,21 @@ export class TickerComponent implements OnInit {
     this.quotes = this._stocks.getQuotes();
   }
   options = {
-    items: 8, 
+    items: 7, 
     loop: true,
-    dots: true, 
-    navigation: true,
+    dots: true,
     margin: 0, 
     autoplay: true, 
-    autoplayTimeout:5000, 
+    autoplayTimeout:3000, 
     autoplayHoverPause:true
   };
   carouselClasses = ['owl-theme', 'row', 'sliding'];
+
+  getArrowDirection(change){
+    return change >= 0 ? "../../../../../assets/dash-images/arrow_upward-24px.svg"
+                       : "../../../../../assets/dash-images/arrow_downward-24px.svg";
+  }
+  getItemBoxColor(quote:IQuote){
+    return {'background-color': quote.change > 0.00 ? 'green' : quote.change < 0.00 ? 'red' : 'gray'}
+  }
 }

@@ -1,7 +1,12 @@
-<div class="mx-auto text-center">
+<div class="mx-auto text-center" style="padding-left: 2%;">
     <owl-carousel [options]="options" [carouselClasses]="carouselClasses">
-        <div class="item" *ngFor="let quote of quotes">
-            {{quote.symbol}}
+        <div class="item" *ngFor="let quote of quotes" [ngStyle]="getItemBoxColor(quote)">
+            <span class="symbol-q">{{quote.symbol}}</span>
+            <span *ngIf="quote.iexRealtimePrice !== null; else marketClosed">${{quote.iexRealtimePrice}}</span>
+            <ng-template #marketClosed>${{quote.latestPrice}}</ng-template>
+            <span class="change-q">
+                {{quote.change}}
+            </span>
         </div>
     </owl-carousel>
 </div>

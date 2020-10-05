@@ -73,7 +73,7 @@ export class AddRemoveComponent implements OnInit {
       .toPromise()
       .then(quote => {
         console.log("quote is:", quote);
-        let q = new IQuote(quote.companyName, quote.symbol, quote.iexRealtimePrice, quote.change, quote.changePercent);
+        let q = new IQuote(quote.companyName, quote.symbol, quote.iexRealtimePrice, quote.change, quote.changePercent, quote.latestPrice);
         this.quotes.push(q);
         this._stocks.updateQuoteList(this.quotes); //update shared quote list
         this.toastSuccessAdd(this.selectBoxValue);

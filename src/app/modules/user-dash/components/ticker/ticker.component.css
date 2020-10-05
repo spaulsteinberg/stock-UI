@@ -1,3 +1,17 @@
 .item {
-    border: 1px solid black;
+    border-bottom: 1px solid lightgray;
+    border-left: 1px solid lightgray;
+    border-right: 1px solid lightgray;
+}
+.trend-arrow {
+    height: 20px;
+    width: 20px;
+}
+.symbol-q {
+    float: left;
+    padding-left: 2%;
+}
+.change-q {
+    float: right;
+    padding-right: 2%;
 }
