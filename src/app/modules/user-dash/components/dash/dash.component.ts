@@ -34,7 +34,7 @@ export class DashComponent implements OnInit {
         if (response === null || response === undefined){
             console.log("Nothing in response to dash");
         }
-        else if (response.stocksTracking !== null && response.stocksTracking !== undefined){
+        else if (response.stocksTracking !== null || response.stocksTracking !== undefined){
             this.watchList = response.stocksTracking;
         }
         else {

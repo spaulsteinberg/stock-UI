@@ -1,5 +1,10 @@
 <div *ngIf="quotesHydratedFlag === true || this._stocks.getQuotes() !== undefined">
-    <app-ticker></app-ticker>
+    <div *ngIf="this._stocks.getQuotes().length >= 6; else notEnoughStocks">
+        <app-ticker></app-ticker>
+    </div>
+    <ng-template #notEnoughStocks>
+        <div class="text-center text-warning"> Need to be watching at least 6 stocks for ticker</div>
+    </ng-template>
 </div>
 <div class="jumbotron">
     <h2 class="display-2 text-center">Dashboard</h2>
