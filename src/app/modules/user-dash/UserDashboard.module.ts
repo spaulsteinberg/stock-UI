@@ -12,6 +12,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { OwlModule } from 'ngx-owl-carousel';
 import { TickerComponent } from './components/ticker/ticker.component';
+import {MatInputModule} from '@angular/material/input';
 
 
 
@@ -25,7 +26,8 @@ import { TickerComponent } from './components/ticker/ticker.component';
     DragDropModule,
     MatRadioModule,
     ScrollingModule,
-    OwlModule
+    OwlModule,
+    MatInputModule
   ],
   exports: [
     DashComponent

@@ -1,8 +1,17 @@
 .card-header {
-    background-color: #4931de;
+    background-color: #1E88E5;
     color: white;
+}
+.card-footer {
+    background-color: #E0E0E0;
 }
 .sub-button {
     background-color: #e6901c;
     color: white;
+}
+.card-body {
+    background-color: #90CAF9;
+}
+.form-group{
+    width: 50%;
 }

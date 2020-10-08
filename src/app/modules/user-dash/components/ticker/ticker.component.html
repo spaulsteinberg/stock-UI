@@ -5,7 +5,7 @@
             <span *ngIf="quote.iexRealtimePrice !== null; else marketClosed">${{quote.iexRealtimePrice}}</span>
             <ng-template #marketClosed>${{quote.latestPrice}}</ng-template>
             <span class="change-q">
-                {{quote.change}}
+                {{renderDayChange(quote.changePercent, quote.change)}}
             </span>
         </div>
     </owl-carousel>

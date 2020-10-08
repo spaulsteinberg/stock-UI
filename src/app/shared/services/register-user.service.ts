@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { ListServiceService } from 'src/app/modules/user-dash/shared/services/list-service.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RegisterUserService {
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private _list: ListServiceService) { }
   private _url = "http://localhost:3000/api";
   registerUser(formData){
     const registerUrl = `${this._url}/register`;
@@ -35,6 +36,7 @@ export class RegisterUserService {
   logoutUser(){
     localStorage.removeItem('token');
     localStorage.removeItem('u');
+    this._list.clearQuotes(); //clears list for logout/login
     this.router.navigate(['/login']);
   }
 

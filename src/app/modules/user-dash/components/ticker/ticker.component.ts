@@ -17,12 +17,12 @@ export class TickerComponent implements OnInit {
     this.quotes = this._stocks.getQuotes();
   }
   options = {
-    items: 7, 
+    items: 6, 
     loop: true,
-    dots: true,
+  //  dots: true,
     margin: 0, 
     autoplay: true, 
-    autoplayTimeout:3000, 
+    autoplayTimeout:2000, 
     autoplayHoverPause:true
   };
   carouselClasses = ['owl-theme', 'row', 'sliding'];
@@ -33,5 +33,9 @@ export class TickerComponent implements OnInit {
   }
   getItemBoxColor(quote:IQuote){
     return {'background-color': quote.change > 0.00 ? 'green' : quote.change < 0.00 ? 'red' : 'gray'}
+  }
+
+  renderDayChange(percent:number, change:number){
+    return `${percent.toFixed(3)}% ${change}`;
   }
 }

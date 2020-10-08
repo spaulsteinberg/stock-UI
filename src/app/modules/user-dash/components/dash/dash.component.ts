@@ -30,11 +30,11 @@ export class DashComponent implements OnInit {
     this._dash.getUserList()
     .subscribe
     (response => {
-        console.log("I am the response");
+        console.log("I am the response:", response);
         if (response === null || response === undefined){
             console.log("Nothing in response to dash");
         }
-        else if (response.stocksTracking !== null || response.stocksTracking !== undefined){
+        else if (response.stocksTracking !== null && response.stocksTracking !== undefined){
             this.watchList = response.stocksTracking;
         }
         else {
@@ -53,7 +53,11 @@ export class DashComponent implements OnInit {
         },
         () => {
             console.log("here after update");
-            this.getBatchQuotesFromStoredPreferences();
+            if (this.watchList.length > 0) {
+              this.getBatchQuotesFromStoredPreferences();
+            } else {
+              this._stocks.initQuoteList();
+            }
             this.finishedLoadingFlag = true;
         });
   }
@@ -65,9 +69,7 @@ export class DashComponent implements OnInit {
       quotes => {
         console.log(quotes);
         Object.keys(quotes).forEach((key, index) => {
-          const min = quotes[key].quote;
-          let q = new IQuote(min.companyName, min.symbol, min.iexRealtimePrice, min.change, min.changePercent, min.latestPrice);
-          this.quotes.push(q);
+          this.quotes.push(quotes[key].quote);
         });
         this._stocks.updateQuoteList(this.quotes);
         console.log(this._stocks.getQuotes());

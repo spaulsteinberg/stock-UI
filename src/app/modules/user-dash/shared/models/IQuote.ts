@@ -1,17 +1,57 @@
 export class IQuote {
-    companyName:string;
-    symbol:string;
-    iexRealtimePrice:number;
+    avgTotalVolume:number;
+    calculationPrice:string;
     change:number;
     changePercent:number;
+    close:number|null;
+    closeSource:string;
+    closeTime:number|null
+    companyName:string;
+    delayedPrice:number|null;
+    delayedPriceTime:number|null;
+    extendedChange:number|null;
+    extendedChangePercent:number|null;
+    extendedPrice:number|null;
+    extendedPriceTime:number|null;
+    high:number|null;
+    highSource:string;
+    highTime:number;
+    iexAskPrice:number;
+    iexAskSize:number;
+    iexBidPrice:number;
+    iexBidSize:number;
+    iexClose:number;
+    iexCloseTime:number;
+    iexLastUpdated:number;
+    iexMarketPercent:number;
+    iexOpen;
+    iexOpenTime:number|null;
+    iexRealtimePrice:number;
+    iexRealtimeSize:number;
+    iexVolume:number;
+    isUSMarketOpen:boolean;
+    lastTradeTime:number;
     latestPrice:number;
-
-    constructor(comp:string, s:string, i:number, c:number, ch:number, lp:number){
-        this.companyName = comp;
-        this.symbol = s;
-        this.iexRealtimePrice = i;
-        this.change = c;
-        this.changePercent = ch;
-        this.latestPrice = lp;
-    }
+    latestSource:string;
+    latestTime:string;
+    latestUpdate:number;
+    latestVolume:number|null
+    low:number|null;
+    lowSource:string;
+    lowTime:number;
+    marketCap:number;
+    oddLotDelayedPrice:number|null;
+    oddLotDelayedPriceTime:number|null;
+    open;
+    openSource:string;
+    openTime;
+    peRatio:number;
+    previousClose:number;
+    previousVolume:number;
+    primaryExchange:string;
+    symbol:string;
+    volume;
+    week52High:number;
+    week52Low:number;
+    ytdChange:number;
 }

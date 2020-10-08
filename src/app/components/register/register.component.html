@@ -4,11 +4,11 @@
             <div class="card-header">
                 <h4 class="mb-0 text-center">Register</h4>
             </div>
-            <div class="card-body text-center mx-auto">
+            <div class="card-body text-center">
                 <form [formGroup]="registerForm" (ngSubmit)="submitRegisterUserData()">
                     <div class="form-group">
                         <label>Username</label>
-                        <input type="text" class="form-control" formControlName="username" [class.is-invalid]="username.invalid && username.touched">
+                        <input type="text" class="form-control mx-auto" formControlName="username" [class.is-invalid]="username.invalid && username.touched">
                         <span *ngIf="username.invalid && username.touched">
                             <small class="text-danger" *ngIf="username.errors?.required">Username field is required</small>
                             <small class="text-danger" *ngIf="username.errors?.minlength">Must be at least 5 characters</small>
@@ -17,7 +17,7 @@
                     </div>
                     <div class="form-group">
                         <label>Password</label>
-                        <input type="password" class="form-control" formControlName="password" [class.is-invalid]="password.invalid && password.touched">
+                        <input type="password" class="form-control mx-auto" formControlName="password" [class.is-invalid]="password.invalid && password.touched">
                         <span *ngIf="password.invalid && password.touched">
                             <small class="text-danger" *ngIf="password.errors?.required">Password field is required</small>
                             <small class="text-danger" *ngIf="password.errors?.minlength">Must be at least 5 characters</small>
@@ -25,7 +25,7 @@
                             <small class="text-danger" *ngIf="password.errors?.notValid">{{password.errors?.notValid.value}}</small>
                         </span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mx-auto">
                         <button class="btn btn-success text-white" type="submit" [disabled]="!registerForm.valid">Submit</button>
                     </div>
                 </form>

@@ -1,4 +1,13 @@
 .card-header {
-    background-color: #fa0990;
+    background-color: #D81B60;
     color: white;
+}
+.card-body {
+    background-color: #F48FB1;
+}
+.form-control {
+    width: 50%;
+}
+.card-footer {
+    background-color: #E0E0E0
 }

@@ -70,13 +70,12 @@ export class AddRemoveComponent implements OnInit {
     .subscribe(
     data => {
       this._stocks.getIndividualQuote(this.selectBoxValue)
-      .toPromise()
       .then(quote => {
-        console.log("quote is:", quote);
-        let q = new IQuote(quote.companyName, quote.symbol, quote.iexRealtimePrice, quote.change, quote.changePercent, quote.latestPrice);
-        this.quotes.push(q);
+        console.log("quote is:", quote, typeof(quote));
+        this.quotes.push(quote);
         this._stocks.updateQuoteList(this.quotes); //update shared quote list
         this.toastSuccessAdd(this.selectBoxValue);
+        this.inputFilter = "";
       })
       .catch(error => {
         console.log(error);

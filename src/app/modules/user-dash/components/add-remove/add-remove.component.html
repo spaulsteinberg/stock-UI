@@ -20,6 +20,7 @@
     <div class="col col-lg-8 offset-sm-1" style="padding-left: 5%;">
         <!-- if user wants to add give them all stock options, or else only the ones they already have added -->
         <mat-form-field appearance="fill" *ngIf="selectBoxAction === 'Add' || selectBoxAction === undefined; else deleteField">
+            <input matInput [(ngModel)]="inputFilter" *ngIf="selectBoxAction !== undefined && chooseList !== undefined">
             <mat-label>Select A Quote</mat-label>
             <mat-select [(ngModel)]="selectBoxValue" [disabled]="chooseList === undefined || inputFilter === ''">
               <cdk-virtual-scroll-viewport itemSize="5" [style.height.px]=200 *ngIf="chooseList === 'NYSE'; else nasdaqBlock">
@@ -29,6 +30,7 @@
             </cdk-virtual-scroll-viewport>
               <ng-template #nasdaqBlock>
                 <cdk-virtual-scroll-viewport itemSize="5" [style.height.px]=200>
+                    <!--list of stocks fitting description get passed to input filter along with the input to search for-->
                     <mat-option *cdkVirtualFor="let n of nasdaqList | symbolFilter:inputFilter" [value]="n">
                         {{n}}
                     </mat-option>
@@ -63,11 +65,12 @@
         </div>
     </div>
 </div>
-<div class="back-button">
-    <button class="btn btn-secondary" (click)="backButton()">Go Back</button>
+<div class="back-arrow">
+    <a routerLink="/dash" class="back">
+        <img src="../../../../../assets/dash-images/keyboard_backspace-24px.svg" alt="back_arrow.svg"> Back to Dash
+    </a>
 </div>
 
-<input [(ngModel)]="inputFilter">
 <!--<ul>
     <li *ngFor="let quote of quotes | symbolFilter:inputFilter">{{quote}}</li>
 </ul> -->
