@@ -1,0 +1,17 @@
+<div *ngIf="!isFinishedLoading">
+    <mat-progress-spinner mode="indeterminate" color="warn"></mat-progress-spinner>
+</div>
+<div class="text-danger" *ngIf="isError; else showChart">
+    {{errorMessage}}
+</div>
+<ng-template #showChart>
+        <div *ngIf="monthDataLineChart.length > 0">
+            <canvas baseChart 
+            [datasets]="monthDataLineChart"
+            [labels]="labels"
+            [options]="monthLineOptions"
+            [legend]="legend"
+            [chartType]="type">
+            </canvas>
+        </div>
+</ng-template>

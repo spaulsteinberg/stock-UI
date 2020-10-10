@@ -13,11 +13,14 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { OwlModule } from 'ngx-owl-carousel';
 import { TickerComponent } from './components/ticker/ticker.component';
 import {MatInputModule} from '@angular/material/input';
+import { ViewChartComponent } from './components/view-chart/view-chart.component';
+import { ChartsModule } from 'ng2-charts';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 
 @NgModule({
-  declarations: [DashComponent, AddRemoveComponent, DashNavigationComponent, SymbolFilterPipe, TickerComponent],
+  declarations: [DashComponent, AddRemoveComponent, DashNavigationComponent, SymbolFilterPipe, TickerComponent, ViewChartComponent],
   imports: [
     CommonModule,
     DashRoutingModule,
@@ -27,7 +30,9 @@ import {MatInputModule} from '@angular/material/input';
     MatRadioModule,
     ScrollingModule,
     OwlModule,
-    MatInputModule
+    MatInputModule,
+    ChartsModule,
+    MatProgressSpinnerModule
   ],
   exports: [
     DashComponent

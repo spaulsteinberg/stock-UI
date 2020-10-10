@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IQuote } from '../../shared/models/IQuote';
+import { IQuote } from '../../shared/interfaces/IQuote';
 import { ListServiceService } from '../../shared/services/list-service.service';
 
 @Component({

@@ -2,7 +2,8 @@ import { HttpClient, HttpErrorResponse, HttpBackend } from '@angular/common/http
 import { Injectable } from '@angular/core';
 import { catchError } from 'rxjs/operators';
 import { throwError, pipe, Observable } from 'rxjs';
-import { IQuote } from '../models/IQuote';
+import { IQuote } from '../interfaces/IQuote';
+import { IHistoricalQuote } from '../interfaces/IHistoricalQuote';
 
 @Injectable({
   providedIn: 'root'
@@ -38,8 +39,19 @@ export class ListServiceService {
     return this.http.get<IQuote[]>(url).pipe(catchError(this.errorOnQuotes));
   }
 
+  getOneYearData(symbol:string):Observable<IHistoricalQuote[]>{
+   //const url = `${this._base}/${symbol}/batch?types=quote,chart&range=1m&token=${this._token}`;
+   //https://sandbox.iexapis.com/stable/stock/AAPL/chart/1m?token=Tpk_fd6c779103b3400b96861977097e17de
+    const url = `https://sandbox.iexapis.com/stable/stock/${symbol}/chart/1m?token=${this._sandboxToken}`;
+    return this.http.get<IHistoricalQuote[]>(url);
+  }
+
   errorOnQuotes(error: HttpErrorResponse){
     return throwError(error.message || "Error retrieving quotes.");
+  }
+
+  errorOnHistoricalData(error: HttpErrorResponse){
+    return throwError(error.message || "Error occurred fetching historical stock data.");
   }
 
   // functions to share stock list

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DashboardService } from 'src/app/shared/services/dashboard.service';
-import { IQuote } from '../../shared/models/IQuote';
+import { IQuote } from '../../shared/interfaces/IQuote';
 import { ListServiceService } from '../../shared/services/list-service.service';
 
 @Component({
@@ -14,9 +14,11 @@ export class DashComponent implements OnInit {
   constructor(private router: Router,
               private _dash: DashboardService,
               public _stocks: ListServiceService){ }
-  // hydrate the service only init once
+  // hydrate the service only init once...or else update the prices on re-visit
   ngOnInit(){
     if (this._stocks.getQuotes() === undefined) this.getUserList();
+    /* this line might just push all the same quotes again...in that case just grab and update price */
+  //  else if (this._stocks.getQuotes.length > 0) this.getBatchQuotesFromStoredPreferences();
   }
 
   watchList = [];

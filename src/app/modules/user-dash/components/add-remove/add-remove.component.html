@@ -15,12 +15,19 @@
                 <p *ngIf="quotes.length > 0">No stocks added yet!</p>
             </ng-template>
         </div>
+        
+        <div class="back-arrow">
+            <a routerLink="/dash" class="back">
+                <img src="../../../../../assets/dash-images/keyboard_backspace-24px.svg" alt="back_arrow.svg"> Back to Dash
+            </a>
+        </div>
     </div>
     <!-- cols for search and other components-->
-    <div class="col col-lg-8 offset-sm-1" style="padding-left: 5%;">
+    <div class="col col-lg-8">
         <!-- if user wants to add give them all stock options, or else only the ones they already have added -->
+        <div style="padding-left: 10%;">
         <mat-form-field appearance="fill" *ngIf="selectBoxAction === 'Add' || selectBoxAction === undefined; else deleteField">
-            <input matInput [(ngModel)]="inputFilter" *ngIf="selectBoxAction !== undefined && chooseList !== undefined">
+            <input matInput [(ngModel)]="inputFilter" *ngIf="selectBoxAction !== undefined && chooseList !== undefined" autocomplete="off">
             <mat-label>Select A Quote</mat-label>
             <mat-select [(ngModel)]="selectBoxValue" [disabled]="chooseList === undefined || inputFilter === ''">
               <cdk-virtual-scroll-viewport itemSize="5" [style.height.px]=200 *ngIf="chooseList === 'NYSE'; else nasdaqBlock">
@@ -63,12 +70,12 @@
         <div class="button-container" style="padding-left: 17%">
             <button class="btn btn-primary btn-lg" type="submit" [disabled]="selectBoxValue === undefined || selectBoxAction === undefined" (click)="executeAction()">Execute</button>
         </div>
+        </div>
+        <app-view-chart 
+            *ngIf="viewClick === true && selectBoxValue !== undefined && selectBoxAction === 'View'" 
+            [symb]="selectBoxValue">
+        </app-view-chart>
     </div>
-</div>
-<div class="back-arrow">
-    <a routerLink="/dash" class="back">
-        <img src="../../../../../assets/dash-images/keyboard_backspace-24px.svg" alt="back_arrow.svg"> Back to Dash
-    </a>
 </div>
 
 <!--<ul>
