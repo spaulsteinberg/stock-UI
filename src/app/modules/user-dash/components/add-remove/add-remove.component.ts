@@ -72,6 +72,7 @@ export class AddRemoveComponent implements OnInit {
   selectBoxAction;
   isAddError:boolean = false;
   viewClick:boolean = false;
+  viewSelectChange:string;
   // on Execute, perform logic to add/delete stock depending on option selected
   executeAction(){
     this.viewClick = false;
@@ -128,7 +129,9 @@ export class AddRemoveComponent implements OnInit {
         () => console.log("Delete complete"));
     }
     else {
+      // set the passed variable to child. Assigning value here makes it so value changes only trigger on click
       this.viewClick = true;
+      this.viewSelectChange = this.selectBoxValue;
     }
   }
 

@@ -26,7 +26,7 @@
     <div class="col col-lg-8">
         <!-- if user wants to add give them all stock options, or else only the ones they already have added -->
         <div style="padding-left: 10%;">
-        <mat-form-field appearance="fill" *ngIf="selectBoxAction === 'Add' || selectBoxAction === undefined; else deleteField">
+        <mat-form-field appearance="fill" *ngIf="selectBoxAction === 'Add' || selectBoxAction === 'View' ||selectBoxAction === undefined; else deleteField">
             <input matInput [(ngModel)]="inputFilter" *ngIf="selectBoxAction !== undefined && chooseList !== undefined" autocomplete="off">
             <mat-label>Select A Quote</mat-label>
             <mat-select [(ngModel)]="selectBoxValue" [disabled]="chooseList === undefined || inputFilter === ''">
@@ -63,7 +63,7 @@
                 </mat-option>
             </mat-select>
         </mat-form-field>
-        <mat-radio-group *ngIf="selectBoxAction === 'Add'" [(ngModel)]="chooseList">
+        <mat-radio-group *ngIf="selectBoxAction === 'Add' || selectBoxAction === 'View'" [(ngModel)]="chooseList">
             <mat-radio-button value="NYSE" (click)="updateValue('NYSE')">NYSE</mat-radio-button>
             <mat-radio-button class="mx-2" value="NASDAQ" (click)="updateValue('NASDAQ')">NASDAQ</mat-radio-button>
         </mat-radio-group>
@@ -72,8 +72,8 @@
         </div>
         </div>
         <app-view-chart 
-            *ngIf="viewClick === true && selectBoxValue !== undefined && selectBoxAction === 'View'" 
-            [symb]="selectBoxValue">
+            *ngIf="viewClick === true && viewSelectChange !== undefined && selectBoxAction === 'View'" 
+            [symb]="viewSelectChange">
         </app-view-chart>
     </div>
 </div>
