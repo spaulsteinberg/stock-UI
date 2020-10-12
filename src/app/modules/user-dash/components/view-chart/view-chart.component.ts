@@ -19,6 +19,14 @@ export class ViewChartComponent implements OnInit {
   isFinishedLoading:boolean = false;
   isError:boolean = false;
   errorMessage:string;
+  closeCheck:boolean = true;
+  openCheck:boolean = false;
+  highCheck:boolean = false;
+  lowCheck:boolean = false;
+  close:boolean;
+  open:boolean;
+  high:boolean;
+  low:boolean;
   public monthData = [];
   public labels = [];
   public monthDataLineChart: ChartDataSets[] = [];
@@ -27,9 +35,14 @@ export class ViewChartComponent implements OnInit {
   public legend = true;
 
   ngOnInit(): void {
+    this.close = this.closeCheck;
+    this.open = this.openCheck;
+    this.high = this.highCheck;
+    this.low = this.lowCheck;
     this.getChartData();
   }
 
+  //make call to get chart data. comes in as an IHistoricalQuote and is processed into the chart as ViewChartData
   getChartData(){
     console.log(this.symbolToSearch);
     if (this.symbolToSearch !== '' && this.symbolToSearch !== undefined && this.symbolToSearch !== null){
@@ -40,8 +53,7 @@ export class ViewChartComponent implements OnInit {
           console.log(response);
           response.forEach(quote => {
             this.monthData.push(quote);
-            this.dataToInsertInChart.close.push(quote.close);
-            this.dataToInsertInChart.date.push(quote.date);
+            this.dataToInsertInChart.pushData(quote.close, quote.date);
           })
         },
         error => {
@@ -70,11 +82,17 @@ export class ViewChartComponent implements OnInit {
     }
   }
   
+  //create chart datasets
   createDataSets(){
     this.labels = this.dataToInsertInChart.date;
     this.monthDataLineChart = [
       { data: this.dataToInsertInChart.close, label: "Close Price", backgroundColor: 'transparent', borderColor: 'red' }
     ]
+  }
+
+  processCheckBoxEvent(event){
+    console.log(event);
+    console.log(this.close, this.open, this.high, this.low);
   }
 
   public monthLineOptions: (ChartOptions & { annotation: any }) = {
@@ -101,7 +119,7 @@ export class ViewChartComponent implements OnInit {
           scaleLabel: {
             display: true,
             labelString: 'Date',
-            fontColor: 'whitesmoke',
+            fontColor: 'lightblue',
             fontSize: 18
           },
           gridLines: {
@@ -119,7 +137,7 @@ export class ViewChartComponent implements OnInit {
           scaleLabel: {
             display: true,
             labelString: 'Price ($)',
-            fontColor: 'whitesmoke',
+            fontColor: 'lightblue',
             fontSize: 18
           },
           gridLines: {
@@ -148,7 +166,7 @@ export class ViewChartComponent implements OnInit {
     title : {
       text: `Previous Month Data`,
       display: true,
-      fontColor: 'whitesmoke',
+      fontColor: 'lightblue',
       fontSize: 20
     },
     plugins: {
