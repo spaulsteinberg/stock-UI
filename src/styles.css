@@ -3,13 +3,14 @@
 html, body {
     height: 100%;
 }
-html, body, .master-class {
+html, body{
     /*background-image: url('assets/general-images/dim-gray-back.jpg');
     height: 100%;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;*/
-    background-color: #424242;
+   /* background-color: #424242; */
+    background-image: url('assets/general-images/nasdaq-nums.jpg');
     background-position: center;
     background-repeat: repeat;
     background-size: cover;
@@ -22,4 +23,3 @@ html, body, .master-class {
 .spinner-container {
     margin-left: 45%;
 }
-

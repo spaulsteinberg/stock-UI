@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'app-about',
@@ -7,9 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AboutComponent implements OnInit {
 
-  constructor() { }
+  constructor(private renderer: Renderer2, private el: ElementRef) {
+   }
 
   ngOnInit(): void {
+    this.renderer.removeStyle(document.body, 'background-image');
   }
 
 }

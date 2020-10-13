@@ -15,9 +15,9 @@
             </canvas>
         </div>
         <span class="check-container">
-            <mat-checkbox color="primary" [(ngModel)]="close" [checked]="closeCheck" (change)="close=$event.checked; processCheckBoxEvent($event.source.value)" value="Close">Close</mat-checkbox>
-            <mat-checkbox color="primary" [(ngModel)]="open" [checked]="openCheck" (change)="open=$event.checked; processCheckBoxEvent($event.source.value)" value="Open">Open</mat-checkbox>
-            <mat-checkbox color="primary" [(ngModel)]="high" [checked]="highCheck" (change)="high=$event.checked; processCheckBoxEvent($event.source.value)" value="High">High</mat-checkbox>
-            <mat-checkbox color="primary" [(ngModel)]="low" [checked]="lowCheck" (change)="low=$event.checked; processCheckBoxEvent($event.source.value)" value="Low">Low</mat-checkbox>
+            <mat-checkbox color="primary" [(ngModel)]="close" [checked]="closeCheck" (change)="close=$event.checked; processCheckBoxEvent($event.source.value, $event.checked)" value="Close">Close</mat-checkbox>
+            <mat-checkbox color="primary" [(ngModel)]="open" [checked]="openCheck" (change)="open=$event.checked; processCheckBoxEvent($event.source.value, $event.checked)" value="Open">Open</mat-checkbox>
+            <mat-checkbox color="primary" [(ngModel)]="high" [checked]="highCheck" (change)="high=$event.checked; processCheckBoxEvent($event.source.value, $event.checked)" value="High">High</mat-checkbox>
+            <mat-checkbox color="primary" [(ngModel)]="low" [checked]="lowCheck" (change)="low=$event.checked; processCheckBoxEvent($event.source.value, $event.checked)" value="Low">Low</mat-checkbox>
         </span>
 </ng-template>

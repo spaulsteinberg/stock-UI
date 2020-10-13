@@ -28,9 +28,8 @@ export class ViewChartComponent implements OnInit {
   high:boolean;
   low:boolean;
   public monthData = [];
-  public labels = [];
   public monthDataLineChart: ChartDataSets[] = [];
-  public monthLineLabels: Label[] = [];
+  public labels: Label[] = [];
   public type= "line";
   public legend = true;
 
@@ -53,7 +52,7 @@ export class ViewChartComponent implements OnInit {
           console.log(response);
           response.forEach(quote => {
             this.monthData.push(quote);
-            this.dataToInsertInChart.pushData(quote.close, quote.date);
+            this.dataToInsertInChart.pushData(quote.close, quote.open, quote.high, quote.low, quote.date);
           })
         },
         error => {
@@ -76,13 +75,16 @@ export class ViewChartComponent implements OnInit {
       this.monthData = [];
       this.labels = [];
       this.monthDataLineChart = [];
-      this.monthLineLabels = [];
+      this.closeCheck = true;
+      this.open = false;
+      this.high = false;
+      this.low = false;
       this.dataToInsertInChart = new ViewChartData();
       this.getChartData();
     }
   }
   
-  //create chart datasets
+  //create chart datasets initally
   createDataSets(){
     this.labels = this.dataToInsertInChart.date;
     this.monthDataLineChart = [
@@ -90,10 +92,49 @@ export class ViewChartComponent implements OnInit {
     ]
   }
 
-  processCheckBoxEvent(event){
-    console.log(event);
-    console.log(this.close, this.open, this.high, this.low);
+  processCheckBoxEvent(eventValue, checked:boolean){
+    console.log(eventValue);
+    // if bools are going to be all false do nothing, for delete key off label
+    if (!this.close && !this.open && !this.high && !this.low) return;
+    else if (checked){
+      if (eventValue === "High" && this.high === true) this.pushOntoDataSet(this.dataToInsertInChart.high, eventValue, 'blue');
+      else if (eventValue === "Low" && this.low === true) this.pushOntoDataSet(this.dataToInsertInChart.low, eventValue, 'orange');
+      else if (eventValue === "Open" && this.open === true) this.pushOntoDataSet(this.dataToInsertInChart.open, eventValue, 'green');
+      else if (eventValue === "Close" && this.close === true) this.pushOntoDataSet(this.dataToInsertInChart.close, eventValue, 'red');  
+    }
+    else {
+      if (this.monthDataLineChart.length <= 1) {
+        console.log("too few");
+        return;
+      }
+      this.popFromDataSet(eventValue);
+    }
   }
+
+  pushOntoDataSet(dataSlice:number[], toLabel:any, color:string):void{
+    console.log("dslice", dataSlice);
+    for (let set of this.monthDataLineChart){
+      if (set.label === `${toLabel} Price`){
+        return;
+      }
+    }
+    this.monthDataLineChart.push({
+      data: dataSlice, label: `${toLabel} Price`, backgroundColor: 'transparent', borderColor: color
+    });
+  }
+
+  popFromDataSet(label){
+    let i = 0;
+    console.log("label is", label);
+    for (let set of this.monthDataLineChart){
+      if (set.label === `${label} Price`){
+        this.monthDataLineChart.splice(i, 1);
+        break;
+      }
+      i++;
+    }
+  }
+
 
   public monthLineOptions: (ChartOptions & { annotation: any }) = {
     responsive: true,

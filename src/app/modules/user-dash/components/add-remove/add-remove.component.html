@@ -7,8 +7,14 @@
     <div class="col col-lg-3">
         <div class="success-content">
             <div *ngIf="finishedLoadingFlag === true; else emptyBlock">
-                <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+               <!-- <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
                     <div class="example-box" *ngFor="let quote of quotes" cdkDrag>{{renderStockItem(quote.companyName, quote.symbol)}}</div>
+                </div> -->
+                <div class="example-list">
+                    <div class="example-box" *ngFor="let quote of quotes">
+                        {{renderStockItem(quote.companyName, quote.symbol)}} 
+                        <span [ngStyle]="getItemBoxColor(quote)">Last close: ${{quote.close}}</span>
+                    </div>
                 </div>
             </div>
             <ng-template #emptyBlock>
@@ -76,7 +82,6 @@
         </div>
     </div>
 </div>
-
 <!--<ul>
     <li *ngFor="let quote of quotes | symbolFilter:inputFilter">{{quote}}</li>
 </ul> -->

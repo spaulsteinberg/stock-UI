@@ -36,13 +36,6 @@ export class AddRemoveComponent implements OnInit {
     if (this.nyseList.length === 0 && this.nasdaqList.length === 0){
       this.retrieveValidStockSymbols();
     }
-  /*  this._stocks.getOneYearData("JPM")
-    .pipe(catchError(this._stocks.errorOnHistoricalData))
-    .subscribe(
-      response => console.log(response),
-      error => console.log(error),
-      () => console.log("Done")
-    )*/
   }
 
   // Get stock lists
@@ -61,6 +54,9 @@ export class AddRemoveComponent implements OnInit {
   //render function helper
   renderStockItem(fullName:string, symbol:string):string {
       return `${fullName} (${symbol})`;
+  }
+  getItemBoxColor(quote:IQuote){
+    return {'color': quote.change > 0.00 ? 'green' : quote.change < 0.00 ? 'red' : 'gray', 'float': 'right'}
   }
 
   updateValue(market){
