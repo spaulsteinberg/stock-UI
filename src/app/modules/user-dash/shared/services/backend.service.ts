@@ -16,13 +16,13 @@ export class BackendService {
   
   addStockToUserList(symbol){
     this.params = new HttpParams().set('user', localStorage.getItem("u"));
-    const url = `${this._url}/addstock?${this.params.toString()}`;
+    const url = `${this._url}/stock?${this.params.toString()}`;
     let objToSend = { 'symbol': symbol};
     return this.http.patch<any>(url, objToSend).pipe(catchError(this.errorAddingUser));
   }
   deleteFromUserList(symbol){
     this.params = new HttpParams().set('user', localStorage.getItem("u"));
-    const url = `${this._url}/deletestock?${this.params.toString()}`;
+    const url = `${this._url}/stock?${this.params.toString()}`;
     const options = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
