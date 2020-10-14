@@ -8,10 +8,13 @@ import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 export class AboutComponent implements OnInit {
 
   constructor(private renderer: Renderer2, private el: ElementRef) {
-   }
+  }
 
   ngOnInit(): void {
-    this.renderer.removeStyle(document.body, 'background-image');
+  }
+  ngAfterViewInit(){
+    this.el.nativeElement.ownerDocument.body.style.backgroundImage = 'none'
+    this.el.nativeElement.ownerDocument.body.style.backgroundColor = '#424242'
   }
 
 }

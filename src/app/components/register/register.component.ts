@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RegisterUserService } from 'src/app/shared/services/register-user.service';
@@ -12,7 +12,7 @@ import { validatePassword } from '../../shared/validators/password.validator'
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  constructor(private fb: FormBuilder, private _register: RegisterUserService, private router: Router) { }
+  constructor(private fb: FormBuilder, private _register: RegisterUserService, private router: Router, private el:ElementRef) { }
 
 
   registerForm = this.fb.group({
@@ -26,6 +26,9 @@ export class RegisterComponent implements OnInit {
   color: ThemePalette = "warn";
   reqCompleted:boolean = true;
   ngOnInit(): void {
+  }
+  ngAfterViewInit(){
+    this.el.nativeElement.ownerDocument.body.style.backgroundImage = "url('../assets/general-images/nasdaq-nums.jpg')"
   }
 
   get username(){

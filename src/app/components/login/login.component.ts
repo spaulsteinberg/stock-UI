@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RegisterUserService } from 'src/app/shared/services/register-user.service';
@@ -12,8 +12,7 @@ import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private fb: FormBuilder, private _login : RegisterUserService, private router: Router) { }
-
+  constructor(private fb: FormBuilder, private _login : RegisterUserService, private router: Router, private el: ElementRef) { }
   errorOccurred:boolean = false;
   reqCompleted:boolean = true;
   mode: ProgressSpinnerMode = "indeterminate";
@@ -58,6 +57,9 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+  ngAfterViewInit(){
+    this.el.nativeElement.ownerDocument.body.style.backgroundImage = "url('../assets/general-images/nasdaq-nums.jpg')"
   }
 
 }

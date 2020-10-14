@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -7,11 +7,14 @@ import { Component, OnInit, Renderer2 } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private renderer: Renderer2) {
-    this.renderer.setStyle(document.body, 'background-image', "url('../../../assets/general-images/nasdaq-nums.jpg')");
+  constructor(private el: ElementRef) {
    }
 
   ngOnInit(): void {
+  }
+
+  ngAfterViewInit(){
+    this.el.nativeElement.ownerDocument.body.style.backgroundImage = "url('../assets/general-images/nasdaq-nums.jpg')"
   }
 
 }

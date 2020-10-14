@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DashboardService } from 'src/app/shared/services/dashboard.service';
 import { IQuote } from '../../shared/interfaces/IQuote';
@@ -13,7 +13,8 @@ export class DashComponent implements OnInit {
 
   constructor(private router: Router,
               private _dash: DashboardService,
-              public _stocks: ListServiceService){ }
+              public _stocks: ListServiceService,
+              private el: ElementRef){ }
   // hydrate the service only init once...or else update the prices on re-visit
   ngOnInit(){
     if (this._stocks.getQuotes() === undefined) this.getUserList();
@@ -87,8 +88,8 @@ export class DashComponent implements OnInit {
     );
   }
 
-  /*reRoute(){
-    console.log(this.route.snapshot['_routerState'].url);
-    this.router.navigate(['configstocks'], {relativeTo: this.route});
-  }*/
+  ngAfterViewInit(){
+    this.el.nativeElement.ownerDocument.body.style.backgroundImage = 'none'
+    this.el.nativeElement.ownerDocument.body.style.backgroundColor = '#424242'
+  }
 }
