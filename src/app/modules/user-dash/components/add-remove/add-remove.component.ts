@@ -56,7 +56,8 @@ export class AddRemoveComponent implements OnInit {
       return `${fullName} (${symbol})`;
   }
   getItemBoxColor(quote:IQuote){
-    return {'color': quote.change > 0.00 ? 'green' : quote.change < 0.00 ? 'red' : 'gray', 'float': 'right'}
+   // return {'color': quote.change > 0.00 ? 'green' : quote.change < 0.00 ? 'red' : 'gray', 'float': 'right'}
+   return {'color': quote.change > 0.00 ? '#00e600' : quote.change < 0.00 ? 'red' : 'gray'}
   }
 
   updateValue(market){
@@ -134,11 +135,6 @@ export class AddRemoveComponent implements OnInit {
   // destination of event emitted from child
   switchData(quoteData:IHistoricalQuote[]){
     this.monthDataFromChild = quoteData;
-  }
-
-  displayPrice(quote:IQuote){
-    if (quote.close === null) return `Currently: ${quote.iexRealtimePrice}`;
-    return `Last close: ${quote.close}`;
   }
 
   toastErrorAdd(value){

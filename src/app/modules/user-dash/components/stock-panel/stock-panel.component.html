@@ -1,0 +1,12 @@
+<mat-expansion-panel>
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            {{quote.companyName}}
+        </mat-panel-title>
+        <mat-panel-description>
+            {{quote.symbol}}
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+            <p [ngStyle]="callColor(quote)">{{displayPrice(quote)}}</p>
+            <div [innerHtml]="renderQuoteData(quote)"></div>
+</mat-expansion-panel>

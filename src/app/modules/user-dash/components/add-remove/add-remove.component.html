@@ -9,22 +9,9 @@
             <div *ngIf="finishedLoadingFlag === true; else emptyBlock">
                 <div class="example-list">
                     <div class="example-box" *ngFor="let quote of quotes">
-                        <mat-accordion multi>
-                            <mat-expansion-panel>
-                                <mat-expansion-panel-header>
-                                <mat-panel-title>
-                                    {{renderStockItem(quote.companyName, quote.symbol)}} 
-                                </mat-panel-title>
-                                <mat-panel-description>
-                                    
-                        <span [ngStyle]="getItemBoxColor(quote)">{{displayPrice(quote)}}</span>
-                                </mat-panel-description>
-                                </mat-expansion-panel-header>
-                                <p>hello</p>
-                                <p>hello 2</p>
-                            </mat-expansion-panel>
+                        <mat-accordion multi style="width:100%">
+                            <app-stock-panel [quote]="quote" [color]="getItemBoxColor"></app-stock-panel>
                         </mat-accordion>
-                        
                     </div>
                 </div>
             </div>

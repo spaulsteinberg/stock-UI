@@ -18,12 +18,13 @@ import { ChartsModule } from 'ng2-charts';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { StockPanelComponent } from './components/stock-panel/stock-panel.component';
 
 
 
 
 @NgModule({
-  declarations: [DashComponent, AddRemoveComponent, DashNavigationComponent, SymbolFilterPipe, TickerComponent, ViewChartComponent],
+  declarations: [DashComponent, AddRemoveComponent, DashNavigationComponent, SymbolFilterPipe, TickerComponent, ViewChartComponent, StockPanelComponent],
   imports: [
     CommonModule,
     DashRoutingModule,
