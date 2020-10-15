@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, Output, SimpleChanges, EventEmitter } from '@angular/core';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Label } from 'ng2-charts';
 import { ListServiceService } from '../../shared/services/list-service.service';
@@ -13,6 +13,8 @@ import { ViewChartData } from '../../shared/models/ViewChartData';
 export class ViewChartComponent implements OnInit {
   @Input('symb')
   symbolToSearch = '';
+
+  @Output() viewChange = new EventEmitter();
   constructor(private _stocks : ListServiceService) { }
 
   dataToInsertInChart:ViewChartData = new ViewChartData();
@@ -62,7 +64,8 @@ export class ViewChartComponent implements OnInit {
         () => {
           this.createDataSets();
           this.isFinishedLoading = true;
-          this.monthLineOptions.title.text = `${this.symbolToSearch} Previous Month Data`
+          this.monthLineOptions.title.text = `${this.symbolToSearch} Previous Month Data`;
+          this.viewChange.emit(this.monthData);
         }
       );
     }
@@ -82,6 +85,11 @@ export class ViewChartComponent implements OnInit {
       this.dataToInsertInChart = new ViewChartData();
       this.getChartData();
     }
+  }
+
+  getMonthData(){
+    console.log(this.monthData);
+    return this.monthData;
   }
   
   //create chart datasets initally

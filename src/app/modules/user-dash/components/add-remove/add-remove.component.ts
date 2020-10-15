@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {  Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ListServiceService } from '../../shared/services/list-service.service';
 import { IQuote } from '../../shared/interfaces/IQuote';
@@ -14,7 +14,6 @@ import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
   styleUrls: ['./add-remove.component.css']
 })
 export class AddRemoveComponent implements OnInit {
-  
   constructor(private router: Router, 
     private _stocks: ListServiceService,
     private _backend: BackendService) { }
@@ -27,6 +26,7 @@ export class AddRemoveComponent implements OnInit {
   nyseList:string[] = [];
   nasdaqList:string[] = [];
   stockSymbolRetrieveError:boolean = false;
+  monthDataFromChild:IHistoricalQuote[] = [];
   ngOnInit(): void {
     // protect against direct navigation
     if (this._stocks.getQuotes() === undefined){
@@ -131,6 +131,15 @@ export class AddRemoveComponent implements OnInit {
     }
   }
 
+  // destination of event emitted from child
+  switchData(quoteData:IHistoricalQuote[]){
+    this.monthDataFromChild = quoteData;
+  }
+
+  displayPrice(quote:IQuote){
+    if (quote.close === null) return `Currently: ${quote.iexRealtimePrice}`;
+    return `Last close: ${quote.close}`;
+  }
 
   toastErrorAdd(value){
       $(function(){
@@ -165,4 +174,37 @@ export class AddRemoveComponent implements OnInit {
     this.router.navigate(['dash']);
   }
 
+  /* Below functions for right pane */
+  renderDateRange():string{
+    return `(${this.monthDataFromChild[0].date} - ${this.monthDataFromChild[this.monthDataFromChild.length - 1].date})`;
+  }
+  renderPanelData():string{
+    let maxClose = -100000;
+    let maxVolume = -1;
+    let maxHigh = -1;
+    let floorLow = 100000;
+    let dates = new Object();
+    this.monthDataFromChild.forEach(element => {
+      if (element.close > maxClose){
+        maxClose = element.close;
+        dates['close'] = element.date;
+      }
+      if (element.volume > maxVolume){
+        maxVolume = element.volume; 
+        dates['volume'] = element.date;
+      }
+      if (element.high > maxHigh){
+        maxHigh = element.high; 
+        dates['high'] = element.date;
+      } 
+      if (element.low < floorLow){
+        floorLow = element.low;
+        dates['low'] = element.date;
+      } 
+    });
+    return `<p>Highest close: ${maxClose} &nbsp ${dates['close']}</p>
+            <p>Highest volume: ${maxVolume} &nbsp ${dates['volume']}</p>
+            <p>Month High: ${maxHigh} &nbsp ${dates['high']}</p>
+            <p>Month Low: ${floorLow} &nbsp ${dates['low']}</p>`;
+  }
 }

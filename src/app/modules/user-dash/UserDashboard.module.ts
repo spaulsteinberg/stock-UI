@@ -17,6 +17,8 @@ import { ViewChartComponent } from './components/view-chart/view-chart.component
 import { ChartsModule } from 'ng2-charts';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatExpansionModule} from '@angular/material/expansion';
+
 
 
 
@@ -34,7 +36,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatInputModule,
     ChartsModule,
     MatProgressSpinnerModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatExpansionModule
   ],
   exports: [
     DashComponent

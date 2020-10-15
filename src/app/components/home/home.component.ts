@@ -8,13 +8,13 @@ import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 export class HomeComponent implements OnInit {
 
   constructor(private el: ElementRef) {
+    this.el.nativeElement.ownerDocument.body.style.backgroundImage = "url('../assets/general-images/nasdaq-nums.jpg')"
    }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(){
-    this.el.nativeElement.ownerDocument.body.style.backgroundImage = "url('../assets/general-images/nasdaq-nums.jpg')"
   }
 
 }

@@ -13,7 +13,7 @@
                 <div class="example-list">
                     <div class="example-box" *ngFor="let quote of quotes">
                         {{renderStockItem(quote.companyName, quote.symbol)}} 
-                        <span [ngStyle]="getItemBoxColor(quote)">Last close: ${{quote.close}}</span>
+                        <span [ngStyle]="getItemBoxColor(quote)">{{displayPrice(quote)}}</span>
                     </div>
                 </div>
             </div>
@@ -29,7 +29,7 @@
         </div>
     </div>
     <!-- cols for search and other components-->
-    <div class="col col-lg-8">
+    <div class="col col-lg-6" style="padding-right: 0; margin-right: 0">
         <!-- if user wants to add give them all stock options, or else only the ones they already have added -->
         <div style="padding-left: 10%;">
         <mat-form-field appearance="fill" *ngIf="selectBoxAction === 'Add' || selectBoxAction === 'View' ||selectBoxAction === undefined; else deleteField">
@@ -73,15 +73,27 @@
             <mat-radio-button value="NYSE" (click)="updateValue('NYSE')">NYSE</mat-radio-button>
             <mat-radio-button class="mx-2" value="NASDAQ" (click)="updateValue('NASDAQ')">NASDAQ</mat-radio-button>
         </mat-radio-group>
-        <div class="button-container" style="padding-left: 17%">
+        <div class="button-container" style="padding-left: 22%">
             <button class="btn btn-primary btn-lg" type="submit" [disabled]="selectBoxValue === undefined || selectBoxAction === undefined" (click)="executeAction()">Execute</button>
         </div>
         </div>
         <div *ngIf="viewClick === true && viewSelectChange !== undefined && selectBoxAction === 'View'" >
-            <app-view-chart [symb]="viewSelectChange"></app-view-chart>
+            <app-view-chart [symb]="viewSelectChange" (viewChange)="switchData($event)"></app-view-chart>
         </div>
     </div>
+    <div class="col col-lg-3" *ngIf="monthDataFromChild.length > 0 && viewClick === true && viewSelectChange !== undefined && selectBoxAction === 'View'">
+        <mat-accordion class="example-headers-align" multi>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                <mat-panel-title>
+                    {{viewSelectChange}}
+                </mat-panel-title>
+                <mat-panel-description>
+                    {{renderDateRange()}}
+                </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div [innerHtml]="renderPanelData()"></div>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
 </div>
-<!--<ul>
-    <li *ngFor="let quote of quotes | symbolFilter:inputFilter">{{quote}}</li>
-</ul> -->
