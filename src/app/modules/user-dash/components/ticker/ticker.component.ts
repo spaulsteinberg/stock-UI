@@ -36,6 +36,6 @@ export class TickerComponent implements OnInit {
   }
 
   renderDayChange(percent:number, change:number){
-    return `${change} (${percent.toFixed(3)}%)`;
+    return `${change} (${(percent*100).toFixed(3)}%)`;
   }
 }

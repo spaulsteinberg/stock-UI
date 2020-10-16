@@ -4,13 +4,13 @@
 <div *ngIf="stockSymbolRetrieveError">Error retrieving stock symbols. Please reload the page to try again.</div>
 <div class="row">
     <!-- cols for 'MyList' -->
-    <div class="col col-lg-3">
+    <div class="col col-lg-3" style="padding-left:3%">
         <div class="success-content">
             <div *ngIf="finishedLoadingFlag === true; else emptyBlock">
                 <div class="example-list">
                     <div class="example-box" *ngFor="let quote of quotes">
                         <mat-accordion multi style="width:100%">
-                            <app-stock-panel [quote]="quote" [color]="getItemBoxColor"></app-stock-panel>
+                            <app-stock-panel [quote]="quote" [color]="getItemBoxColor" [execute]="executeAction" (panelChange)="process($event)"></app-stock-panel>
                         </mat-accordion>
                     </div>
                 </div>
@@ -20,7 +20,7 @@
             </ng-template>
         </div>
         
-        <div class="back-arrow">
+        <div class="back-arrow" style="padding-left:22%">
             <a routerLink="/dash" class="back">
                 <img src="../../../../../assets/dash-images/keyboard_backspace-24px.svg" alt="back_arrow.svg"> Back to Dash
             </a>
@@ -75,7 +75,7 @@
             <button class="btn btn-primary btn-lg" type="submit" [disabled]="selectBoxValue === undefined || selectBoxAction === undefined" (click)="executeAction()">Execute</button>
         </div>
         </div>
-        <div *ngIf="viewClick === true && viewSelectChange !== undefined && selectBoxAction === 'View'" >
+        <div *ngIf="viewClick === true && viewSelectChange !== undefined && selectBoxAction === 'View'">
             <app-view-chart [symb]="viewSelectChange" (viewChange)="switchData($event)"></app-view-chart>
         </div>
     </div>

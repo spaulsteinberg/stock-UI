@@ -9,6 +9,7 @@
 <div class="jumbotron">
     <h2 class="display-2 text-center">Dashboard</h2>
 </div>
+<hr style="background-color: white; width: 70%;" class="text-center">
 <div class="text-danger" *ngIf="isError && finishedLoadingFlag; else success">{{errorOnList}}</div>
 <ng-template #success>
     <app-dash-navigation></app-dash-navigation>

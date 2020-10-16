@@ -1,3 +1,7 @@
 h1 {
     color: orange;
 }
+.test {
+    background-image: url('../../../assets/general-images/solid-lightblue-back.jpg');
+    background-attachment: fixed;
+}

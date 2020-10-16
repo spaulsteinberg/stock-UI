@@ -10,9 +10,7 @@ html, body{
     background-repeat: no-repeat;
     background-size: cover;*/
    /* background-color: #424242; */
-    background-image: url('assets/general-images/nasdaq-nums.jpg');
-    background-position: center;
-    background-repeat: repeat;
+    background-image: url('assets/general-images/nasdaq-nums.jpg') no-repeat left top, url('assets/general-images/solid-lightblue-back.jpg') no-repeat right bottom;
     background-size: cover;
 }
 .jumbotron {
@@ -22,4 +20,9 @@ html, body{
 }
 .spinner-container {
     margin-left: 45%;
+}
+.row {
+  margin-left: -15px;
+  margin-right: -15px;
+  overflow-x: hidden;
 }

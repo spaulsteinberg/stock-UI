@@ -63,6 +63,9 @@ export class AddRemoveComponent implements OnInit {
   updateValue(market){
     this.chooseList = market;
   }
+  process(ev){
+    this.executeAction(ev.symbol, ev.action);
+  }
 
   actions = ['Add', 'Remove', 'View'];
   selectBoxValue;
@@ -71,9 +74,10 @@ export class AddRemoveComponent implements OnInit {
   viewClick:boolean = false;
   viewSelectChange:string;
   // on Execute, perform logic to add/delete stock depending on option selected
-  executeAction(){
+  executeAction(symb?:string, action?:string){
+    let mainAction = action === undefined ? this.selectBoxAction : action;
     this.viewClick = false;
-    if (this.selectBoxAction === 'Add'){
+    if (mainAction === 'Add'){
         this._backend.addStockToUserList(this.selectBoxValue)
         .subscribe(
         data => {
@@ -108,27 +112,31 @@ export class AddRemoveComponent implements OnInit {
             console.log("Patch Complete");
         });
     }
-    else if (this.selectBoxAction === 'Remove'){
-        this._backend.deleteFromUserList(this.selectBoxValue)
+    else if (mainAction === 'Remove'){
+        let main = symb === undefined ? this.selectBoxValue : symb;
+        this._backend.deleteFromUserList(main)
         .subscribe(
         data => {
+        
         for (let i = 0; i < this.quotes.length; i++){
-          if (this.selectBoxValue === this.quotes[i].symbol){
+          if (main === this.quotes[i].symbol){
             this.quotes.splice(i, 1);
-            this.toastSuccessDelete(this.selectBoxValue);
+            this.toastSuccessDelete(main);
             break;
           }
         }
         this._stocks.updateQuoteList(this.quotes);
         console.log(this.quotes);
         },
-        error => this.toastErrorDelete(this.selectBoxValue),
+        error => this.toastErrorDelete(main),
         () => console.log("Delete complete"));
     }
     else {
+      console.log("in view")
       // set the passed variable to child. Assigning value here makes it so value changes only trigger on click
       this.viewClick = true;
-      this.viewSelectChange = this.selectBoxValue;
+      this.viewSelectChange = symb === undefined ? this.selectBoxValue : symb;
+      this.selectBoxAction = "View";
     }
   }
 
