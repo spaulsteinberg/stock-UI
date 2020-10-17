@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpBackend } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError } from 'rxjs/operators';
-import { throwError, pipe, Observable } from 'rxjs';
+import { throwError, pipe, Observable, of } from 'rxjs';
 import { IQuote } from '../interfaces/IQuote';
 import { IHistoricalQuote } from '../interfaces/IHistoricalQuote';
 
@@ -44,6 +44,11 @@ export class ListServiceService {
    //https://sandbox.iexapis.com/stable/stock/AAPL/chart/1m?token=Tpk_fd6c779103b3400b96861977097e17de
     const url = `https://sandbox.iexapis.com/stable/stock/${symbol}/chart/1m?token=${this._sandboxToken}`;
     return this.http.get<IHistoricalQuote[]>(url);
+  }
+
+  getNextEarningsReport(symbol:string){
+    //EARNINGS -> https://cloud.iexapis.com/stable/stock/aapl/estimates/1/reportDate?token=YOUR_TOKEN_HERE
+    return of("hi");
   }
 
   errorOnQuotes(error: HttpErrorResponse){

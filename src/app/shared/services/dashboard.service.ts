@@ -15,7 +15,7 @@ export class DashboardService {
   // get users saved stock list
   getUserList(){
     this.params = new HttpParams().set('user', localStorage.getItem("u"));
-    const url = `${this._url}/userlist?${this.params.toString()}`;
+    const url = `${this._url}/stock?${this.params.toString()}`;
     return this.http.get<any>(url).pipe(catchError(this.errorUserList));
   }
 
