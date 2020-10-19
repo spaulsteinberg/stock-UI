@@ -10,7 +10,7 @@
                 <div class="example-list">
                     <div class="example-box" *ngFor="let quote of quotes">
                         <mat-accordion multi style="width:100%">
-                            <app-stock-panel [quote]="quote" [color]="getItemBoxColor" [execute]="executeAction" (panelChange)="process($event)"></app-stock-panel>
+                            <app-stock-panel [quote]="quote" [color]="getItemBoxColor" [execute]="executeAction" [flag]="flagForPanel" (panelChange)="process($event)"></app-stock-panel>
                         </mat-accordion>
                     </div>
                 </div>

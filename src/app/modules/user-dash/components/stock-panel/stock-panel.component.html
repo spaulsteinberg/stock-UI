@@ -14,7 +14,7 @@
             <div [innerHtml]="renderQuoteData(quote)"></div>
             <p>YTD Change: <span [ngStyle]="colorText(quote.ytdChange)">{{(quote.ytdChange*100).toFixed(2)}}%</span></p>
             <div class="mx-auto justify-content-center text-center" style="margin-left: 3%;">
-                <button class="btn btn-primary" (click)="panelButtonClick(quote.symbol, 'View')">V</button>
-                <button class="btn btn-danger" (click)="panelButtonClick(quote.symbol, 'Remove')">D</button>
+                <button [ngClass]="buttonClasses.leftButtonClasses" (click)="panelButtonClick(quote.symbol, 'left')">{{letters[0]}}</button>
+                <button [ngClass]="buttonClasses.rightButtonClasses" (click)="panelButtonClick(quote.symbol, 'right')">{{letters[1]}}</button>
             </div>
 </mat-expansion-panel>

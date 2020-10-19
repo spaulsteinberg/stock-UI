@@ -11,11 +11,15 @@ export class StockPanelComponent implements OnInit {
   @Input() quote: IQuote;
   @Input('color') getColor:any; 
   @Input('execute') sendAction:any;
+  @Input('flag') flag:string;
   @Output() panelChange = new EventEmitter();
+  letters:string[] = [];
+  buttonClasses;
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.quote);
+    console.log(this.quote, this.flag);
+    this.resolveFlag();
   }
 
   // display field depending on whether market is opened/closed
@@ -37,8 +41,51 @@ export class StockPanelComponent implements OnInit {
   panelButtonClick(symbol:string, action:string){
     let n = new Object();
     n['symbol'] = symbol;
-    n['action'] = action;
+    if (this.flag === "add-remove" && action === 'left'){
+      n['action'] = 'View';
+    }
+    else if (this.flag === 'add-remove' && action === 'right'){
+      n['action'] = 'Remove';
+    }
+    else if (this.flag === 'compare' && action === 'left'){
+      n['action'] = 'Left';
+    }
+    else if (this.flag === "compare" && action === 'right'){
+      n['action'] = 'Right';
+    }
     this.panelChange.emit(n);
+  }
+
+  // resolve which flag is being passed for button names
+  resolveFlag = () => {
+    if (this.flag === "compare"){
+      this.letters[0] = "L";
+      this.letters[1] = "R";
+      this.buttonClasses = {
+        leftButtonClasses: {
+          'btn': true,
+          'btn-warning': true
+        },
+        rightButtonClasses: {
+          'btn': true,
+          'btn-info': true
+        }
+      };
+    }
+    else if (this.flag === "add-remove"){
+      this.letters[0] = "V";
+      this.letters[1] = "D";
+      this.buttonClasses = {
+        leftButtonClasses: {
+          'btn': true,
+          'btn-primary': true
+        },
+        rightButtonClasses: {
+          'btn': true,
+          'btn-danger': true
+        }
+      };
+    }
   }
 
   //basically the same thing as call in parent, but less logic needed for this

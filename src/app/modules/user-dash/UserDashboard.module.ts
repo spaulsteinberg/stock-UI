@@ -25,7 +25,16 @@ import { MainLandingComponent } from './components/compare-components/main-landi
 
 
 @NgModule({
-  declarations: [DashComponent, AddRemoveComponent, DashNavigationComponent, SymbolFilterPipe, TickerComponent, ViewChartComponent, StockPanelComponent, MainLandingComponent],
+  declarations: [
+    DashComponent, 
+    AddRemoveComponent, 
+    DashNavigationComponent, 
+    SymbolFilterPipe, 
+    TickerComponent, 
+    ViewChartComponent, 
+    StockPanelComponent, 
+    MainLandingComponent
+  ],
   imports: [
     CommonModule,
     DashRoutingModule,

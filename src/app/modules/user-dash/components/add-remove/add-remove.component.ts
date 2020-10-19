@@ -27,6 +27,7 @@ export class AddRemoveComponent implements OnInit {
   nasdaqList:string[] = [];
   stockSymbolRetrieveError:boolean = false;
   monthDataFromChild:IHistoricalQuote[] = [];
+  flagForPanel:string = "add-remove";
   ngOnInit(): void {
     // protect against direct navigation
     if (this._stocks.getQuotes() === undefined){

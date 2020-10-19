@@ -7,7 +7,7 @@ import { IQuote } from './interfaces/IQuote';
 export class SymbolFilterPipe implements PipeTransform {
 
   transform(quotes: string[], toSearch:string): any {
-      return quotes.filter(val => val.toLowerCase().startsWith(toSearch));
+      return quotes.filter(val => val.toLowerCase().startsWith(toSearch.toLowerCase()));
     }
 
 }

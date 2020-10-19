@@ -20,6 +20,7 @@ export class MainLandingComponent implements OnInit {
   inputFilterRight:string = '';
   selectBoxLeft:string;
   selectBoxRight:string;
+  flagForPanel:string = "compare";
   ngOnInit(): void {
     if (this._stocks.getQuotes() === undefined) this.router.navigate(['dash']);
     this.quotes = this._stocks.getQuotes();
@@ -39,15 +40,29 @@ export class MainLandingComponent implements OnInit {
       this.stockSymbolRetrieveError = true;
     });
   }
+  processClick(ev){
+    if (ev.action === "Left") {
+      this.inputFilterLeft = ev.symbol;
+      this.selectBoxLeft = ev.symbol;
+    }
+    if (ev.action === "Right"){
+      this.inputFilterRight = ev.symbol;
+      this.selectBoxRight = ev.symbol;
+    }
+    console.log("Click", ev)
+  }
+  changeBoxesOnClick(){
+    console.log("changeBoxes");
+  }
+  getItemBoxColor(quote:IQuote){
+    return {'color': quote.change > 0.00 ? '#00e600' : quote.change < 0.00 ? 'red' : 'gray'}
+  }
 
-  
-  renderQuoteData(quote:IQuote){
-    return `<p>Open: ${quote.open}</p>
-            <p>Day High: ${quote.high}</p>
-            <p>Day Low: ${quote.low}</p>
-            <p>Volume: ${quote.volume}</p>
-            <p>52 Week High: ${quote.week52High}</p>
-            <p>52 Week Low: ${quote.week52Low}</p>`;
+  goCompare(){
+    if (this.selectBoxLeft === this.selectBoxRight){
+      // throw toast msg
+    }
+    console.log(this.selectBoxLeft, this.selectBoxRight);
   }
 
 }

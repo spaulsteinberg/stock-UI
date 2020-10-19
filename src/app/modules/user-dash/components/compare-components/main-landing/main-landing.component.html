@@ -3,24 +3,10 @@
 </div>
 <div class="row">
     <div class="col col-md-3" style="padding-left: 3%;">
-        <div class="expansion-container" *ngIf="this._stocks.getQuotes().length > 0; else emptyBlock">
+        <div class="expansion-container" *ngIf="this._stocks.getQuotes !== undefined; else emptyBlock">
             <div class="expansion-box" *ngFor="let quote of quotes">
                 <mat-accordion multi>
-                    <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            {{quote.companyName}}
-                        </mat-panel-title>
-                        <mat-panel-description>
-                            {{quote.symbol}}
-                        </mat-panel-description>
-                        </mat-expansion-panel-header>
-                        <div [innerHtml]="renderQuoteData(quote)"></div>
-                        <div class="mx-auto justify-content-center text-center" style="margin-left: 3%;">
-                            <button class="btn btn-warning">L</button>
-                            <button class="btn btn-info">R</button>
-                        </div>
-                    </mat-expansion-panel>
+                    <app-stock-panel [quote]="quote" [color]="getItemBoxColor" [execute]="changeBoxesOnClick" [flag]="flagForPanel" (panelChange)="processClick($event)"></app-stock-panel>
                 </mat-accordion>
             </div>
         </div>
@@ -40,7 +26,7 @@
                 <mat-form-field appearance="fill" style="padding-right: 3%;">
                     <input matInput [(ngModel)]="inputFilterLeft" autocomplete="off">
                     <mat-label>Select A Quote</mat-label>
-                    <mat-select [(ngModel)]="selectBoxLeft" [disabled]="inputFilterLeft === ''">
+                    <mat-select [(ngModel)]="selectBoxLeft">
                         <cdk-virtual-scroll-viewport itemSize="5" [style.height.px]=200>
                             <mat-option *cdkVirtualFor="let s of symbolsList | symbolFilter:inputFilterLeft" [value]="s">
                                 {{s}}
@@ -52,7 +38,7 @@
                 <mat-form-field appearance="fill" style="padding-left: 3%;">
                     <input matInput [(ngModel)]="inputFilterRight" autocomplete="off">
                     <mat-label>Select A Quote</mat-label>
-                    <mat-select [(ngModel)]="selectBoxRight" [disabled]="inputFilterRight === ''">
+                    <mat-select [(ngModel)]="selectBoxRight">
                         <cdk-virtual-scroll-viewport itemSize="5" [style.height.px]=200>
                             <mat-option *cdkVirtualFor="let s of symbolsList | symbolFilter:inputFilterRight" [value]="s">
                                 {{s}}
@@ -60,6 +46,10 @@
                         </cdk-virtual-scroll-viewport>
                     </mat-select>
                 </mat-form-field>
+                <div style="padding-left: 29%;">
+                    <button class="btn btn-success" [disabled]="selectBoxLeft === undefined || selectBoxRight === undefined"
+                 (click)="goCompare()">Go</button>
+                </div>
             </div>
         </div>
         <ng-template #badSymbols>
