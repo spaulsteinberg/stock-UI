@@ -4,3 +4,7 @@
 .navbar-brand:hover {
     color: red;
 }
+span {
+    color: green;
+    font-size: 1.25rem;
+}

@@ -1,7 +1,7 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { throwError } from 'rxjs';
+import { Subject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ListServiceService } from 'src/app/modules/user-dash/shared/services/list-service.service';
 
@@ -12,6 +12,9 @@ export class RegisterUserService {
 
   constructor(private http: HttpClient, private router: Router, private _list: ListServiceService) { }
   private _url = "http://localhost:3000/api";
+  username:string;
+  private params:HttpParams;
+  s = new Subject();
   registerUser(formData){
     const registerUrl = `${this._url}/register`;
     return this.http.post<any>(registerUrl, formData).pipe(catchError(this.errorRegisterUser));
@@ -32,11 +35,21 @@ export class RegisterUserService {
     return localStorage.getItem('token');
   }
 
+  setUsername(u){
+    if (u !== undefined && u !== null && u !== '') this.s.next(u);
+  }
+
+  getUsernameRefresh(){
+    this.params = new HttpParams().set('user', localStorage.getItem("u"));
+    const url = `${this._url}/whoami?${this.params.toString()}`;
+    return this.http.get<any>(url).pipe(catchError(this.errorOnGettingLogin));
+  }
   //log the user out
   logoutUser(){
     localStorage.removeItem('token');
     localStorage.removeItem('u');
     this._list.clearQuotes(); //clears list for logout/login
+    this.setUsername(undefined);
     this.router.navigate(['/login']);
   }
 
@@ -46,5 +59,9 @@ export class RegisterUserService {
 
   errorLogin(error: HttpErrorResponse){
     return throwError(error.message || "Something went wrong logging in. Please try again.");
+  }
+
+  errorOnGettingLogin(error: HttpErrorResponse){
+    return throwError(error.message || "Bad getting username");
   }
 }

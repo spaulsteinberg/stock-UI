@@ -1,0 +1,69 @@
+<div class="jumbotron">
+    <h2 class="display-2 text-center">Compare</h2>
+</div>
+<div class="row">
+    <div class="col col-md-3" style="padding-left: 3%;">
+        <div class="expansion-container" *ngIf="this._stocks.getQuotes().length > 0; else emptyBlock">
+            <div class="expansion-box" *ngFor="let quote of quotes">
+                <mat-accordion multi>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            {{quote.companyName}}
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            {{quote.symbol}}
+                        </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <div [innerHtml]="renderQuoteData(quote)"></div>
+                        <div class="mx-auto justify-content-center text-center" style="margin-left: 3%;">
+                            <button class="btn btn-warning">L</button>
+                            <button class="btn btn-info">R</button>
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+        </div>
+        <ng-template #emptyBlock>
+            <div class="text-danger">No stocks added yet!</div>
+        </ng-template>
+        <div class="back-arrow" style="padding-left:22%">
+            <a routerLink="/dash" class="back" style="color: lightblue;">
+                <img src="../../../../../../assets/dash-images/keyboard_backspace-24px.svg" alt="back_arrow.svg"> Back to Dash
+            </a>
+        </div>
+    </div>
+    <div class="col col-md-7 mx-auto">
+        <!-- for centering:  d-flex justify-content-center-->
+        <div class="comparisons" *ngIf="stockSymbolRetrieveError === false; else badSymbols;">
+            <div class="compare-arrows">
+                <mat-form-field appearance="fill" style="padding-right: 3%;">
+                    <input matInput [(ngModel)]="inputFilterLeft" autocomplete="off">
+                    <mat-label>Select A Quote</mat-label>
+                    <mat-select [(ngModel)]="selectBoxLeft" [disabled]="inputFilterLeft === ''">
+                        <cdk-virtual-scroll-viewport itemSize="5" [style.height.px]=200>
+                            <mat-option *cdkVirtualFor="let s of symbolsList | symbolFilter:inputFilterLeft" [value]="s">
+                                {{s}}
+                            </mat-option>
+                        </cdk-virtual-scroll-viewport>
+                    </mat-select>
+                </mat-form-field>
+                <img src="../../../../../../assets/dash-images/compare_arrows_48px.svg" alt="back_arrow.svg">
+                <mat-form-field appearance="fill" style="padding-left: 3%;">
+                    <input matInput [(ngModel)]="inputFilterRight" autocomplete="off">
+                    <mat-label>Select A Quote</mat-label>
+                    <mat-select [(ngModel)]="selectBoxRight" [disabled]="inputFilterRight === ''">
+                        <cdk-virtual-scroll-viewport itemSize="5" [style.height.px]=200>
+                            <mat-option *cdkVirtualFor="let s of symbolsList | symbolFilter:inputFilterRight" [value]="s">
+                                {{s}}
+                            </mat-option>
+                        </cdk-virtual-scroll-viewport>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <ng-template #badSymbols>
+            <span class="text-danger">Error loading symbols</span>
+        </ng-template>
+    </div>
+</div>

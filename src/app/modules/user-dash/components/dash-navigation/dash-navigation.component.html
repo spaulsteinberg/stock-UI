@@ -14,8 +14,8 @@
         </a>
     </div>
     <div class="col col-sm-3 mx-auto">
-        <a routerLink="configstocks">
-            <div class="flip-card">
+        <a>
+            <div class="flip-card" (click)="navToCompare()">
                 <div class="flip-card-inner">
                     <div class="flip-card-front" [ngStyle]="styles[1]">
                         Compare
