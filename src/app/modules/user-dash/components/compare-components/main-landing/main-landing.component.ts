@@ -3,6 +3,9 @@ import { Router } from '@angular/router';
 import { IQuote } from '../../../shared/interfaces/IQuote';
 import { BackendService } from '../../../shared/services/backend.service';
 import { ListServiceService } from '../../../shared/services/list-service.service';
+import * as $ from 'jquery/dist/jquery.min.js';
+import * as toastr from 'toastr';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-main-landing',
@@ -21,6 +24,7 @@ export class MainLandingComponent implements OnInit {
   selectBoxLeft:string;
   selectBoxRight:string;
   flagForPanel:string = "compare";
+  executionClick:boolean = false;
   ngOnInit(): void {
     if (this._stocks.getQuotes() === undefined) this.router.navigate(['dash']);
     this.quotes = this._stocks.getQuotes();
@@ -60,9 +64,10 @@ export class MainLandingComponent implements OnInit {
 
   goCompare(){
     if (this.selectBoxLeft === this.selectBoxRight){
-      // throw toast msg
+      toastr.error("Cannot compare the same stock!");
+      return;
     }
-    console.log(this.selectBoxLeft, this.selectBoxRight);
+    this.executionClick = true;
   }
 
 }

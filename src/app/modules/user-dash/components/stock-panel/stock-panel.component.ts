@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IQuote } from '../../shared/interfaces/IQuote';
 
+
 @Component({
   selector: 'app-stock-panel',
   templateUrl: './stock-panel.component.html',

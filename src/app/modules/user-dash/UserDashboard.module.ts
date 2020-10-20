@@ -20,6 +20,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { StockPanelComponent } from './components/stock-panel/stock-panel.component';
 import { MainLandingComponent } from './components/compare-components/main-landing/main-landing.component';
+import { ChartsComponent } from './components/compare-components/charts/charts.component';
 
 
 
@@ -33,7 +34,7 @@ import { MainLandingComponent } from './components/compare-components/main-landi
     TickerComponent, 
     ViewChartComponent, 
     StockPanelComponent, 
-    MainLandingComponent
+    MainLandingComponent, ChartsComponent
   ],
   imports: [
     CommonModule,

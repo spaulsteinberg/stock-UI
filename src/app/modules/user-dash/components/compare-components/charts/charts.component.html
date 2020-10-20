@@ -1,0 +1,23 @@
+<div *ngIf="showLoadingIcon">
+    <mat-progress-spinner mode="indeterminate" color="warn"></mat-progress-spinner>
+</div>
+<div class="text-danger" *ngIf="isError; else showChart">
+    {{errMessage}}
+</div>
+<ng-template #showChart>
+        <div *ngIf="chartData.length > 0">
+            <canvas baseChart 
+            [datasets]="chartData"
+            [labels]="labels"
+            [options]="monthLineOptions"
+            [legend]="legend"
+            [chartType]="type">
+            </canvas>
+        </div>
+       <!-- <span class="check-container">
+            <mat-checkbox color="primary" [(ngModel)]="close" [checked]="closeCheck" (change)="close=$event.checked; processCheckBoxEvent($event.source.value, $event.checked)" value="Close">Close</mat-checkbox>
+            <mat-checkbox color="primary" [(ngModel)]="open" [checked]="openCheck" (change)="open=$event.checked; processCheckBoxEvent($event.source.value, $event.checked)" value="Open">Open</mat-checkbox>
+            <mat-checkbox color="primary" [(ngModel)]="high" [checked]="highCheck" (change)="high=$event.checked; processCheckBoxEvent($event.source.value, $event.checked)" value="High">High</mat-checkbox>
+            <mat-checkbox color="primary" [(ngModel)]="low" [checked]="lowCheck" (change)="low=$event.checked; processCheckBoxEvent($event.source.value, $event.checked)" value="Low">Low</mat-checkbox>
+        </span>-->
+</ng-template>

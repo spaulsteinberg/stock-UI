@@ -14,6 +14,7 @@ export class ListServiceService {
   private _base = "https://cloud.iexapis.com/v1/stock";
   private _token = "pk_37940397ebe547018bb0721e95c37432";
   private _sandboxToken = "Tpk_fd6c779103b3400b96861977097e17de";
+  private sandbox = "https://sandbox.iexapis.com/stable/stock";
   public quoteList: IQuote[];
   //http backend will ignore HTTP_INTERCEPTORS from core module
   constructor(private handler: HttpBackend){
@@ -51,6 +52,11 @@ export class ListServiceService {
     return of("hi");
   }
 
+  getBatchHistoricalData(symbols:string):Observable<IHistoricalQuote[]>{
+    const token = "Tpk_5abe84814d2b432f84281d9e38b65317";
+    const url = `${this.sandbox}/market/batch?types=chart&symbols=${symbols}&range=1m&token=${token}`
+    return this.http.get<IHistoricalQuote[]>(url);
+  }
   errorOnQuotes(error: HttpErrorResponse){
     return throwError(error.message || "Error retrieving quotes.");
   }
