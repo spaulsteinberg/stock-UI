@@ -55,6 +55,7 @@
                     <button class="btn btn-success" [disabled]="selectBoxLeft === undefined || selectBoxRight === undefined"
                  (click)="goCompare()">Go</button>
                 </div>
+                <app-earnings-display [left]="selectBoxLeft" [right]="selectBoxRight"></app-earnings-display>
             </div>
             <div *ngIf="executionClick === true">
                 <app-charts [left]="selectBoxLeft" [right]="selectBoxRight"></app-charts>

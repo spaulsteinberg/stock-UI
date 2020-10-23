@@ -47,14 +47,16 @@ export class ListServiceService {
     return this.http.get<IHistoricalQuote[]>(url);
   }
 
-  getNextEarningsReport(symbol:string){
+  getNextEarningsReport(symbols:string):Observable<any>{
     //EARNINGS -> https://cloud.iexapis.com/stable/stock/aapl/estimates/1/reportDate?token=YOUR_TOKEN_HERE
-    return of("hi");
+    const token = "Tpk_5abe84814d2b432f84281d9e38b65317";
+    const url = `${this.sandbox}/market/batch?types=estimates&symbols=${symbols}&range=1m&token=${token}`
+    return this.http.get<any>(url).pipe(catchError(this.errorOnEstimates));
   }
 
   getBatchHistoricalData(symbols:string):Observable<IHistoricalQuote[]>{
     const token = "Tpk_5abe84814d2b432f84281d9e38b65317";
-    const url = `${this.sandbox}/market/batch?types=chart&symbols=${symbols}&range=1m&token=${token}`
+    const url = `${this.sandbox}/market/batch?types=chart&symbols=${symbols}&range=1y&token=${token}`
     return this.http.get<IHistoricalQuote[]>(url);
   }
   errorOnQuotes(error: HttpErrorResponse){
@@ -63,6 +65,10 @@ export class ListServiceService {
 
   errorOnHistoricalData(error: HttpErrorResponse){
     return throwError(error.message || "Error occurred fetching historical stock data.");
+  }
+  
+  errorOnEstimates(error: HttpErrorResponse){
+    return throwError(error.message || "Error on estimates");
   }
 
   // functions to share stock list

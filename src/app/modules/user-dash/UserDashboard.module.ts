@@ -21,6 +21,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import { StockPanelComponent } from './components/stock-panel/stock-panel.component';
 import { MainLandingComponent } from './components/compare-components/main-landing/main-landing.component';
 import { ChartsComponent } from './components/compare-components/charts/charts.component';
+import { EarningsDisplayComponent } from './components/compare-components/earnings-display/earnings-display.component';
 
 
 
@@ -34,7 +35,7 @@ import { ChartsComponent } from './components/compare-components/charts/charts.c
     TickerComponent, 
     ViewChartComponent, 
     StockPanelComponent, 
-    MainLandingComponent, ChartsComponent
+    MainLandingComponent, ChartsComponent, EarningsDisplayComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,13 @@
+<div *ngIf="estimates !== undefined && estimates.length === 2" 
+      style="background-color: blue;">
+    <div style="padding-left: 8%;">
+        <span>{{this.estimatesDisplay.symbols[0]}}</span> 
+        <span class="right-item">{{this.estimatesDisplay.symbols[1]}}</span>
+        <br><br>
+    </div>
+    <div>
+        <span>Announce Time</span>
+        <span>{{this.estimatesDisplay.announceTime[0]}}</span> 
+        <span class="right-item">{{this.estimatesDisplay.announceTime[1]}}</span>
+    </div>
+</div>

@@ -19,7 +19,7 @@ export class StockPanelComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.quote, this.flag);
+    console.log(this.quote);
     this.resolveFlag();
   }
 

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Label } from 'ng2-charts';
 import { catchError } from 'rxjs/operators';
@@ -54,9 +54,30 @@ export class ChartsComponent implements OnInit {
         this.errMessage = error;
       },
       () => {
+        this.makeSets();
         this.showLoadingIcon = false;
+        this.monthLineOptions.title.text = `${this.left} vs. ${this.right}`;
+
       }
     );
+  }
+
+  private makeSets(){
+    this.labels = this.leftDataSet.date;
+    this.chartData = [
+      { data: this.leftDataSet.close, label: `${this.leftDataSet.symbol}`, backgroundColor: 'transparent', borderColor: 'red' },
+      { data: this.rightDataSet.close, label: `${this.rightDataSet.symbol}`, backgroundColor: 'transparent', borderColor: 'green'}
+    ]
+  }
+
+  // if statement is on change, catch the undefineed and cont. is first changes in if/else happens once
+  ngOnChanges(changes: SimpleChanges){
+    console.log(changes);
+    if (changes.left === undefined || changes.right === undefined) console.log("hi");
+    else if (changes.left.isFirstChange() && changes.right.isFirstChange()) return;
+    this.labels = [];
+    this.chartData = [];
+    this.handleData();
   }
 
   public monthLineOptions: (ChartOptions & { annotation: any }) = {
@@ -71,6 +92,9 @@ export class ChartsComponent implements OnInit {
       line: {
         tension: 0,
         fill: false
+      },
+      point: {
+        radius: 0
       }
     },
     scales: {
@@ -96,7 +120,8 @@ export class ChartsComponent implements OnInit {
           id: 'y-axis-0',
           position: 'left',
           ticks: {
-            fontColor: 'white'
+            fontColor: 'white',
+            beginAtZero: true
           },
           scaleLabel: {
             display: true,

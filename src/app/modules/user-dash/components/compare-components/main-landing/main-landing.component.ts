@@ -5,7 +5,8 @@ import { BackendService } from '../../../shared/services/backend.service';
 import { ListServiceService } from '../../../shared/services/list-service.service';
 import * as $ from 'jquery/dist/jquery.min.js';
 import * as toastr from 'toastr';
-import { catchError } from 'rxjs/operators';
+import { IEstimate } from '../../../shared/interfaces/IEstimate';
+import { EstimateData } from '../../../shared/models/EstimateData';
 
 @Component({
   selector: 'app-main-landing',
@@ -44,6 +45,7 @@ export class MainLandingComponent implements OnInit {
       this.stockSymbolRetrieveError = true;
     });
   }
+  //process a click on L or R from child
   processClick(ev){
     if (ev.action === "Left") {
       this.inputFilterLeft = ev.symbol;
