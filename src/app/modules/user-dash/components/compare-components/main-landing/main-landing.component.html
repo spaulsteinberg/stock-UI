@@ -57,12 +57,16 @@
                 </div>
                 <app-earnings-display [left]="selectBoxLeft" [right]="selectBoxRight"></app-earnings-display>
             </div>
-            <div *ngIf="executionClick === true">
-                <app-charts [left]="selectBoxLeft" [right]="selectBoxRight"></app-charts>
-            </div>
         </div>
         <ng-template #badSymbols>
             <span class="text-danger">Error loading symbols</span>
         </ng-template>
+    </div>
+</div>
+<div class="row">
+    <div class="col col-md-8 offset-md-2">
+        <div *ngIf="executionClick === true">
+            <app-charts [left]="selectBoxLeft" [right]="selectBoxRight"></app-charts>
+        </div>
     </div>
 </div>
