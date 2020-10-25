@@ -19,11 +19,13 @@ export class EarningsDisplayComponent implements OnInit {
   estimatesDisplay:EstimateData;
   isError:boolean = false;
   errMessage:string = '';
+  showLoading:boolean = false;
   ngOnInit(): void {
   }
   //add a loading icon when finished
   getEarnings(){
     if (this.rightSymbol === undefined || this.leftSymbol === undefined) return;
+    this.showLoading = true;
     this.estimates = [];
     this.estimatesDisplay = new EstimateData();
     console.log(this.leftSymbol, this.rightSymbol);
@@ -49,7 +51,10 @@ export class EarningsDisplayComponent implements OnInit {
       this.isError = true;
       this.errMessage = error;
     },
-    () => console.log("Done with earnings")
+    () => {
+      this.showLoading = false;
+      console.log("Done loading earnings");
+    }
     );
   }
 

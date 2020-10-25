@@ -14,13 +14,13 @@ export class ListServiceService {
   private _base = "https://cloud.iexapis.com/v1/stock";
   private _token = "pk_37940397ebe547018bb0721e95c37432";
   private _sandboxToken = "Tpk_fd6c779103b3400b96861977097e17de";
+  private _sandboxTokenAlt = "Tpk_5abe84814d2b432f84281d9e38b65317";
   private sandbox = "https://sandbox.iexapis.com/stable/stock";
   public quoteList: IQuote[];
   //http backend will ignore HTTP_INTERCEPTORS from core module
   constructor(private handler: HttpBackend){
     this.http = new HttpClient(handler);
   }
-  //
   //https://sandbox.iexapis.com/stable/stock/${symbol}/quote?token=Tpk_fd6c779103b3400b96861977097e17de
   getUserListQuotes(symbol){
     const url = `${this._base}/${symbol}/quote?token=${this._token}`;
@@ -48,10 +48,13 @@ export class ListServiceService {
   }
 
   getNextEarningsReport(symbols:string):Observable<any>{
-    //EARNINGS -> https://cloud.iexapis.com/stable/stock/aapl/estimates/1/reportDate?token=YOUR_TOKEN_HERE
-    const token = "Tpk_5abe84814d2b432f84281d9e38b65317";
-    const url = `${this.sandbox}/market/batch?types=estimates&symbols=${symbols}&range=1m&token=${token}`
+    const url = `${this.sandbox}/market/batch?types=estimates&symbols=${symbols}&range=1m&token=${this._sandboxTokenAlt}`;
     return this.http.get<any>(url).pipe(catchError(this.errorOnEstimates));
+  }
+
+  getDividends(symbols:string):Observable<any>{
+    const url = `${this.sandbox}/market/batch?types=dividends&symbols=${symbols}&range=1y&token=${this._sandboxTokenAlt}`;
+    return this.http.get<any>(url).pipe(catchError(this.errorOnDividends));
   }
 
   getBatchHistoricalData(symbols:string):Observable<IHistoricalQuote[]>{
@@ -69,6 +72,10 @@ export class ListServiceService {
   
   errorOnEstimates(error: HttpErrorResponse){
     return throwError(error.message || "Error on estimates");
+  }
+
+  errorOnDividends(error:HttpErrorResponse){
+    return throwError(error.message || "Error fetching dividends. Please reload and try again.");
   }
 
   // functions to share stock list

@@ -1,4 +1,7 @@
-<div *ngIf="estimates !== undefined && estimates.length === 2 && isError === false; else errBlock" style="width:55%">
+<div class="loading-box" *ngIf="showLoading">
+    <mat-progress-spinner mode="indeterminate" color="warn"></mat-progress-spinner>
+</div>
+<div *ngIf="estimates !== undefined && estimates.length === 2 && isError === false && !showLoading; else errBlock" style="width:55%">
     <table class="table table-dark table-striped table-hover">
         <tbody>
             <tr>
