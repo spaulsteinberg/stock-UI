@@ -20,7 +20,7 @@
             </a>
         </div>
     </div>
-    <div class="col col-md-8 mx-auto">
+    <div class="col col-md-6">
         <!-- for centering:  d-flex justify-content-center-->
         <div class="comparisons" *ngIf="stockSymbolRetrieveError === false; else badSymbols;">
             <div class="compare-arrows">
@@ -52,7 +52,7 @@
                     <mat-radio-button>Month</mat-radio-button>
                     <mat-radio-button>Year</mat-radio-button>
                 </mat-radio-group>--> 
-                <div style="padding-left: 22%;">
+                <div style="padding-left: 29%;">
                     <button class="btn btn-success" [disabled]="selectBoxLeft === undefined || selectBoxRight === undefined"
                  (click)="goCompare()">Go</button>
                 </div>
@@ -62,6 +62,9 @@
         <ng-template #badSymbols>
             <span class="text-danger">Error loading symbols</span>
         </ng-template>
+    </div>
+    <div class="col col-md-3" id="dividends-container">
+        <app-dividends-panel [left]="selectBoxLeft" [right]="selectBoxRight"></app-dividends-panel>
     </div>
 </div>
 <div class="row">

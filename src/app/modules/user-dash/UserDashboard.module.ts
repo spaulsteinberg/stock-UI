@@ -22,6 +22,8 @@ import { StockPanelComponent } from './components/stock-panel/stock-panel.compon
 import { MainLandingComponent } from './components/compare-components/main-landing/main-landing.component';
 import { ChartsComponent } from './components/compare-components/charts/charts.component';
 import { EarningsDisplayComponent } from './components/compare-components/earnings-display/earnings-display.component';
+import { DividendsPanelComponent } from './components/compare-components/dividends-panel/dividends-panel.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 
 
@@ -35,7 +37,7 @@ import { EarningsDisplayComponent } from './components/compare-components/earnin
     TickerComponent, 
     ViewChartComponent, 
     StockPanelComponent, 
-    MainLandingComponent, ChartsComponent, EarningsDisplayComponent
+    MainLandingComponent, ChartsComponent, EarningsDisplayComponent, DividendsPanelComponent
   ],
   imports: [
     CommonModule,
@@ -50,7 +52,8 @@ import { EarningsDisplayComponent } from './components/compare-components/earnin
     ChartsModule,
     MatProgressSpinnerModule,
     MatCheckboxModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatProgressBarModule
   ],
   exports: [
     DashComponent

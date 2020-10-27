@@ -1,0 +1,12 @@
+mat-expansion-panel {
+    background-color: #2c75ff;
+    margin-bottom: 2%;
+    color: lightgreen;
+}
+mat-panel-title {
+    color: #ff9912;
+    width: 10%;
+}
+mat-panel-description {
+    color: #ffd700;
+}

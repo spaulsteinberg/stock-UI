@@ -30,7 +30,6 @@ export class MainLandingComponent implements OnInit {
     if (this._stocks.getQuotes() === undefined) this.router.navigate(['dash']);
     this.quotes = this._stocks.getQuotes();
     if (this.symbolsList.length === 0) this.retrieveValidStockSymbols();
-    this._stocks.getDividends("jpm,aapl").subscribe(data => console.log(data), error => console.log(error));
   }
 
   async retrieveValidStockSymbols(){
