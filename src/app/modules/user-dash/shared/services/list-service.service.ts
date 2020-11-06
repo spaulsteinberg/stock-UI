@@ -52,15 +52,20 @@ export class ListServiceService {
     return this.http.get<any>(url).pipe(catchError(this.errorOnEstimates));
   }
 
-  getDividends(symbols:string):Observable<any>{
+  getDividends(symbols:string):Promise<any>{
     const url = `${this.sandbox}/market/batch?types=dividends&symbols=${symbols}&range=1y&token=${this._sandboxTokenAlt}`;
-    return this.http.get<any>(url).pipe(catchError(this.errorOnDividends));
+    return this.http.get<any>(url).toPromise();
   }
 
   getBatchHistoricalData(symbols:string):Observable<IHistoricalQuote[]>{
     const token = "Tpk_5abe84814d2b432f84281d9e38b65317";
-    const url = `${this.sandbox}/market/batch?types=chart&symbols=${symbols}&range=1y&token=${token}`
+    const url = `${this.sandbox}/market/batch?types=chart&symbols=${symbols}&range=1y&token=${this._sandboxTokenAlt}`
     return this.http.get<IHistoricalQuote[]>(url);
+  }
+
+  getOneMonthHistoricalData(symbols:string, timespan:string):Promise<IHistoricalQuote[]>{
+    const url = `${this.sandbox}/market/batch?types=chart&symbols=${symbols}&range=${timespan}&token=${this._sandboxTokenAlt}`
+    return this.http.get<IHistoricalQuote[]>(url).toPromise();
   }
   errorOnQuotes(error: HttpErrorResponse){
     return throwError(error.message || "Error retrieving quotes.");

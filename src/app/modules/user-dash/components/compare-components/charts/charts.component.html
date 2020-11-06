@@ -1,4 +1,4 @@
-<div *ngIf="showLoadingIcon">
+<div *ngIf="showLoadingIcon" style="padding-left: 35%;">
     <mat-progress-spinner mode="indeterminate" color="warn"></mat-progress-spinner>
 </div>
 <div class="text-danger" *ngIf="isError; else showChart">
@@ -14,10 +14,17 @@
             [chartType]="type">
             </canvas>
         </div>
-       <!-- <span class="check-container">
-            <mat-checkbox color="primary" [(ngModel)]="close" [checked]="closeCheck" (change)="close=$event.checked; processCheckBoxEvent($event.source.value, $event.checked)" value="Close">Close</mat-checkbox>
-            <mat-checkbox color="primary" [(ngModel)]="open" [checked]="openCheck" (change)="open=$event.checked; processCheckBoxEvent($event.source.value, $event.checked)" value="Open">Open</mat-checkbox>
-            <mat-checkbox color="primary" [(ngModel)]="high" [checked]="highCheck" (change)="high=$event.checked; processCheckBoxEvent($event.source.value, $event.checked)" value="High">High</mat-checkbox>
-            <mat-checkbox color="primary" [(ngModel)]="low" [checked]="lowCheck" (change)="low=$event.checked; processCheckBoxEvent($event.source.value, $event.checked)" value="Low">Low</mat-checkbox>
-        </span>-->
+        <mat-radio-group style="margin-left: 25%;" [(ngModel)]="setToDisplay" (change)="toggleSet()">
+             <mat-radio-button class="mx-4" value="Close">Close</mat-radio-button>
+             <mat-radio-button class="mx-4" value="Open">Open</mat-radio-button>
+             <mat-radio-button class="mx-4" value="Volume">Volume</mat-radio-button>
+             <mat-radio-button class="mx-4" value="High">High</mat-radio-button>
+             <mat-radio-button class="mx-4" value="Low">Low</mat-radio-button>
+         </mat-radio-group>
+         <mat-radio-group color="primary" style="margin-left: 30%;" [(ngModel)]="timespanToDisplay" (change)="toggleTime()">
+            <mat-radio-button class="mx-4" value="1Month">One Month</mat-radio-button>
+            <mat-radio-button class="mx-4" value="3Month">3 Month</mat-radio-button>
+            <mat-radio-button class="mx-4" value="1Year">1 Year</mat-radio-button>
+            <mat-radio-button class="mx-4" value="5Year">5 Year</mat-radio-button>
+        </mat-radio-group>
 </ng-template>

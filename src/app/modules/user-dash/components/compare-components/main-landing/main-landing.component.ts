@@ -64,7 +64,7 @@ export class MainLandingComponent implements OnInit {
     return {'color': quote.change > 0.00 ? '#00e600' : quote.change < 0.00 ? 'red' : 'gray'}
   }
 
-  goCompare(){
+  goCompare(event){
     if (this.selectBoxLeft === this.selectBoxRight){
       toastr.error("Cannot compare the same stock!");
       return;

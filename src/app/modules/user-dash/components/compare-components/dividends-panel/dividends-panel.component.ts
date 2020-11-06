@@ -15,19 +15,18 @@ export class DividendsPanelComponent implements OnInit {
   loading:boolean;
   topPanel:Dividend;
   bottomPanel:Dividend;
-  ngOnInit(): void {
-    this.getDividendData();
+  async ngOnInit() {
+    await this.getDividendData();
   }
 
-  getDividendData(){
+  async getDividendData(){
     if (this.rightSymbol === undefined || this.leftSymbol === undefined) return;
     const sendToCall = `${this.leftSymbol},${this.rightSymbol}`;
     this.loading = true;
     this.topPanel = new Dividend();
     this.bottomPanel = new Dividend();
-    this._stocks.getDividends(sendToCall)
-    .subscribe
-    (data => {
+    return this._stocks.getDividends(sendToCall)
+    .then( (data) => {
       let temp = [];
       let tempData = [];
       for (const [key, value] of Object.entries(data)){
@@ -47,15 +46,16 @@ export class DividendsPanelComponent implements OnInit {
       }
       console.log("Top", this.topPanel, "Bottom", this.bottomPanel);
       this.isError = false;
-    }, 
-    error => {
+      return;
+    })
+    .catch( (error) => {
       this.isError = true;
       console.log(error);
-    },
-    () => {
+    })
+    .finally(() => {
       console.log("Dividends complete.");
       this.loading = false;
-    });
+    })
   }
 
   renderPanelData(dividend:Dividend){
@@ -68,7 +68,7 @@ export class DividendsPanelComponent implements OnInit {
             <p>Amount: ${dividend.dividends.recordDate}</p>`
   }
   //on changes call getEarnings again
-  ngOnChanges(changes:SimpleChanges){
+  async ngOnChanges(changes:SimpleChanges){
     console.log("Earnings changes: ", changes);
     try {
       if (changes.left === undefined || changes.right === undefined) console.log("hi");
@@ -83,7 +83,7 @@ export class DividendsPanelComponent implements OnInit {
       this.loading = false;
     }
    // if (changes.left !== undefined && changes.right !== undefined) this.getEarnings();
-   this.getDividendData()
+   await this.getDividendData()
   }
 
 }

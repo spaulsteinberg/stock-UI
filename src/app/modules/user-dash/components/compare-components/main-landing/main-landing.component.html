@@ -47,23 +47,18 @@
                         </cdk-virtual-scroll-viewport>
                     </mat-select>
                 </mat-form-field>
-               <!--<mat-radio-group>
-                    <mat-radio-button>Today</mat-radio-button>
-                    <mat-radio-button>Month</mat-radio-button>
-                    <mat-radio-button>Year</mat-radio-button>
-                </mat-radio-group>--> 
-                <div style="padding-left: 29%;">
+                <div style="padding-left: 32%;">
                     <button class="btn btn-success" [disabled]="selectBoxLeft === undefined || selectBoxRight === undefined"
-                 (click)="goCompare()">Go</button>
+                 (click)="goCompare($event)">Go</button>
                 </div>
-                <app-earnings-display [left]="selectBoxLeft" [right]="selectBoxRight"></app-earnings-display>
+                <app-earnings-display *ngIf="executionClick === true" [left]="selectBoxLeft" [right]="selectBoxRight"></app-earnings-display>
             </div>
         </div>
         <ng-template #badSymbols>
             <span class="text-danger">Error loading symbols</span>
         </ng-template>
     </div>
-    <div class="col col-md-3" id="dividends-container">
+    <div class="col col-md-3" id="dividends-container" *ngIf="selectBoxLeft !== selectBoxRight">
         <app-dividends-panel [left]="selectBoxLeft" [right]="selectBoxRight"></app-dividends-panel>
     </div>
 </div>

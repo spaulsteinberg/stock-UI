@@ -23,17 +23,48 @@ export class ChartsComponent implements OnInit {
   public labels: Label[] = [];
   public type= "line";
   public legend = true;
+  leftColor:string = 'orange';
+  rightColor:string = 'blue'
+  setToDisplay:string = "Close";
+  timespanToDisplay:string = "1Month";
   leftDataSet;
   rightDataSet;
-  ngOnInit(): void {
-    this.handleData();
+  async ngOnInit() {
+    await this.handleData("1m");
   }
 
-  handleData(){
+  async handleData(timespan:string){
     this.leftDataSet = new ViewChartHistoricalData(this.left);
     this.rightDataSet = new ViewChartHistoricalData(this.right)
     const symbols = this.left + "," + this.right;
-    console.log("Symbols are", symbols);
+    return this._stocks.getOneMonthHistoricalData(symbols, timespan)
+    .then((data) =>{
+      for (const [key, value] of Object.entries(data[this.left])) {
+        for (let d of data[this.left][key]){
+          this.leftDataSet._pushData(d.close, d.open, d.high, d.low, d.date, d.volume);
+        }
+      }
+      for (const [key, value] of Object.entries(data[this.right])) {
+        for (let d of data[this.right][key]){
+          this.rightDataSet._pushData(d.close, d.open, d.high, d.low, d.date, d.volume);
+        }
+      }
+    })
+    .catch((error) => {
+      this.isError = true;
+      this.errMessage = error;
+    })
+    .finally(() => {
+      this.makeSets();
+      this.showLoadingIcon = false;
+      this.monthLineOptions.title.text = `${this.left} vs. ${this.right}`;
+    })
+  }
+
+  async dataOneYear(){
+    this.leftDataSet = new ViewChartHistoricalData(this.left);
+    this.rightDataSet = new ViewChartHistoricalData(this.right)
+    const symbols = this.left + "," + this.right;
     this._stocks.getBatchHistoricalData(symbols)
     .pipe(catchError(this._stocks.errorOnHistoricalData))
     .subscribe(
@@ -62,22 +93,84 @@ export class ChartsComponent implements OnInit {
     );
   }
 
-  private makeSets(){
+  private async makeSets(displayNew?:string){
     this.labels = this.leftDataSet.date;
-    this.chartData = [
-      { data: this.leftDataSet.close, label: `${this.leftDataSet.symbol}`, backgroundColor: 'transparent', borderColor: 'red' },
-      { data: this.rightDataSet.close, label: `${this.rightDataSet.symbol}`, backgroundColor: 'transparent', borderColor: 'green'}
-    ]
+    if (displayNew === undefined){
+      this.chartData = [
+        { data: this.leftDataSet.close, label: `${this.leftDataSet.symbol}`, backgroundColor: 'transparent', borderColor: this.leftColor },
+        { data: this.rightDataSet.close, label: `${this.rightDataSet.symbol}`, backgroundColor: 'transparent', borderColor: this.rightColor}
+      ]
+    }
+    else {
+      if (displayNew === "Close"){
+        this.chartData = [
+        { data: this.leftDataSet.close, label: `${this.leftDataSet.symbol}`, backgroundColor: 'transparent', borderColor: this.leftColor },
+        { data: this.rightDataSet.close, label: `${this.rightDataSet.symbol}`, backgroundColor: 'transparent', borderColor: this.rightColor}
+      ]
+      }
+      else if (displayNew === "Open"){
+        this.chartData = [
+          { data: this.leftDataSet.open, label: `${this.leftDataSet.symbol}`, backgroundColor: 'transparent', borderColor: this.leftColor },
+          { data: this.rightDataSet.open, label: `${this.rightDataSet.symbol}`, backgroundColor: 'transparent', borderColor: this.rightColor}
+        ]
+      }
+      else if (displayNew === "High"){
+        this.chartData = [
+          { data: this.leftDataSet.high, label: `${this.leftDataSet.symbol}`, backgroundColor: 'transparent', borderColor: this.leftColor },
+          { data: this.rightDataSet.high, label: `${this.rightDataSet.symbol}`, backgroundColor: 'transparent', borderColor: this.rightColor}
+        ]
+      }
+      else if (displayNew === "Low"){
+        this.chartData = [
+          { data: this.leftDataSet.low, label: `${this.leftDataSet.symbol}`, backgroundColor: 'transparent', borderColor: this.leftColor },
+          { data: this.rightDataSet.low, label: `${this.rightDataSet.symbol}`, backgroundColor: 'transparent', borderColor: this.rightColor}
+        ]
+      }
+      else if (displayNew === "Volume"){
+        this.chartData = [
+          { data: this.leftDataSet.volume, label: `${this.leftDataSet.symbol}`, backgroundColor: 'transparent', borderColor: this.leftColor },
+          { data: this.rightDataSet.volume, label: `${this.rightDataSet.symbol}`, backgroundColor: 'transparent', borderColor: this.rightColor}
+        ]
+      }
+    }
+  }
+
+  async toggleSet(){
+    await this.makeSets(this.setToDisplay);
+    let t = await this.test();
+    console.log("test finished:", t);
+  }
+
+  async toggleTime(){
+    if (this.timespanToDisplay == "1Year"){
+      await this.dataOneYear();
+    }
+    else if (this.timespanToDisplay == "1Month"){
+      await this.handleData("1m");
+    }
+    else if (this.timespanToDisplay == "3Month"){
+      await this.handleData("3m");
+    }
+    else if (this.timespanToDisplay == "5Year"){
+      await this.handleData("5y");
+    }
   }
 
   // if statement is on change, catch the undefineed and cont. is first changes in if/else happens once
-  ngOnChanges(changes: SimpleChanges){
+  async ngOnChanges(changes: SimpleChanges){
     console.log(changes);
     if (changes.left === undefined || changes.right === undefined) console.log("hi");
     else if (changes.left.isFirstChange() && changes.right.isFirstChange()) return;
     this.labels = [];
     this.chartData = [];
-    this.handleData();
+    await this.toggleTime();
+  }
+
+  async test(){
+    let promise = new Promise((resolve, reject) => {
+      setTimeout(() => resolve("waiting..."), 2000)
+    });
+    return promise;
   }
 
   public monthLineOptions: (ChartOptions & { annotation: any }) = {
