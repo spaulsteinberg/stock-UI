@@ -1,0 +1,23 @@
+<div class="row m-4" *ngFor="let article of articleList">
+    <div class="col col-md-9">
+        <div class="card">
+            <div class="row">
+                <div class="col col-md-5">
+                    <div style="height:280px;overflow: hidden;"><img class="img-c" src="{{article.image}}" alt="article_img.png"></div>
+                </div>
+                <div class="col">
+                    <div class="card-body px-2">
+                        <h4 class="card-title">{{renderCharCountSummary(article.summary.length, article.summary, "headline")}}</h4>
+                        <p class="card-text">{{renderCharCountSummary(article.summary.length, article.summary, "summary")}}</p>
+                        <p>
+                            <a href="{{article.url}}"target="_blank">
+                                <span class="text-info">Source: {{article.source}}</span>
+                            </a>
+                        </p>
+                        <p class="text-info">{{renderDate(article.datetime)}}</p>
+                    </div>
+                </div>
+            </div>
+      </div>
+    </div>
+</div>

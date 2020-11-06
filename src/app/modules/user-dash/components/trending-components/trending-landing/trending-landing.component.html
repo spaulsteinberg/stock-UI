@@ -1,0 +1,21 @@
+<div class="jumbotron">
+    <h2 class="display-2 text-center text-white">The Latest</h2>
+    <hr style="background-color: orange; width: 50%;" class="text-center">
+</div>
+<!--<mat-form-field appearance="fill" style="padding-right: 3%">
+    <input matInput [(ngModel)]="inputFilterLeft" autocomplete="off">
+    <mat-label>Select A Quote</mat-label>
+    <mat-select [(ngModel)]="selectBoxLeft">
+        <cdk-virtual-scroll-viewport itemSize="5" [style.height.px]=200>
+            <mat-option *cdkVirtualFor="let s of symbolsList | symbolFilter:inputFilterLeft" [value]="s">
+                {{s}}
+            </mat-option>
+        </cdk-virtual-scroll-viewport>
+    </mat-select>
+</mat-form-field> -->
+<div class="text-info mx-4" *ngIf="articleList.length == 0; else viewArticles">
+    Add stocks to watchlist to see their latest and trending news!
+</div>
+<ng-template #viewArticles>
+    <app-news-card [article]="articleList"></app-news-card>
+</ng-template>

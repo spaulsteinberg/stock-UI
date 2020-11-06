@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router'; // CLI imports router
 import { AddRemoveComponent } from './components/add-remove/add-remove.component';
 import { MainLandingComponent } from './components/compare-components/main-landing/main-landing.component';
 import { DashComponent } from './components/dash/dash.component';
+import { TrendingLandingComponent } from './components/trending-components/trending-landing/trending-landing.component';
 
 const routes: Routes = [
     {
@@ -24,6 +25,10 @@ const routes: Routes = [
     {
         path: 'comparelanding',
         component: MainLandingComponent
+    },
+    {
+        path: 'trending',
+        component: TrendingLandingComponent
     }
 ];
 

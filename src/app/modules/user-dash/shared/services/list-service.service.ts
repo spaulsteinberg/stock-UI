@@ -67,6 +67,16 @@ export class ListServiceService {
     const url = `${this.sandbox}/market/batch?types=chart&symbols=${symbols}&range=${timespan}&token=${this._sandboxTokenAlt}`
     return this.http.get<IHistoricalQuote[]>(url).toPromise();
   }
+
+  getLatestNews(symbols:string){
+    const url = `${this._base}/market/batch?types=news&symbols=${symbols}&last=2&token=${this._token}`;
+    return this.http.get<any>(url).pipe(catchError(this.errorOnNews));
+  }
+
+  errorOnNews(error : HttpErrorResponse){
+    return throwError(error || "Error retrieving latest news articles");
+  }
+
   errorOnQuotes(error: HttpErrorResponse){
     return throwError(error.message || "Error retrieving quotes.");
   }

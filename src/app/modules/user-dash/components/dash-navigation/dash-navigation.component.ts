@@ -33,5 +33,8 @@ export class DashNavigationComponent implements OnInit {
     console.log(this.router.url)
     this.router.navigate(['comparelanding'], {relativeTo: this.route});
   }
+  navToTrending(){
+    this.router.navigate(['trending'], {relativeTo: this.route})
+  }
 
 }

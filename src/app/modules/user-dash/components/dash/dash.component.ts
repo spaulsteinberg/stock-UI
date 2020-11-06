@@ -46,13 +46,13 @@ export class DashComponent implements OnInit {
         this.isError = false;
         },
         error => {
-            this.isError = true;
-            if (error.status === 401) {
-                localStorage.removeItem('token');
-                localStorage.removeItem('u');
-                this.router.navigate(['/login']);
-            }
-            this.errorOnList = error.status === 500 ? "Server error. Please login and try again." : "Error fetching stocks.";
+          this.isError = true;
+          if (error.status === 401) {
+              localStorage.removeItem('token');
+              localStorage.removeItem('u');
+              this.router.navigate(['/login']);
+          }
+          this.errorOnList = error.status === 500 ? "Server error. Please login and try again." : "Error fetching stocks.";
         },
         () => {
             console.log("here after update");
