@@ -112,4 +112,12 @@ export class ListServiceService {
   initQuoteList(){
     this.quoteList = [];
   }
+
+  getQuoteSymbols(){
+    let toWatch = [];
+    for (let quote of this.quoteList){
+      toWatch.push(quote.symbol);
+    }
+    return toWatch;
+  }
 }
