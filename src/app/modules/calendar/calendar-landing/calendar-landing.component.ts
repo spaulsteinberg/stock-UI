@@ -3,8 +3,8 @@ import { CalendarOptions } from '@fullcalendar/angular';
 import { Observable, zip } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DashboardService } from 'src/app/shared/services/dashboard.service';
-import { CalendarContainer, CalendarObject } from '../../user-dash/shared/models/CalendarObject';
-import { ListServiceService } from '../../user-dash/shared/services/list-service.service';
+import { CalendarContainer, CalendarObject } from '../../../shared/models/CalendarObject';
+import { ListServiceService } from '../../../shared/services/list-service.service';
 @Component({
   selector: 'app-calendar-landing',
   templateUrl: './calendar-landing.component.html',
@@ -14,6 +14,7 @@ export class CalendarLandingComponent implements OnInit {
 
   constructor(private el: ElementRef, private _stocks : ListServiceService, private dash: DashboardService) {
     this.el.nativeElement.ownerDocument.body.style.backgroundColor = "lightgray"
+    this.el.nativeElement.ownerDocument.body.style.backgroundImage = "none"
   }
   symbolList:string[] = [];
   calendarObj:CalendarObject[] = [];

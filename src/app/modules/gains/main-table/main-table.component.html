@@ -1,0 +1,24 @@
+<table class="table table-dark">
+    <thead>
+        <tr>
+            <th>Symbol</th>
+            <th>sector</th>
+            <th>volume</th>
+            <th>last updated</th>
+            <th>last sale price</th>
+            <th>I bought at...</th>
+            <th>My Gains</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let o of testObj; let index = index">
+            <td>{{o.symbol}}</td>
+            <td>{{o.price}}</td>
+            <td>{{o.volume}}</td>
+            <td>{{o.lastUpdated}}</td>
+            <td>{{o.lastSale}}</td>
+            <td><input type="number" class="form-control" [(ngModel)]="testObj[index]['mybuy']"></td>
+            <td><span *ngIf="testObj[index]['mybuy'] !== undefined && testObj[index]['mybuy'] !== null">{{renderPrice(o.lastSale, testObj[index]['mybuy'])}}</span></td>
+        </tr>
+    </tbody>
+</table>

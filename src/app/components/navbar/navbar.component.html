@@ -3,7 +3,7 @@
     <a class="navbar-brand" routerLinkActive="active" routerLink="about">About</a>
     <a class="navbar-brand" routerLinkActive="active" routerLink="dash">Dashboard</a>
     <a class="navbar-brand" *ngIf="_auth.isUserLoggedIn()" routerLinkActive="active" routerLink="calendar">My Calendar</a>
-    <a class="navbar-brand" *ngIf="_auth.isUserLoggedIn()" routerLinkActive="active" routerLink="about">My Gains</a>
+    <a class="navbar-brand" *ngIf="_auth.isUserLoggedIn()" routerLinkActive="active" routerLink="gains">My Gains</a>
     <ul class="navbar-nav ml-auto">
         <li class="nav-item">
             <a class="navbar-brand" *ngIf="!_auth.isUserLoggedIn()" routerLink="login" routerLinkActive="active">Login</a>

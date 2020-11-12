@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
-import { NewsData } from '../../../shared/models/NewsData';
-import { NewsDataKey } from '../../../shared/models/NewsFilterStructure';
+import { NewsData } from '../../../../../shared/models/NewsData';
+import { NewsDataKey } from '../../../../../shared/models/NewsFilterStructure';
 
 @Component({
   selector: 'app-news-card',

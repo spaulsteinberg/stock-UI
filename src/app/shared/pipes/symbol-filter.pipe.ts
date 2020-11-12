@@ -1,5 +1,4 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { IQuote } from './interfaces/IQuote';
 
 @Pipe({
   name: 'symbolFilter'

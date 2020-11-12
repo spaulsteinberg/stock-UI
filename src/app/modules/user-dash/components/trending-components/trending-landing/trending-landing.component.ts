@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NewsData } from '../../../shared/models/NewsData';
-import { ListServiceService } from '../../../shared/services/list-service.service';
+import { NewsData } from '../../../../../shared/models/NewsData';
+import { ListServiceService } from '../../../../../shared/services/list-service.service';
 
 @Component({
   selector: 'app-trending-landing',

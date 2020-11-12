@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
-import { Dividend } from '../../../shared/models/DividendData';
-import { ListServiceService } from '../../../shared/services/list-service.service';
+import { Dividend } from '../../../../../shared/models/DividendData';
+import { ListServiceService } from '../../../../../shared/services/list-service.service';
 
 @Component({
   selector: 'app-dividends-panel',

@@ -1,9 +1,9 @@
 import { Component, Input, OnInit, Output, SimpleChanges, EventEmitter } from '@angular/core';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Label } from 'ng2-charts';
-import { ListServiceService } from '../../shared/services/list-service.service';
+import { ListServiceService } from '../../../../shared/services/list-service.service';
 import { catchError } from 'rxjs/internal/operators';
-import { ViewChartData } from '../../shared/models/ViewChartData';
+import { ViewChartData } from '../../../../shared/models/ViewChartData';
 
 @Component({
   selector: 'app-view-chart',

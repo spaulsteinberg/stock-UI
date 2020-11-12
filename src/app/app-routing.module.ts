@@ -40,6 +40,11 @@ const routes: Routes = [
     loadChildren: () => import('./modules/calendar/calendar.module').then(m => m.CalendarModule),
     canActivate: [AuthGuard]
   },
+  {
+    path: 'gains',
+    loadChildren: () => import('./modules/gains/gains.module').then(m => m.GainsModule),
+    canActivate: [AuthGuard]
+  },
   { 
     path: '**', 
     component: PageNotFoundComponent 

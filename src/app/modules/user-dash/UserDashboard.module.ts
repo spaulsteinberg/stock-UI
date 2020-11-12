@@ -4,7 +4,7 @@ import { DashComponent } from './components/dash/dash.component';
 import { AddRemoveComponent } from './components/add-remove/add-remove.component';
 import { DashRoutingModule } from './dash-routing.module';
 import { DashNavigationComponent } from './components/dash-navigation/dash-navigation.component';
-import { SymbolFilterPipe } from './shared/symbol-filter.pipe';
+import { SymbolFilterPipe } from '../../shared/pipes/symbol-filter.pipe';
 import { TickerComponent } from './components/ticker/ticker.component';
 import { ViewChartComponent } from './components/view-chart/view-chart.component';
 import { StockPanelComponent } from './components/stock-panel/stock-panel.component';

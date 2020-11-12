@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { IQuote } from '../../../shared/interfaces/IQuote';
-import { BackendService } from '../../../shared/services/backend.service';
-import { ListServiceService } from '../../../shared/services/list-service.service';
+import { IQuote } from '../../../../../shared/interfaces/IQuote';
+import { BackendService } from '../../../../../shared/services/backend.service';
+import { ListServiceService } from '../../../../../shared/services/list-service.service';
 import * as $ from 'jquery/dist/jquery.min.js';
 import * as toastr from 'toastr';
-import { IEstimate } from '../../../shared/interfaces/IEstimate';
-import { EstimateData } from '../../../shared/models/EstimateData';
 
 @Component({
   selector: 'app-main-landing',

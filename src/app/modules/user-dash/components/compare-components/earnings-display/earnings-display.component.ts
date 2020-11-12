@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
-import { IEstimate } from '../../../shared/interfaces/IEstimate';
-import { EstimateData } from '../../../shared/models/EstimateData';
-import { ListServiceService } from '../../../shared/services/list-service.service';
+import { IEstimate } from '../../../../../shared/interfaces/IEstimate';
+import { EstimateData } from '../../../../../shared/models/EstimateData';
+import { ListServiceService } from '../../../../../shared/services/list-service.service';
 
 @Component({
   selector: 'app-earnings-display',

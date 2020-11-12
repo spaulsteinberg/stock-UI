@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { ListServiceService } from 'src/app/modules/user-dash/shared/services/list-service.service';
+import { ListServiceService } from 'src/app/shared/services/list-service.service';
 
 @Injectable({
   providedIn: 'root'

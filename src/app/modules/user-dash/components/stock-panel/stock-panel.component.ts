@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { IQuote } from '../../shared/interfaces/IQuote';
+import { IQuote } from '../../../../shared/interfaces/IQuote';
 
 
 @Component({
