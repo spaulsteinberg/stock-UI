@@ -6,9 +6,6 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { RegisterComponent } from './components/register/register.component';
-import { AddRemoveComponent } from './modules/user-dash/components/add-remove/add-remove.component';
-import { DashComponent } from './modules/user-dash/components/dash/dash.component';
-import { UserDashModule } from './modules/user-dash/UserDashboard.module';
 
 
 const routes: Routes = [
@@ -36,6 +33,11 @@ const routes: Routes = [
   {
     path: 'dash',
     loadChildren: () => import('./modules/user-dash/UserDashboard.module').then(m => m.UserDashModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'calendar',
+    loadChildren: () => import('./modules/calendar/calendar.module').then(m => m.CalendarModule),
     canActivate: [AuthGuard]
   },
   { 

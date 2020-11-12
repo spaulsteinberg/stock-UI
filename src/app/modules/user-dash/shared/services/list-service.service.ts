@@ -4,6 +4,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError, pipe, Observable, of } from 'rxjs';
 import { IQuote } from '../interfaces/IQuote';
 import { IHistoricalQuote } from '../interfaces/IHistoricalQuote';
+import { CalendarContainer, CalendarObject } from '../models/CalendarObject';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,7 @@ export class ListServiceService {
   private _sandboxToken = "Tpk_fd6c779103b3400b96861977097e17de";
   private _sandboxTokenAlt = "Tpk_5abe84814d2b432f84281d9e38b65317";
   private sandbox = "https://sandbox.iexapis.com/stable/stock";
+  private stableDatapointUrl = "https://cloud.iexapis.com/stable/data-points";
   public quoteList: IQuote[];
   //http backend will ignore HTTP_INTERCEPTORS from core module
   constructor(private handler: HttpBackend){
@@ -73,6 +75,36 @@ export class ListServiceService {
     return this.http.get<any>(url).pipe(catchError(this.errorOnNews));
   }
 
+  getNextDividendDate(symbol){
+    const url = `${this.stableDatapointUrl}/${symbol}/NEXTDIVIDENDDATE?token=${this._token}`;
+    return this.http.get<any>(url).pipe(catchError(this.catchNextDividendError));
+  }
+
+  getNextDividendOnBadStocks(symbols:string[]) {
+    let calendarContainer = new CalendarContainer();
+    symbols.forEach(symbol => {
+      const url = `${this.stableDatapointUrl}/${symbol}/NEXTDIVIDENDDATE?token=${this._token}`;
+      this.http.get<any>(url)
+      .pipe(catchError(this.catchNextDividendError))
+      .subscribe(
+        data => {
+          calendarContainer.calendarObjects.push(new CalendarObject(symbol, data))
+        },
+        error => {
+          console.log(error)
+          calendarContainer.errorObjects.push(symbol);
+        },
+        () => console.log("Done in requests")
+      );
+    });
+    console.log("done here")
+    return calendarContainer;
+  }
+
+  catchNextDividendError(error : HttpErrorResponse){
+    return throwError(error || "Error getting next data");
+  }
+
   errorOnNews(error : HttpErrorResponse){
     return throwError(error || "Error retrieving latest news articles");
   }
@@ -114,10 +146,6 @@ export class ListServiceService {
   }
 
   getQuoteSymbols(){
-    let toWatch = [];
-    for (let quote of this.quoteList){
-      toWatch.push(quote.symbol);
-    }
-    return toWatch;
+    return this.quoteList.map(x => x.symbol);
   }
 }

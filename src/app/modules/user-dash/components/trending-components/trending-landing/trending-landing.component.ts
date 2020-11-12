@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { DashboardService } from 'src/app/shared/services/dashboard.service';
+import { Component, ElementRef, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NewsData } from '../../../shared/models/NewsData';
 import { ListServiceService } from '../../../shared/services/list-service.service';
 
@@ -11,7 +10,10 @@ import { ListServiceService } from '../../../shared/services/list-service.servic
 })
 export class TrendingLandingComponent implements OnInit {
 
-  constructor(private _stocks : ListServiceService, private router : Router, private dash : DashboardService) { }
+  constructor(private _stocks : ListServiceService,
+              private router : Router,
+              private route : ActivatedRoute,
+              private el : ElementRef) { }
   articleList:NewsData[] = [];
   newsToDisplay:string = "All";
   isError:boolean = false;
@@ -72,6 +74,11 @@ export class TrendingLandingComponent implements OnInit {
  compareTimestamps(a:NewsData, b:NewsData){
     return a.datetime - b.datetime;
  }
-
-
+ navBack(){
+   this.router.navigate(['..'], {relativeTo: this.route})
+ }
+ ngAfterViewInit(){
+ // this.el.nativeElement.ownerDocument.body.style.backgroundColor = "ghostwhite"
+ }
+ 
 }

@@ -21,9 +21,13 @@
         </mat-select>
     </mat-form-field>
 </ng-template>
-<div class="text-info mx-4" *ngIf="articleList.length == 0 && !isLoading; else viewArticles">
+<div class="text-info mx-4" *ngIf="articleList.length === 0 && !isLoading; else viewArticles">
     Add stocks to watchlist to see their latest and trending news!
 </div>
 <ng-template #viewArticles>
     <app-news-card [article]="articleList" [display]="newsToDisplay"></app-news-card>
 </ng-template>
+<a (click)="navBack()" class="arrow-link-container">
+    <img id="arrow-back" src="../../../../../../assets/dash-images/back-arrow.svg" alt="back_arrow">
+    <span class="text-white">Back to Dash</span>
+</a>
