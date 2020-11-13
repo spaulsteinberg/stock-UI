@@ -5,6 +5,7 @@ import { throwError, pipe, Observable, of } from 'rxjs';
 import { IQuote } from '../interfaces/IQuote';
 import { IHistoricalQuote } from '../interfaces/IHistoricalQuote';
 import { CalendarContainer, CalendarObject } from '../models/CalendarObject';
+import { ILightWeightQuote } from '../interfaces/ILightWeightQuote';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class ListServiceService {
   private _sandboxTokenAlt = "Tpk_5abe84814d2b432f84281d9e38b65317";
   private sandbox = "https://sandbox.iexapis.com/stable/stock";
   private stableDatapointUrl = "https://cloud.iexapis.com/stable/data-points";
+  private lightweightUrl = "https://api.iextrading.com/1.0/tops?";
   public quoteList: IQuote[];
   //http backend will ignore HTTP_INTERCEPTORS from core module
   constructor(private handler: HttpBackend){
@@ -101,8 +103,19 @@ export class ListServiceService {
     return calendarContainer;
   }
 
+  getLightweightStocks(symbolList:string[]):Observable<ILightWeightQuote[]>{
+    console.log(symbolList)
+    let payload = symbolList.join();
+    const url = `${this.lightweightUrl}symbols=${payload}`;
+    return this.http.get<ILightWeightQuote[]>(url).pipe(catchError(this.catchLightWeightError));
+  }
+
   catchNextDividendError(error : HttpErrorResponse){
     return throwError(error || "Error getting next data");
+  }
+
+  catchLightWeightError(error: HttpErrorResponse){
+    return throwError(error || "Couldnt retrieve lightweigh stocks")
   }
 
   errorOnNews(error : HttpErrorResponse){

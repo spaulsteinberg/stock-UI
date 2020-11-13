@@ -17,7 +17,6 @@ export class CalendarLandingComponent implements OnInit {
     this.el.nativeElement.ownerDocument.body.style.backgroundImage = "none"
   }
   symbolList:string[] = [];
-  calendarObj:CalendarObject[] = [];
   calendarContainer:CalendarContainer;
   ngOnInit(): void {
     this.dash.getUserList()
@@ -52,5 +51,8 @@ export class CalendarLandingComponent implements OnInit {
       this.isLoaded = true;
     }, 500)
     console.log(this.calendarContainer)
+  }
+  renderErrorStocks(){
+    return this.calendarContainer.errorObjects.join(', ');
   }
 }

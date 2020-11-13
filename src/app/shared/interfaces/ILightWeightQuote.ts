@@ -6,7 +6,7 @@ export interface ILightWeightQuote {
     bidSize:number;
     askPrice:number;
     askSize:number;
-    lastUpdated:number;
+    lastUpdated:string;
     lastSalePrice:number;
     lastSaleSize:number;
     lastSaleTime:number;

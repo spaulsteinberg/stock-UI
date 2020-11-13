@@ -2,14 +2,12 @@
     <mat-progress-bar color="warn" mode="indeterminate"></mat-progress-bar>
 </div>
 <div class="jumotron text-center">
-<h4 class="display-4 text-white">Ex-Dividend Calendar</h4>
+    <h4 class="display-4 text-white">Ex-Dividend Calendar</h4>
 </div>
 <p *ngIf="calendarContainer !== undefined && calendarContainer.errorObjects !== undefined && calendarContainer.errorObjects.length > 0">
-<span class="text-danger">Some stocks unable to render: </span>
-<span *ngFor="let err of calendarContainer.errorObjects">{{err}}</span>
+    <span class="text-danger">Some stocks unable to render: </span>
+    <span>{{renderErrorStocks()}}</span>
 </p>
 <div class="m-3 calendar-container">
     <full-calendar [options]="calendarOptions" ></full-calendar>
-</div>
-<div *ngIf="calendarContainer !== undefined">
 </div>

@@ -1,24 +1,43 @@
-<table class="table table-dark">
-    <thead>
-        <tr>
-            <th>Symbol</th>
-            <th>sector</th>
-            <th>volume</th>
-            <th>last updated</th>
-            <th>last sale price</th>
-            <th>I bought at...</th>
-            <th>My Gains</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let o of testObj; let index = index">
-            <td>{{o.symbol}}</td>
-            <td>{{o.price}}</td>
-            <td>{{o.volume}}</td>
-            <td>{{o.lastUpdated}}</td>
-            <td>{{o.lastSale}}</td>
-            <td><input type="number" class="form-control" [(ngModel)]="testObj[index]['mybuy']"></td>
-            <td><span *ngIf="testObj[index]['mybuy'] !== undefined && testObj[index]['mybuy'] !== null">{{renderPrice(o.lastSale, testObj[index]['mybuy'])}}</span></td>
-        </tr>
-    </tbody>
-</table>
+<div class="text-danger" *ngIf="isError">
+    Something went wrong. Please reload and try again. If the issue persists, log out and log back in.
+</div>
+<div class="text-info" *ngIf="!isError && symbolList.length === 0">
+    You don't have any stocks! Navigate to the dash <a routerLink="/dash">here</a> to add some!
+</div>
+<div class="loading-container" *ngIf="onInitLoadingProgressBarDisplay === true && !isError" style="margin-left: 55%;">
+    <mat-progress-spinner mode="indeterminate" color="warn"></mat-progress-spinner>
+</div>
+<div *ngIf="onInitLoadingProgressBarDisplay === false && !isError && symbolList.length !== 0" style="margin-left: 10%;">
+    <table class="table table-light table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Sector</th>
+                <th>Volume</th>
+                <th>Last Updated (CST)</th>
+                <th>Last Sale Price</th>
+                <th>I Bought At...</th>
+                <th>Num Shares</th>
+                <th>My Gains</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let stock of stockList; let index = index">
+                <td>{{stock.symbol}}</td>
+                <td>{{stock.sector}}</td>
+                <td>{{stock.volume}}</td>
+                <td>{{stock.lastUpdated}}</td>
+                <td>{{stock.lastSalePrice | currency}}</td>
+                <td><input type="number" class="form-control" [(ngModel)]="stockList[index].lastSaleSize"></td>
+                <td><input type="number" class="form-control" [(ngModel)]="stockList[index].lastSaleTime"></td>
+                <td>
+                    <span 
+                    *ngIf="stockList[index].lastSaleSize !== undefined && stockList[index].lastSaleSize !== null
+                            && stockList[index].lastSaleTime !== undefined && stockList[index].lastSaleTime !== null">
+                    {{renderPrice(stock.lastSalePrice, stockList[index].lastSaleSize, stockList[index].lastSaleTime) | currency}}
+                </span>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
