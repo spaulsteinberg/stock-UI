@@ -38,7 +38,7 @@ export class ListServiceService {
   }
 
   // get a batch list of quotes...stocks need to go in comma separated (hence join())
-  getBatchQuotes(symbolList: string[]): Observable<any>{
+  getBatchQuotes(symbolList: string[]): Observable<IQuote[]>{
     const batchSymbols = symbolList.join();
     const url = `${this._base}/market/batch?&types=quote&symbols=${batchSymbols}&token=${this._token}`;
     return this.http.get<IQuote[]>(url).pipe(catchError(this.errorOnQuotes));

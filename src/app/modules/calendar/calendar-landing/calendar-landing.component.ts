@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CalendarOptions } from '@fullcalendar/angular';
 import { Observable, zip } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -12,7 +13,10 @@ import { ListServiceService } from '../../../shared/services/list-service.servic
 })
 export class CalendarLandingComponent implements OnInit {
 
-  constructor(private el: ElementRef, private _stocks : ListServiceService, private dash: DashboardService) {
+  constructor(private el: ElementRef,
+              private _stocks : ListServiceService,
+              private dash: DashboardService, 
+              private router : Router) {
     this.el.nativeElement.ownerDocument.body.style.backgroundColor = "lightgray"
     this.el.nativeElement.ownerDocument.body.style.backgroundImage = "none"
   }
@@ -54,5 +58,8 @@ export class CalendarLandingComponent implements OnInit {
   }
   renderErrorStocks(){
     return this.calendarContainer.errorObjects.join(', ');
+  }
+  navBack() {
+    this.router.navigate(['/dash'])
   }
 }

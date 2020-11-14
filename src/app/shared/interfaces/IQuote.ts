@@ -34,7 +34,7 @@ export class IQuote {
     latestPrice:number;
     latestSource:string;
     latestTime:string;
-    latestUpdate:number;
+    latestUpdate:number|string;
     latestVolume:number|null
     low:number|null;
     lowSource:string;

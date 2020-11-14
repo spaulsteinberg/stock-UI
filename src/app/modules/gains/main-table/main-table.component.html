@@ -12,29 +12,25 @@
         <thead>
             <tr>
                 <th>Symbol</th>
-                <th>Sector</th>
-                <th>Volume</th>
                 <th>Last Updated (CST)</th>
-                <th>Last Sale Price</th>
+                <th>Current Price</th>
                 <th>I Bought At...</th>
                 <th>Num Shares</th>
                 <th>My Gains</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let stock of stockList; let index = index">
+            <tr *ngFor="let stock of quoteList; let index = index">
                 <td>{{stock.symbol}}</td>
-                <td>{{stock.sector}}</td>
-                <td>{{stock.volume}}</td>
-                <td>{{stock.lastUpdated}}</td>
-                <td>{{stock.lastSalePrice | currency}}</td>
-                <td><input type="number" class="form-control" [(ngModel)]="stockList[index].lastSaleSize"></td>
-                <td><input type="number" class="form-control" [(ngModel)]="stockList[index].lastSaleTime"></td>
-                <td>
+                <td>{{stock.latestUpdate}}</td>
+                <td>{{stock.latestPrice}}</td>
+                <td><input type="number" class="form-control" [(ngModel)]="quoteList[index].lowTime" onkeyup="this.value=this.value.replace(/[^\d]/,'')"></td>
+                <td><input type="number" class="form-control" [(ngModel)]="quoteList[index].highTime" onkeyup="this.value=this.value.replace(/[^\d]/,'')"></td>
+                <td [ngStyle] = "renderStyle(stock.latestPrice, quoteList[index].lowTime)">
                     <span 
-                    *ngIf="stockList[index].lastSaleSize !== undefined && stockList[index].lastSaleSize !== null
-                            && stockList[index].lastSaleTime !== undefined && stockList[index].lastSaleTime !== null">
-                    {{renderPrice(stock.lastSalePrice, stockList[index].lastSaleSize, stockList[index].lastSaleTime) | currency}}
+                    *ngIf="quoteList[index].lowTime !== undefined && quoteList[index].lowTime !== null
+                            && quoteList[index].highTime !== undefined && quoteList[index].highTime !== null">
+                    {{renderPrice(stock.latestPrice, quoteList[index].lowTime, quoteList[index].highTime) | currency}}
                 </span>
             </td>
             </tr>

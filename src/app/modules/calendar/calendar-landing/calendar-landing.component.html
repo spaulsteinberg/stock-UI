@@ -4,9 +4,14 @@
 <div class="jumotron text-center">
     <h4 class="display-4 text-white">Ex-Dividend Calendar</h4>
 </div>
-<p *ngIf="calendarContainer !== undefined && calendarContainer.errorObjects !== undefined && calendarContainer.errorObjects.length > 0">
-    <span class="text-danger">Some stocks unable to render: </span>
-    <span>{{renderErrorStocks()}}</span>
+<p>
+    <a (click)="navBack()" class="arrow-link-container">
+        <img id="arrow-back" src="../../../../../../assets/dash-images/back-arrow.svg" alt="back_arrow">
+        <span class="text-white">To Dash</span>
+    </a>
+    <span 
+    *ngIf="calendarContainer !== undefined && calendarContainer.errorObjects !== undefined && calendarContainer.errorObjects.length > 0"
+     class="text-danger" style="margin-left: 29%;">    *Some stocks unable to render: {{renderErrorStocks()}}</span>
 </p>
 <div class="m-3 calendar-container">
     <full-calendar [options]="calendarOptions" ></full-calendar>

@@ -1,7 +1,8 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { noop, timer } from 'rxjs';
+import { noop, Observable, timer } from 'rxjs';
 import { concatMap, map, switchMap, tap } from 'rxjs/operators';
 import { ILightWeightQuote } from 'src/app/shared/interfaces/ILightWeightQuote';
+import { IQuote } from 'src/app/shared/interfaces/IQuote';
 import { DashboardService } from 'src/app/shared/services/dashboard.service';
 import { ListServiceService } from 'src/app/shared/services/list-service.service';
 
@@ -20,8 +21,10 @@ export class MainTableComponent implements OnInit {
 
   symbolList:string[] = [];
   stockList:ILightWeightQuote[] = [];
+  quoteList:IQuote[] = [];
   isError:boolean = false;
   onInitLoadingProgressBarDisplay:boolean = true;
+  tickingSub$;
   ngOnInit(): void {
     this.getSymbols();
   }
@@ -33,14 +36,13 @@ export class MainTableComponent implements OnInit {
         this.isError = true;
         console.log(error)
       },
-      () => this.getData()
+      () => {
+      //  this.getData()
+        this.getQuotes();
+      }
     );
   }
-  
-  renderDate(d:string){
-    return new Date(d).toLocaleString()
-  }
-
+/* DOESNT LOOK LIKE LIGHTWEIGHT API DOES WEEKENDS
   getData(){
     this._stocks.getLightweightStocks(this.symbolList)
     .pipe(
@@ -69,12 +71,9 @@ export class MainTableComponent implements OnInit {
       }
     )
   }
-  renderPrice(curPrice:number, userBuyPrice:number, numShares:number){
-    return ( (curPrice*numShares) - (userBuyPrice*numShares)).toFixed(2);
-  }
   //contains update timer for constant checks, start after 2 seconds on load
   updatePrices(){
-    timer(2000, 5000)
+    this.tickingSub$ = timer(2000, 10000)
     .pipe(
       tap(_ => this.getPrices())
     ).subscribe();
@@ -86,11 +85,71 @@ export class MainTableComponent implements OnInit {
       data => {
         for (let i = 0; i < this.stockList.length; i++){
           this.stockList[i].lastSalePrice = data[i].lastSalePrice;
+          console.log(data[i].lastSalePrice)
         }
+        console.log(this.stockList)
       },
       error => console.log(error),
       () => console.log("completed a run")
     )
+  }
+*/
+  getQuotes(){
+    this._stocks.getBatchQuotes(this.symbolList)
+    .pipe(
+      map(raw => {
+        let refined = Object.values(raw); //convert obj of obj into array of obj
+        for (let quote of refined){
+          console.log(quote)
+          quote["quote"]["latestUpdate"] = this.renderDate(quote["quote"]["latestUpdate"]);
+          quote["quote"]["highTime"] = undefined;
+          quote["quote"]["lowTime"] = undefined;
+        }
+        return refined;
+      })
+    )
+    .subscribe(
+      data => {
+        console.log(data);
+        for(let q of data){
+          this.quoteList.push(q["quote"])
+        }
+        console.log(this.quoteList)
+      },
+      error => {
+        console.log("ERROR:", error);
+        this.isError = true
+      },
+      () => {
+        console.log("done heavyweight");
+        this.onInitLoadingProgressBarDisplay = false;
+        this.marketIsOpen() && this.updatePrices();
+      }
+    )
+  }
+  //contains update timer for constant checks, start after 2 seconds on load
+  updatePrices(){
+    this.tickingSub$ = timer(2000, 10000)
+    .pipe(
+      tap(_ => this.getQuotes())
+    ).subscribe();
+  }
+
+  renderPrice(curPrice:number, userBuyPrice:number, numShares:number){
+    return ( (curPrice*numShares) - (userBuyPrice*numShares)).toFixed(2);
+  }
+  
+  renderStyle(curPrice:number, userBuyPrice:number){
+    let style = {
+      'color': (curPrice - userBuyPrice) > 0 ? 'green' : (curPrice - userBuyPrice) < 0 ? 'red' : 'gray'
+    };
+    
+    return style;
+  }
+  renderDate(d:any){
+    return new Date(d).toLocaleString("en-US", {
+      timeZone: "America/New_York"
+    });
   }
 
   marketIsOpen(){
@@ -98,8 +157,9 @@ export class MainTableComponent implements OnInit {
       timeZone: "America/New_York"
     });
     let curDateTime = new Date(curTime)
+    //Might need to check for daylight savings?
     if (curDateTime.getDay() >= 1 && curDateTime.getDay() <= 5){
-      if (curDateTime.getHours() >= 9 && curDateTime.getHours() < 4){
+      if (curDateTime.getHours() >= 9 && curDateTime.getHours() < 16){
         if (curDateTime.getHours() === 9){
           return curDateTime.getMinutes() >= 30 ? true : false;
         }
@@ -107,6 +167,10 @@ export class MainTableComponent implements OnInit {
       }
     }
     return false;
+  }
+
+  ngOnDestroy(){
+    this.tickingSub$ !== undefined && this.tickingSub$.unsubscribe();
   }
 
 }
