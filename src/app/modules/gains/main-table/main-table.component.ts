@@ -1,6 +1,6 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { noop, Observable, timer } from 'rxjs';
-import { concatMap, map, switchMap, tap } from 'rxjs/operators';
+import { ChangeDetectorRef, Component, ElementRef, OnInit } from '@angular/core';
+import { timer } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { ILightWeightQuote } from 'src/app/shared/interfaces/ILightWeightQuote';
 import { IQuote } from 'src/app/shared/interfaces/IQuote';
 import { DashboardService } from 'src/app/shared/services/dashboard.service';
@@ -13,7 +13,10 @@ import { ListServiceService } from 'src/app/shared/services/list-service.service
 })
 export class MainTableComponent implements OnInit {
 
-  constructor(private dash : DashboardService, private _stocks : ListServiceService, private el : ElementRef) 
+  constructor(private dash : DashboardService,
+              private _stocks : ListServiceService,
+              private el : ElementRef,
+              private cdr : ChangeDetectorRef) 
   {
     this.el.nativeElement.ownerDocument.body.style.backgroundColor = "black"
     this.el.nativeElement.ownerDocument.body.style.backgroundImage = "none"
@@ -25,6 +28,7 @@ export class MainTableComponent implements OnInit {
   isError:boolean = false;
   onInitLoadingProgressBarDisplay:boolean = true;
   tickingSub$;
+  sumColumnValues:number[] = [];
   ngOnInit(): void {
     this.getSymbols();
   }
@@ -104,17 +108,16 @@ export class MainTableComponent implements OnInit {
           quote["quote"]["latestUpdate"] = this.renderDate(quote["quote"]["latestUpdate"]);
           quote["quote"]["highTime"] = undefined;
           quote["quote"]["lowTime"] = undefined;
+          quote["quote"]["lastTradeTime"] = undefined;
         }
-        return refined;
+        this.sumColumnValues = new Array(refined.length).fill(0);
+        return refined.map(_ => _["quote"]);
       })
     )
     .subscribe(
       data => {
-        console.log(data);
-        for(let q of data){
-          this.quoteList.push(q["quote"])
-        }
-        console.log(this.quoteList)
+        console.log(this.sumColumnValues)
+        this.quoteList = data;
       },
       error => {
         console.log("ERROR:", error);
@@ -135,15 +138,22 @@ export class MainTableComponent implements OnInit {
     ).subscribe();
   }
 
-  renderPrice(curPrice:number, userBuyPrice:number, numShares:number){
-    return ( (curPrice*numShares) - (userBuyPrice*numShares)).toFixed(2);
+  renderPrice(curPrice:number, userBuyPrice:number, numShares:number, index:number):string | void{
+    if (numShares <= 0) return;
+    try {
+      let sum = ( (curPrice*numShares) - (userBuyPrice*numShares)).toFixed(2);
+      this.sumColumnValues[index] = Number.parseFloat(sum);
+      return sum;
+    }
+    catch (err){
+      console.log(err)
+    }
   }
-  
+  globalStyle:object = {};
   renderStyle(curPrice:number, userBuyPrice:number){
     let style = {
       'color': (curPrice - userBuyPrice) > 0 ? 'green' : (curPrice - userBuyPrice) < 0 ? 'red' : 'gray'
     };
-    
     return style;
   }
   renderDate(d:any){
@@ -168,6 +178,26 @@ export class MainTableComponent implements OnInit {
     }
     return false;
   }
+
+  sumGains(){
+    console.log(this.sumColumnValues)
+    let total = this.sumColumnValues.reduce((acc, cur) => acc + cur)
+    let style = {
+      'color': total > 0 ? 'green' : total < 0 ? 'red' : 'gray'
+    };
+    this.globalStyle = style;
+    return total;
+  }
+  //function sumGains() is called on changes, need this so view isnt checked too soon...only show totals when defined
+  ngAfterViewChecked(){
+    for (let i = 0; i < this.quoteList.length; i++){
+      if (this.quoteList[i].highTime === undefined || this.quoteList[i].highTime === null
+          || this.quoteList[i].lowTime === undefined || this.quoteList[i].lowTime === null){
+            this.sumColumnValues[i] = 0;
+          }
+    }
+    this.cdr.detectChanges();
+ }
 
   ngOnDestroy(){
     this.tickingSub$ !== undefined && this.tickingSub$.unsubscribe();

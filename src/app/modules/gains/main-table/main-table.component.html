@@ -1,7 +1,7 @@
 <div class="text-danger" *ngIf="isError">
     Something went wrong. Please reload and try again. If the issue persists, log out and log back in.
 </div>
-<div class="text-info" *ngIf="!isError && symbolList.length === 0">
+<div class="text-info" *ngIf="!isError && symbolList.length === 0 && onInitLoadingProgressBarDisplay === false">
     You don't have any stocks! Navigate to the dash <a routerLink="/dash">here</a> to add some!
 </div>
 <div class="loading-container" *ngIf="onInitLoadingProgressBarDisplay === true && !isError" style="margin-left: 55%;">
@@ -24,16 +24,26 @@
                 <td>{{stock.symbol}}</td>
                 <td>{{stock.latestUpdate}}</td>
                 <td>{{stock.latestPrice}}</td>
-                <td><input type="number" class="form-control" [(ngModel)]="quoteList[index].lowTime" onkeyup="this.value=this.value.replace(/[^\d]/,'')"></td>
-                <td><input type="number" class="form-control" [(ngModel)]="quoteList[index].highTime" onkeyup="this.value=this.value.replace(/[^\d]/,'')"></td>
-                <td [ngStyle] = "renderStyle(stock.latestPrice, quoteList[index].lowTime)">
+                <td><input type="number" class="form-control" [(ngModel)]="quoteList[index].lowTime"></td>
+                <td><input type="number" class="form-control" [(ngModel)]="quoteList[index].highTime"></td>
+                <td [ngStyle] = "renderStyle(stock.latestPrice, quoteList[index].lowTime)" ngDefaultControl [(ngModel)]="sumColumnValues[index]">
                     <span 
                     *ngIf="quoteList[index].lowTime !== undefined && quoteList[index].lowTime !== null
                             && quoteList[index].highTime !== undefined && quoteList[index].highTime !== null">
-                    {{renderPrice(stock.latestPrice, quoteList[index].lowTime, quoteList[index].highTime) | currency}}
+                    {{renderPrice(stock.latestPrice, quoteList[index].lowTime, quoteList[index].highTime, index) | currency}}
                 </span>
             </td>
             </tr>
         </tbody>
+        <tfoot>
+            <tr>
+                <td><strong>Total</strong></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td [ngStyle]="globalStyle">{{sumGains() | currency}}</td>
+            </tr>
+        </tfoot>
     </table>
 </div>
