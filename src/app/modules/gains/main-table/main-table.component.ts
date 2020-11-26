@@ -16,11 +16,7 @@ export class MainTableComponent implements OnInit {
   constructor(private dash : DashboardService,
               private _stocks : ListServiceService,
               private el : ElementRef,
-              private cdr : ChangeDetectorRef) 
-  {
-    this.el.nativeElement.ownerDocument.body.style.backgroundColor = "black"
-    this.el.nativeElement.ownerDocument.body.style.backgroundImage = "none"
-  }
+              private cdr : ChangeDetectorRef) { }
 
   symbolList:string[] = [];
   stockList:ILightWeightQuote[] = [];
@@ -45,6 +41,9 @@ export class MainTableComponent implements OnInit {
         this.getQuotes();
       }
     );
+    if (this.marketIsOpen()){
+      this.updatePrices();
+    }
   }
 /* DOESNT LOOK LIKE LIGHTWEIGHT API DOES WEEKENDS
   getData(){
@@ -126,7 +125,6 @@ export class MainTableComponent implements OnInit {
       () => {
         console.log("done heavyweight");
         this.onInitLoadingProgressBarDisplay = false;
-        this.marketIsOpen() && this.updatePrices();
       }
     )
   }
@@ -134,8 +132,34 @@ export class MainTableComponent implements OnInit {
   updatePrices(){
     this.tickingSub$ = timer(2000, 10000)
     .pipe(
-      tap(_ => this.getQuotes())
+      tap(_ => this.getIndividualPrice())
     ).subscribe();
+  }
+
+  getIndividualPrice(){
+    this._stocks.getBatchQuotes(this.symbolList)
+    .pipe(
+      map(raw => {
+        let refined = Object.values(raw);
+        for (let quote of refined){
+          console.log(quote)
+          quote["quote"]["latestUpdate"] = this.renderDate(quote["quote"]["latestUpdate"]);
+          quote["quote"]["highTime"] = undefined;
+          quote["quote"]["lowTime"] = undefined;
+          quote["quote"]["lastTradeTime"] = undefined;
+        }
+        return refined.map(_ => _["quote"]);
+      })
+    )
+    .subscribe(
+      data => {
+        for (let i = 0; i < data.length; i++){
+          this.quoteList[i].latestPrice = data[i].latestPrice;
+        }
+      },
+      error => console.log(error),
+      () => console.log("completed a run")
+    )
   }
 
   renderPrice(curPrice:number, userBuyPrice:number, numShares:number, index:number):string | void{
@@ -180,7 +204,6 @@ export class MainTableComponent implements OnInit {
   }
 
   sumGains(){
-    console.log(this.sumColumnValues)
     let total = this.sumColumnValues.reduce((acc, cur) => acc + cur)
     let style = {
       'color': total > 0 ? 'green' : total < 0 ? 'red' : 'gray'
@@ -200,7 +223,7 @@ export class MainTableComponent implements OnInit {
  }
 
   ngOnDestroy(){
-    this.tickingSub$ !== undefined && this.tickingSub$.unsubscribe();
+    this.tickingSub$.unsubscribe();
   }
 
 }

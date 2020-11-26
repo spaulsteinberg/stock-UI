@@ -12,6 +12,7 @@ import {MatInputModule} from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { HttpClientModule } from '@angular/common/http';
 import { FullCalendarModule } from '@fullcalendar/angular';
+import { MatCardModule } from '@angular/material/card';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 
@@ -34,7 +35,8 @@ export const modules = [
   ReactiveFormsModule,
   HttpClientModule,
   MatProgressSpinnerModule,
-  FullCalendarModule
+  FullCalendarModule,
+  MatCardModule
 ];
 
 @NgModule({

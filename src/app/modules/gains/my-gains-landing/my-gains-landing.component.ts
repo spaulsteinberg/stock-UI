@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-my-gains-landing',
@@ -7,7 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MyGainsLandingComponent implements OnInit {
 
-  constructor() { }
+  constructor( private el: ElementRef) {
+    this.el.nativeElement.ownerDocument.body.style.backgroundColor = "lightblue"
+    this.el.nativeElement.ownerDocument.body.style.backgroundImage = "none"
+   }
 
   ngOnInit(): void {
   }
