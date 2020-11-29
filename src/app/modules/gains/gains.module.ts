@@ -6,11 +6,18 @@ import { GainsRoutingModule } from './gains-routing.module';
 import { MainTableComponent } from './main-table/main-table.component';
 import { NavGainsComponent } from './nav-gains/nav-gains.component';
 import { AccountsPageComponent } from './accounts-page/accounts-page.component';
+import { RemoveDialogComponent } from './remove-dialog/remove-dialog.component';
 
 
 
 @NgModule({
-  declarations: [MyGainsLandingComponent, MainTableComponent, NavGainsComponent, AccountsPageComponent],
+  declarations: [
+    MyGainsLandingComponent,
+    MainTableComponent,
+    NavGainsComponent,
+    AccountsPageComponent,
+    RemoveDialogComponent
+  ],
   imports: [
     SharedModule,
     CommonModule,
