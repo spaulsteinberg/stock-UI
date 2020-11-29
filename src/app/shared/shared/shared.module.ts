@@ -13,6 +13,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { HttpClientModule } from '@angular/common/http';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import {MatListModule} from '@angular/material/list';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 
@@ -36,7 +40,11 @@ export const modules = [
   HttpClientModule,
   MatProgressSpinnerModule,
   FullCalendarModule,
-  MatCardModule
+  MatCardModule,
+  MatButtonModule,
+  MatIconModule,
+  MatSidenavModule,
+  MatListModule
 ];
 
 @NgModule({

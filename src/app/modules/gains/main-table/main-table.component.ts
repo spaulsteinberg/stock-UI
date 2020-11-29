@@ -37,7 +37,6 @@ export class MainTableComponent implements OnInit {
         console.log(error)
       },
       () => {
-      //  this.getData()
         this.getQuotes();
       }
     );
@@ -45,58 +44,7 @@ export class MainTableComponent implements OnInit {
       this.updatePrices();
     }
   }
-/* DOESNT LOOK LIKE LIGHTWEIGHT API DOES WEEKENDS
-  getData(){
-    this._stocks.getLightweightStocks(this.symbolList)
-    .pipe(
-      map(x => {
-        for (let attributes of x){
-          attributes.lastUpdated = this.renderDate(attributes.lastUpdated);
-          attributes.lastSaleSize = undefined; //undefined because we will never use this, now just as buy price indicator
-          attributes.lastSaleTime = undefined; //like above, use as number of shares indicator
-        }
-        return x;
-      })
-    )
-    .subscribe(
-      data => {
-        console.log(data);
-        this.stockList = data;
-      },
-      error => {
-        this.isError = true;
-        console.log(error)
-      },
-      () =>{ 
-        console.log("done lightweight");
-        this.onInitLoadingProgressBarDisplay = false;
-        this.marketIsOpen() && this.updatePrices(); //short circuit, only run constant update is market is open
-      }
-    )
-  }
-  //contains update timer for constant checks, start after 2 seconds on load
-  updatePrices(){
-    this.tickingSub$ = timer(2000, 10000)
-    .pipe(
-      tap(_ => this.getPrices())
-    ).subscribe();
-  }
-  //get current prices to update
-  getPrices(){
-    this._stocks.getLightweightStocks(this.symbolList)
-    .subscribe(
-      data => {
-        for (let i = 0; i < this.stockList.length; i++){
-          this.stockList[i].lastSalePrice = data[i].lastSalePrice;
-          console.log(data[i].lastSalePrice)
-        }
-        console.log(this.stockList)
-      },
-      error => console.log(error),
-      () => console.log("completed a run")
-    )
-  }
-*/
+
   getQuotes(){
     this._stocks.getBatchQuotes(this.symbolList)
     .pipe(
@@ -223,7 +171,7 @@ export class MainTableComponent implements OnInit {
  }
 
   ngOnDestroy(){
-    this.tickingSub$.unsubscribe();
+    if (this.tickingSub$ !== undefined) this.tickingSub$.unsubscribe();
   }
 
 }

@@ -5,11 +5,12 @@ import { MyGainsLandingComponent } from './my-gains-landing/my-gains-landing.com
 import { GainsRoutingModule } from './gains-routing.module';
 import { MainTableComponent } from './main-table/main-table.component';
 import { NavGainsComponent } from './nav-gains/nav-gains.component';
+import { AccountsPageComponent } from './accounts-page/accounts-page.component';
 
 
 
 @NgModule({
-  declarations: [MyGainsLandingComponent, MainTableComponent, NavGainsComponent],
+  declarations: [MyGainsLandingComponent, MainTableComponent, NavGainsComponent, AccountsPageComponent],
   imports: [
     SharedModule,
     CommonModule,

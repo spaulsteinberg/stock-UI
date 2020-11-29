@@ -29,6 +29,11 @@ export class CalendarLandingComponent implements OnInit {
     },
     error => {
       console.log(error)
+      if (error.status === 401){
+        localStorage.removeItem('token');
+        localStorage.removeItem('u');
+        this.router.navigate(['/dash']);
+      }
     },
     () => {
       this.getNextDividends();

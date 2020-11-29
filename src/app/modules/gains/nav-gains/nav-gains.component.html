@@ -1,31 +1,35 @@
 <div class="row justify-content-center">
     <div class="col col-md-3">
-        <mat-card>
-            <mat-card-header>
-                <mat-card-title>My Watch List</mat-card-title>
-            </mat-card-header>
-            <img mat-card-image src="../../../../assets/general-images/magnifying-watchlist.jpg" alt="watchlist.jpg">
-            <mat-card-content>
-                <p>
-                    View and interact with your watchlist with realtime prices (during market hours).
-                    Learn the best price to buy in for you and get insight into each individual stock.
-                </p>
-            </mat-card-content>
-        </mat-card>
+        <a (click)="nav(1)">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>My Watch List</mat-card-title>
+                </mat-card-header>
+                <img mat-card-image src="../../../../assets/general-images/magnifying-watchlist.jpg" alt="watchlist.jpg">
+                <mat-card-content>
+                    <p>
+                        View and interact with your watchlist with realtime prices (during market hours).
+                        Learn the best price to buy in for you and get insight into each individual stock.
+                    </p>
+                </mat-card-content>
+            </mat-card>
+        </a>
     </div>
     <div class="col col-md-3 offset-sm-1">
-        <mat-card>
-            <mat-card-header>
-                <mat-card-title>View My Accounts</mat-card-title>
-            </mat-card-header>
-            <img mat-card-image src="../../../../assets/general-images/accounting.jpg" alt="accounting.jpg">
-            <mat-card-content>
-                <p>
-                    Create and edits accounts mirroring your real brokerage account, adding and deleting as you
-                    buy and sell.
-                </p>
-            </mat-card-content>
-        </mat-card>
+        <a (click)="nav(2)">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>View My Accounts</mat-card-title>
+                </mat-card-header>
+                <img mat-card-image src="../../../../assets/general-images/accounting.jpg" alt="accounting.jpg">
+                <mat-card-content>
+                    <p>
+                        Create and edits accounts mirroring your real brokerage account, adding and deleting as you
+                        buy and sell.
+                    </p>
+                </mat-card-content>
+            </mat-card>
+        </a>
     </div>
     <div class="col col-md-3 offset-sm-1">
         <mat-card>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { RegisterUserService } from 'src/app/shared/services/register-user.service';
 
 @Component({
@@ -8,7 +9,18 @@ import { RegisterUserService } from 'src/app/shared/services/register-user.servi
 })
 export class NavbarComponent implements OnInit {
 
-  constructor(public _auth: RegisterUserService) { }
+  constructor(public _auth: RegisterUserService, private router: Router) { }
+  links = [
+    {
+      'link': "/dash",
+      'text': "Dashboard"
+    },
+    {
+      'link': "/home",
+      'text': "Home"
+    }
+  ];
+  opened:boolean = false;
   username;
   ngOnInit(): void {
     console.log(this.username);
@@ -22,6 +34,12 @@ export class NavbarComponent implements OnInit {
   }
   // on first load
   this._auth.s.subscribe(username => this.username = username);
+  }
+  redirectToLogin() {
+    this.router.navigate(['/login']);
+  }
+  signOut(){
+    this._auth.logoutUser();
   }
 
 }

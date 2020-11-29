@@ -1,17 +1,26 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router'; // CLI imports router
+import { AccountsPageComponent } from './accounts-page/accounts-page.component';
 import { MainTableComponent } from './main-table/main-table.component';
 import { MyGainsLandingComponent } from './my-gains-landing/my-gains-landing.component';
 
 const routes: Routes = [
     {
         path: '',
-        component: MyGainsLandingComponent,
-        pathMatch: 'full'
-    },
-    {
-      path: 'gains',
-      component: MyGainsLandingComponent
+        children: [
+          {
+            path: '',
+            component: MyGainsLandingComponent
+          },
+          {
+            path: 'watchlist/table',
+            component: MainTableComponent
+          },
+          {
+            path: 'accounts',
+            component: AccountsPageComponent
+          }
+        ]
     }
 ];
 
