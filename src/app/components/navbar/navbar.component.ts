@@ -20,7 +20,6 @@ export class NavbarComponent implements OnInit {
       'text': "Home"
     }
   ];
-  opened:boolean = false;
   username;
   ngOnInit(): void {
     console.log(this.username);
