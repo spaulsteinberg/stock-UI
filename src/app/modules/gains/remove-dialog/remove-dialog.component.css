@@ -4,3 +4,11 @@
 #discard-button {
     background-color: #00c853;
 }
+::ng-deep .mat-snack-bar-container{
+    color: black !important;
+    background-color:lightgray !important;
+    border-color: green !important;
+  }
+  ::ng-deep .mat-simple-snackbar-action {
+    color: red;
+  }

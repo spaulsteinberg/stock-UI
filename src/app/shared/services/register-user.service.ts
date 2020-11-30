@@ -36,7 +36,13 @@ export class RegisterUserService {
   }
 
   setUsername(u){
-    if (u !== undefined && u !== null && u !== '') this.s.next(u);
+    if (u !== undefined && u !== null && u !== ''){
+      this.s.next(u);
+      this.username = u;
+    }
+  }
+  get _username(){
+    return this.username;
   }
 
   getUsernameRefresh(){

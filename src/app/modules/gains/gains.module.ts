@@ -7,6 +7,7 @@ import { MainTableComponent } from './main-table/main-table.component';
 import { NavGainsComponent } from './nav-gains/nav-gains.component';
 import { AccountsPageComponent } from './accounts-page/accounts-page.component';
 import { RemoveDialogComponent } from './remove-dialog/remove-dialog.component';
+import { AddDialogComponent } from './add-dialog/add-dialog.component';
 
 
 
@@ -16,7 +17,8 @@ import { RemoveDialogComponent } from './remove-dialog/remove-dialog.component';
     MainTableComponent,
     NavGainsComponent,
     AccountsPageComponent,
-    RemoveDialogComponent
+    RemoveDialogComponent,
+    AddDialogComponent
   ],
   imports: [
     SharedModule,

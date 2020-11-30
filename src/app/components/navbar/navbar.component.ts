@@ -18,6 +18,10 @@ export class NavbarComponent implements OnInit {
     {
       'link': "/home",
       'text': "Home"
+    },
+    {
+      'link': "/gains",
+      'text': "Accounts"
     }
   ];
   username;
@@ -27,8 +31,12 @@ export class NavbarComponent implements OnInit {
       this._auth.getUsernameRefresh().subscribe({
       next: (response) => {
         this.username = response.username
+        this._auth.setUsername(response.username)
       },
-      error: (error) => console.log(error)
+      error: (error) => {
+        console.log(error)
+        this._auth.logoutUser();
+      }
     });
   }
   // on first load

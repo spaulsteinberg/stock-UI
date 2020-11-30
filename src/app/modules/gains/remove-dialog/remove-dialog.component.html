@@ -4,7 +4,7 @@
         <mat-form-field appearance="standard" class="mx-4">
             <mat-label>Choose an Account</mat-label>
             <mat-select [formControl]="accountName">
-                <mat-option *ngFor="let ex of exampleAccounts" [value]="ex">{{ex}}</mat-option>
+                <mat-option class="text-white" *ngFor="let acc of data.names;" [value]="acc">{{acc}}</mat-option>
             </mat-select>
             <mat-error *ngIf="accountName.invalid">{{configureErrorMessages()}}</mat-error>
         </mat-form-field>
@@ -17,7 +17,7 @@
         </mat-form-field>
     </p>
     <p>
-        <button mat-raised-button type="submit" class="mx-3" id="confirm-button" [disabled]="removeForm.invalid" (click)="confirm()" mat-dialog-close>Confirm</button>
+        <button mat-raised-button type="submit" class="mx-3" id="confirm-button" [disabled]="removeForm.invalid" (click)="confirm()">Confirm</button>
         <button mat-raised-button class="mx-3" id="discard-button" (click)="discard()" mat-dialog-close>Discard</button>
     </p>
     <mat-error *ngIf="removeForm.errors?.nameMisMatch && (accountName.touched && confirmAccountName.touched)" class="text-center">Account names must match.</mat-error>
