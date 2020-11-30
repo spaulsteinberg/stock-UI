@@ -2,17 +2,17 @@
     <h4 class="display-3">Accounts View</h4>
 </div>
 <div class="row">
-    <div class="col col-md-2 offset-md-1" *ngIf="accountNames !== undefined && accountNames.length !== 0 && doneLoading === true; else empty">
-        <mat-form-field appearance="outline">
+    <div class="col col-md-2 offset-md-1" >
+        <mat-form-field appearance="outline" *ngIf="accountNames !== undefined && accountNames.length !== 0; else empty">
             <mat-label class="text-success">Choose an Account</mat-label>
             <mat-select class="text-white" >
                 <mat-option class="text-white" *ngFor="let name of accountNames" [value]="name">{{name}}</mat-option>
             </mat-select>
         </mat-form-field>
+        <ng-template #empty>
+            <p>No accounts. Please click 'Add Account' to interact with your real stocks.</p>
+        </ng-template>
     </div>
-    <ng-template #empty>
-        <p>No accounts. Please click 'Add Account' to interact with your real stocks.</p>
-    </ng-template>
     <div class="col col-md-5 offset-md-1">
         <button mat-raised-button id="add-account-button" class="mx-3"
         [matTooltipPosition]="tooltipPosition" [matTooltip]="tooltipMessageCreate" (click)="openCreateAccountDialog()">

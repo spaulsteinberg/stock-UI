@@ -18,10 +18,6 @@ export class NavbarComponent implements OnInit {
     {
       'link': "/home",
       'text': "Home"
-    },
-    {
-      'link': "/gains",
-      'text': "Accounts"
     }
   ];
   username;

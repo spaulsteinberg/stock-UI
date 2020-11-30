@@ -12,16 +12,14 @@ import { RemoveDialogComponent } from '../remove-dialog/remove-dialog.component'
 })
 export class AccountsPageComponent implements OnInit {
 
+  accountNames:string[];
   constructor(private dialog: MatDialog, private account: AccountsService, private el: ElementRef) {
     this.el.nativeElement.ownerDocument.body.style.backgroundColor = "lightblue"
     this.el.nativeElement.ownerDocument.body.style.backgroundImage = "none"
    }
-  doneLoading:boolean = false;
-  accountNames:string[];
   async ngOnInit() {
     const res = await this.account.doesUserExist();
     this.accountNames = res;
-    this.doneLoading = true;
   }
 
   tooltipPosition: TooltipPosition = "above";
