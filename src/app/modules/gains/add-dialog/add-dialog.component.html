@@ -1,32 +1,46 @@
 <h1 mat-dialog-title class="mx-3 text-center">Add Account</h1>
-<div mat-dialog-content>
-    <p>
-        <mat-form-field appearance="standard" class="mx-4">
-            <mat-label>New Account Name</mat-label>
-            <input type="text" matInput autocomplete="off">
-        </mat-form-field>
-        <mat-form-field appearance="standard" class="mx-4">
-            <mat-label>Symbol</mat-label>
-            <input type="text" matInput autocomplete="off">
-        </mat-form-field>
-    </p>
-    <p>
-        <mat-form-field appearance="standard" class="mx-4">
-            <mat-label>Number of Shares</mat-label>
-            <input type="number" matInput autocomplete="off">
-        </mat-form-field>
-        <mat-form-field appearance="standard" class="mx-4">
-            <mat-label>Price</mat-label>
-            <input type="number" matInput autocomplete="off">
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput [matDatepicker]="picker" placeholder="Choose a Date">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker color="primary"></mat-datepicker>
-          </mat-form-field>
-    </p>
-    <div class="text-center justify-content-center">
-        <button mat-raised-button type="submit" class="mx-3" id="confirm-button">Confirm</button>
-        <button mat-raised-button class="mx-3" id="discard-button"mat-dialog-close>Discard</button>
-    </div>
+<div mat-dialog-content >
+    <form [formGroup]= "addAccountForm">
+        <p>
+            <mat-form-field appearance="standard" class="mx-4">
+                <mat-label>New Account Name</mat-label>
+                <input type="text" matInput formControlName="name" autocomplete="off">
+                <mat-error *ngIf="name.invalid">{{configErrorName()}}</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="standard" class="mx-4">
+                <mat-label>Symbol</mat-label>
+                <input type="text" matInput formControlName="symbol" autocomplete="off">
+                <mat-error *ngIf="!symbol.errors?.OK || symbol.invalid">{{configErrorSymbol()}}</mat-error>
+            </mat-form-field>
+        </p>
+        <p>
+            <mat-form-field appearance="standard" class="mx-4">
+                <mat-label>Number of Shares</mat-label>
+                <input type="number" matInput formControlName="shares" autocomplete="off">
+            </mat-form-field>
+            <mat-form-field appearance="standard" class="mx-4">
+                <mat-label>Price ($)</mat-label>
+                <input type="number" matInput formControlName="price" autocomplete="off">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Choose a Date">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker color="primary"></mat-datepicker>
+              </mat-form-field>
+        </p>
+        <div class="text-center justify-content-center">
+            <button mat-raised-button type="submit" class="mx-3" [disabled]="addAccountForm.invalid" id="confirm-button" (click)="submitAccount()">Confirm</button>
+            <button mat-raised-button class="mx-3" id="discard-button" (click)="discard()" mat-dialog-close>Discard</button>
+            <mat-error *ngIf="errCreatingRequest">Something went wrong creating request. Please try again.</mat-error>
+        </div>
+    </form>
 </div>
+<!--
+    <mat-select [formControl]="accountName">
+                <mat-option class="text-white" *ngFor="let acc of data.names;" [value]="acc">{{acc}}</mat-option>
+            </mat-select>
+-->
+<!--
+
+                    
+-->

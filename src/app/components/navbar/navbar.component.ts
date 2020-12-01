@@ -26,8 +26,8 @@ export class NavbarComponent implements OnInit {
     if ( this._auth.isUserLoggedIn() && this.username === undefined) {
       this._auth.getUsernameRefresh().subscribe({
       next: (response) => {
-        this.username = response.username
-        this._auth.setUsername(response.username)
+        console.log("refresh username value:", response.username)
+        this._auth.usernameSubject$.next(response.username);
       },
       error: (error) => {
         console.log(error)
@@ -36,7 +36,7 @@ export class NavbarComponent implements OnInit {
     });
   }
   // on first load
-  this._auth.s.subscribe(username => this.username = username);
+  this._auth.username$.subscribe(username => this.username = username);
   }
   redirectToLogin() {
     this.router.navigate(['/login']);

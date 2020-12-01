@@ -8,6 +8,7 @@ import { NavGainsComponent } from './nav-gains/nav-gains.component';
 import { AccountsPageComponent } from './accounts-page/accounts-page.component';
 import { RemoveDialogComponent } from './remove-dialog/remove-dialog.component';
 import { AddDialogComponent } from './add-dialog/add-dialog.component';
+import { DialogComponent } from './dialog/dialog.component';
 
 
 
@@ -18,7 +19,8 @@ import { AddDialogComponent } from './add-dialog/add-dialog.component';
     NavGainsComponent,
     AccountsPageComponent,
     RemoveDialogComponent,
-    AddDialogComponent
+    AddDialogComponent,
+    DialogComponent
   ],
   imports: [
     SharedModule,

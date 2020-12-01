@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('token', response.token);
         localStorage.setItem('u', response.id);
         this.loginForm.reset();
-        this._login.setUsername(objSend.username);
+        this._login.usernameSubject$.next(objSend.username);
         this.router.navigate(['/dash']);
       },
       error: () => {

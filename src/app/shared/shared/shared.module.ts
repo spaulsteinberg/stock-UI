@@ -8,6 +8,7 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { MaterialModule } from './material.module';
+import { SymbolFilterPipe } from '../../shared/pipes/symbol-filter.pipe';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,

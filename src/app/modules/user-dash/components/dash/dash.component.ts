@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AccountsService } from 'src/app/shared/services/accounts.service';
 import { DashboardService } from 'src/app/shared/services/dashboard.service';
 import { IQuote } from '../../../../shared/interfaces/IQuote';
 import { ListServiceService } from '../../../../shared/services/list-service.service';
@@ -14,7 +15,8 @@ export class DashComponent implements OnInit {
   constructor(private router: Router,
               private _dash: DashboardService,
               public _stocks: ListServiceService,
-              private el: ElementRef){
+              private el: ElementRef,
+              private account: AccountsService){
                 this.el.nativeElement.ownerDocument.body.style.backgroundImage = 'none'
                 this.el.nativeElement.ownerDocument.body.style.backgroundColor = '#424242' }
   // hydrate the service only init once...or else update the prices on re-visit
@@ -22,6 +24,9 @@ export class DashComponent implements OnInit {
     if (this._stocks.getQuotes() === undefined) this.getUserList();
     /* this line might just push all the same quotes again...in that case just grab and update price */
   //  else if (this._stocks.getQuotes.length > 0) this.getBatchQuotesFromStoredPreferences();
+  
+  // init accounts data here
+   this.account.initData()
   }
 
   watchList = [];

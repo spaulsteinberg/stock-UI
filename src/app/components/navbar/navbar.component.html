@@ -16,8 +16,8 @@
         </li>
     </ul>
 </nav>
-<mat-sidenav-container (mouseleave)="sidenav.close()">
-    <mat-sidenav #sidenav mode="push" fixedInViewport="true">
+<mat-sidenav-container (mouseleave)="sidenav.close()" style="z-index: 1000;">
+    <mat-sidenav #sidenav mode="side" fixedInViewport="true">
         <mat-nav-list>
             <a mat-list-item class="text-danger" (click)="sidenav.close()">Close Sidenav</a>
             <a mat-list-item class="text-white" routerLink="{{link.link}}" (click)="sidenav.close()" *ngFor="let link of links">{{link.text}}</a>

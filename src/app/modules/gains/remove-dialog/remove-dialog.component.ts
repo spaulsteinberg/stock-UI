@@ -15,7 +15,6 @@ export class RemoveDialogComponent implements OnInit {
   removeForm:FormGroup;
   accountName = new FormControl('', Validators.required);
   confirmAccountName = new FormControl('', [Validators.required])
-  names:string[];
   constructor(private fb: FormBuilder, 
               @Inject(MAT_DIALOG_DATA) public data: any,
               private account: AccountsService,
@@ -25,7 +24,6 @@ export class RemoveDialogComponent implements OnInit {
       accountName: this.accountName,
       confirmAccountName: this.confirmAccountName
     }, { validator: validateSameAccountNamesRemoveDialog });
-    this.names = data.names;
   }
 
   get selectAccount(){
@@ -39,14 +37,6 @@ export class RemoveDialogComponent implements OnInit {
     this.account.deleteAnAccount(this.confirmAccount)
     .subscribe(response => {
       console.log(response)
-      for (let i = 0; i < this.names.length; i++){
-        console.log(this.names[i] + " " + this.confirmAccount)
-        if (this.names[i] === this.confirmAccount){
-          console.log(this.names[i])
-          this.data.names.splice(i, 1)
-          this.names.splice(i, 1);
-        }
-      }
       this.openSnackbar(response.details, "Close")
     },
     error => {

@@ -52,7 +52,7 @@ export class RegisterComponent implements OnInit {
           this.successMessage = "Registered successfully!";
           localStorage.setItem('token', response.token); //store the jwt token
           localStorage.setItem('u', response.id);
-          this._register.setUsername(this.registerForm.get('username').value);
+          this._register.usernameSubject$.next(this.registerForm.get('username').value);
           this.registerForm.reset();
           this.router.navigate(['/dash']);
         },

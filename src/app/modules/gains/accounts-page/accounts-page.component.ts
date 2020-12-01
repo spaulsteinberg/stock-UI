@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { TooltipPosition } from '@angular/material/tooltip';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { AccountsService } from 'src/app/shared/services/accounts.service';
-import { AddDialogComponent } from '../add-dialog/add-dialog.component';
-import { RemoveDialogComponent } from '../remove-dialog/remove-dialog.component';
+import { BackendService } from 'src/app/shared/services/backend.service';
 
 @Component({
   selector: 'app-accounts-page',
@@ -12,26 +12,27 @@ import { RemoveDialogComponent } from '../remove-dialog/remove-dialog.component'
 })
 export class AccountsPageComponent implements OnInit {
 
-  accountNames:string[];
-  constructor(private dialog: MatDialog, private account: AccountsService, private el: ElementRef) {
+  listOfSymbols$:Observable<string[]>;
+  accountNames:string[]; // used to be a checker...if length > 0 then there is a profile, if not must be created
+  accountNames$:Observable<string[]>;
+  constructor(private account: AccountsService,
+              private el: ElementRef,
+              private router: Router,
+              private route: ActivatedRoute,
+              private backend: BackendService) {
     this.el.nativeElement.ownerDocument.body.style.backgroundColor = "lightblue"
     this.el.nativeElement.ownerDocument.body.style.backgroundImage = "none"
-   }
+  }
+  isErr: boolean = false;
   async ngOnInit() {
-    const res = await this.account.doesUserExist();
-    this.accountNames = res;
+    this.accountNames$ = this.account.accountNames$;
+    this.accountNames$.subscribe(val => this.accountNames = val, err => this.isErr = true);
+    console.log("ACCOUNT NAMES IN COMPONENT: ", this.accountNames)
+    this.backend.getStockListAsObservable();
+    this.listOfSymbols$ = this.backend.stockList$;
   }
-
-  tooltipPosition: TooltipPosition = "above";
-  tooltipMessageCreate = "Create a new account";
-  tooltipMessageRemove = "Delete an account";
-  openRemoveDialog() {
-    this.dialog.open(RemoveDialogComponent, { data: {
-      names: this.accountNames
-    }});
-  }
-  openCreateAccountDialog(){
-    this.dialog.open(AddDialogComponent);
+  navBack() {
+    this.router.navigate([".."], {relativeTo: this.route})
   }
   /*
     REMOVE: 

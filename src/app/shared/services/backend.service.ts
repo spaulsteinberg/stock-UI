@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +38,21 @@ export class BackendService {
   getStockList():Promise<any>{
     const url = `${this._url}/retrievestocks`;
     return this.http.get<any>(url).toPromise();
+  }
+
+  //as observable to pass async
+  private listSubject = new BehaviorSubject<string[]>([]);
+  stockList$:Observable<string[]> = this.listSubject.asObservable();
+  getStockListAsObservable():void{
+    const url = `${this._url}/retrievestocks`;
+    this.http.get<any>(url)
+            .pipe(
+              map(res => {
+                console.log(res);
+                return res.nyse.concat(res.nasdaq)
+              })
+            )
+            .subscribe(data => this.listSubject.next(data), err => console.log(err, "IN BACKEND SERVICE"));
   }
 
   errorAddingUser(error: HttpErrorResponse){

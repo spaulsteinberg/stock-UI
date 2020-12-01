@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { timer } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { ILightWeightQuote } from 'src/app/shared/interfaces/ILightWeightQuote';
@@ -16,7 +17,12 @@ export class MainTableComponent implements OnInit {
   constructor(private dash : DashboardService,
               private _stocks : ListServiceService,
               private el : ElementRef,
-              private cdr : ChangeDetectorRef) { }
+              private cdr : ChangeDetectorRef,
+              private router: Router,
+              private route: ActivatedRoute) {
+                  this.el.nativeElement.ownerDocument.body.style.backgroundColor = "lightblue"
+                  this.el.nativeElement.ownerDocument.body.style.backgroundImage = "none"
+               }
 
   symbolList:string[] = [];
   stockList:ILightWeightQuote[] = [];
@@ -169,6 +175,9 @@ export class MainTableComponent implements OnInit {
     }
     this.cdr.detectChanges();
  }
+ navBack() {
+  this.router.navigate(["../.."], {relativeTo: this.route})
+}
 
   ngOnDestroy(){
     if (this.tickingSub$ !== undefined) this.tickingSub$.unsubscribe();
