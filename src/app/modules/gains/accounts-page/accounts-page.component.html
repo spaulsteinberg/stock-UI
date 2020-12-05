@@ -7,20 +7,49 @@
         </button>
     </div>
 </div>
-<div class="row">
+<div class="row" *ngIf="accountNames$ | async as names; else empty">
     <div class="col col-md-2 offset-md-1" >
-        <mat-form-field appearance="outline" *ngIf="accountNames !== undefined && accountNames.length !== 0; else empty">
+        <mat-form-field appearance="outline">
             <mat-label class="text-success">Choose an Account</mat-label>
-            <mat-select class="text-white" >
-                <mat-option class="text-white" *ngFor="let name of accountNames$ | async" [value]="name">{{name}}</mat-option>
+            <mat-select class="text-white" [(value)]="selectedAccount" (selectionChange)="selectChange($event)">
+                <mat-option class="text-white" *ngFor="let name of names" [value]="name">{{name}}</mat-option>
             </mat-select>
         </mat-form-field>
-        <ng-template #empty>
-            <p>No accounts. Please click 'Add Account' to interact with your real stocks.</p>
-            <p *ngIf="isErr">An error occurred. Please reload and try again.</p>
-        </ng-template>
     </div>
     <div class="col col-md-5 offset-md-1">
-        <app-dialog [accountNames]="accountNames$ | async" [symbols]="listOfSymbols$ | async"></app-dialog>
+        <app-dialog [accountNames]="names" [symbols]="listOfSymbols$ | async"></app-dialog>
     </div>
 </div>
+<ng-template #empty>
+    <p>No accounts. Please click 'Add Account' to interact with your real stocks.</p>
+    <p *ngIf="isErr">An error occurred. Please reload and try again.</p>
+</ng-template>
+<div *ngIf="accountDisplay$ | async as acc">
+    {{acc.name}}
+    <div *ngFor="let data of acc.data">
+        {{data.symbol}}
+        <p *ngFor="let value of data.values">
+            {{value.position + "   " + value.dateOfBuy + "    " + value.priceOfBuy}}
+        </p>
+    </div>
+</div>
+<p><strong>Selected</strong>: {{selectedAccount}}</p>
+<!--<div class="row">
+    <div class="col col-md-6">
+        <table *ngFor="let details of accountDisplay$ | async">
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Position</th>
+                    <th>Date</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+                <tbody>
+                    <tr *ngFor="let data of details.details; let i = index;">
+                        <td>{{data.symbol}}</td>
+                    </tr>
+                </tbody>
+        </table>
+    </div>
+</div>-->

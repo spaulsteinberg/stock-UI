@@ -16,6 +16,8 @@ export class AddDialogComponent implements OnInit {
   addAccountForm:FormGroup;
   request:AddAccountRequest = new AddAccountRequest(null, null);
   errCreatingRequest:boolean = false;
+  minDate:Date = new Date(1960, 1, 1);
+  maxDate:Date = new Date();
   constructor(private fb:FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private account: AccountsService,
@@ -123,6 +125,8 @@ get _name(){
       return "Symbol is not listed. Please check your spelling."
     }
   }
+
+  public dateFilter = (date) => { return date.getDay() !== 0 && date.getDay() !== 6; }
 
   configErrorName(){
     if (this.name.hasError('required')){

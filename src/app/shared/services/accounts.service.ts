@@ -1,7 +1,8 @@
 import { HttpBackend, HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, ReplaySubject, Subject, throwError, timer } from 'rxjs';
+import { catchError, delayWhen, map, retry, retryWhen, tap } from 'rxjs/operators';
+import { DetailAttributes, Details, IAccount } from '../interfaces/IAccount';
 import { AddAccountRequest } from '../models/AddAccountRequest';
 import { RegisterUserService } from './register-user.service';
 
@@ -66,7 +67,9 @@ export class AccountsService {
   /***************************************** Implementing store pattern *****************************************/
 
   private subject = new BehaviorSubject<string[]>([]); //init subject
+  private accountDataSubject = new BehaviorSubject<DetailAttributes[]>([]);
   accountNames$:Observable<string[]> = this.subject.asObservable(); //get observable from subject data
+  accountsData$:Observable<DetailAttributes[]> = this.accountDataSubject.asObservable();
 
   createAccount(payload: AddAccountRequest){
     const accNames = this.subject.getValue();
@@ -108,5 +111,40 @@ export class AccountsService {
               },
               error => console.log(error),
               () => console.log("subscribe complete"))
+  }
+
+  async getAccounts(){
+    if (this.username === undefined) this.username = await this.setHeaders();
+    this.createHeaders();
+    console.log("HEADERS:", this.headers)
+    this.http.get<IAccount>(this.URLS.ACCOUNT, {headers: this.headers})
+            .pipe(
+              tap((data) => console.log("TAPPED ACCOUNT", data)),
+              catchError((err:HttpErrorResponse) => throwError(err.message)),
+              retryWhen(errors => errors.pipe(
+                delayWhen(() => timer(2000)
+              )))
+            )
+            .subscribe({
+              next: (response) => {
+                console.log("acc response:", response)
+                this.subject.next(response.names)
+                this.accountDataSubject.next(Object.values(response.details))
+              },
+              error: (error) => console.log(error),
+              complete: () => console.log("request subscribe completed")
+            })
+  }
+
+  // enable filtering of accounts with find()
+  filterAccounts(name:string){
+    return this.accountsData$
+    .pipe(
+      map(accounts => {
+        return accounts.find(account => {
+          return account.name === name
+        })
+      })
+    );
   }
 }

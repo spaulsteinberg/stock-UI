@@ -26,7 +26,8 @@ export class DashComponent implements OnInit {
   //  else if (this._stocks.getQuotes.length > 0) this.getBatchQuotesFromStoredPreferences();
   
   // init accounts data here
-   this.account.initData()
+  // this.account.initData();
+  // this.account.getAccounts();
   }
 
   watchList = [];

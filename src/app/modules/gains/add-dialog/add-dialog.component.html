@@ -23,7 +23,7 @@
                 <input type="number" matInput formControlName="price" autocomplete="off">
             </mat-form-field>
             <mat-form-field>
-                <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Choose a Date">
+                <input matInput [matDatepicker]="picker" formControlName="date" [min]="minDate" [max]="maxDate" [matDatepickerFilter]="dateFilter" placeholder="Choose a Date">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker color="primary"></mat-datepicker>
               </mat-form-field>
@@ -35,12 +35,3 @@
         </div>
     </form>
 </div>
-<!--
-    <mat-select [formControl]="accountName">
-                <mat-option class="text-white" *ngFor="let acc of data.names;" [value]="acc">{{acc}}</mat-option>
-            </mat-select>
--->
-<!--
-
-                    
--->

@@ -1,4 +1,6 @@
-export class AddAccountRequest {
+import { IAddAccountRequest } from '../interfaces/IAddAccountRequest';
+
+export class AddAccountRequest implements IAddAccountRequest {
     name:string;
     accounts:Account;
     constructor(name:string | null, acc:Account | null){

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AccountsService } from 'src/app/shared/services/accounts.service';
 
 @Component({
   selector: 'app-gains-navigation-cards',
@@ -8,9 +9,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class NavGainsComponent implements OnInit {
 
-  constructor(private router: Router, private route: ActivatedRoute) { }
+  constructor(private router: Router, private route: ActivatedRoute, private account: AccountsService) { }
 
   ngOnInit(): void {
+    // init account data
+    this.account.getAccounts();
   }
   WATCHLIST_ROUTE:string = "watchlist/table";
   ACCOUNTS_VIEW_ROUTE:string = "accounts";
