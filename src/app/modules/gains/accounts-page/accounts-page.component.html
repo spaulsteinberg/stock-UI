@@ -24,32 +24,8 @@
     <p>No accounts. Please click 'Add Account' to interact with your real stocks.</p>
     <p *ngIf="isErr">An error occurred. Please reload and try again.</p>
 </ng-template>
-<div *ngIf="accountDisplay$ | async as acc">
-    {{acc.name}}
-    <div *ngFor="let data of acc.data">
-        {{data.symbol}}
-        <p *ngFor="let value of data.values">
-            {{value.position + "   " + value.dateOfBuy + "    " + value.priceOfBuy}}
-        </p>
+<div class="row" *ngIf="selectedAccount !== undefined">
+    <div class="col col-md-10 offset-md-1">
+        <app-accounts-table [accountData]="accountDisplay$ | async"></app-accounts-table>
     </div>
 </div>
-<p><strong>Selected</strong>: {{selectedAccount}}</p>
-<!--<div class="row">
-    <div class="col col-md-6">
-        <table *ngFor="let details of accountDisplay$ | async">
-            <thead>
-                <tr>
-                    <th>Symbol</th>
-                    <th>Position</th>
-                    <th>Date</th>
-                    <th>Price</th>
-                </tr>
-            </thead>
-                <tbody>
-                    <tr *ngFor="let data of details.details; let i = index;">
-                        <td>{{data.symbol}}</td>
-                    </tr>
-                </tbody>
-        </table>
-    </div>
-</div>-->

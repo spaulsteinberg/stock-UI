@@ -1,0 +1,38 @@
+<table mat-table *ngIf="accountData !== undefined" [dataSource]="dataObserv" class="mat-elevation-z8">
+    
+        <!-- Name Column -->
+        <ng-container matColumnDef="symbol">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.symbol}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef> Position </th>
+            <td mat-cell *matCellDef="let element"> {{accumulateTotalPosition(element.symbol)}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef> Cost Basis </th>
+            <td mat-cell *matCellDef="let element">{{determineCostBasis(element.symbol) | currency}}</td>
+          </ng-container>
+<!--
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef> Date of Purchase </th>
+            <td mat-cell *matCellDef="let element"> {{element.values.dateOfBuy}}</td>
+          </ng-container>
+        -->   
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+<!--
+  change parent back to observable for this to work
+  <div *ngIf="accountData | async as acc">
+  {{acc.name}}
+  <div *ngFor="let s of acc.data">
+    {{s.symbol}}
+    <div *ngFor="let ss of s.values">
+      {{ss.position + "   " + ss.dateOfBuy + "    " + ss.priceOfBuy}}
+    </div>
+  </div>
+</div>
+-->

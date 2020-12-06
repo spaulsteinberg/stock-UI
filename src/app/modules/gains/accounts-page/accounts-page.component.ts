@@ -1,11 +1,12 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { noop, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { DetailAttributes, Details } from 'src/app/shared/interfaces/IAccount';
+import { Data, DetailAttributes, Details } from 'src/app/shared/interfaces/IAccount';
 import { AccountsService } from 'src/app/shared/services/accounts.service';
 import { BackendService } from 'src/app/shared/services/backend.service';
+import { AccountsTableComponent } from '../accounts-table/accounts-table.component';
 
 @Component({
   selector: 'app-accounts-page',
@@ -13,11 +14,11 @@ import { BackendService } from 'src/app/shared/services/backend.service';
   styleUrls: ['./accounts-page.component.css']
 })
 export class AccountsPageComponent implements OnInit {
-
+  @ViewChild(AccountsTableComponent) tableComponent:AccountsTableComponent;
   listOfSymbols$:Observable<string[]>;
   accountNames$:Observable<string[]>;
   accountData$:Observable<DetailAttributes[]>;
-  accountDisplay$:Observable<any>;
+  accountDisplay$:Observable<DetailAttributes>;
   selectedAccount:string;
   constructor(private account: AccountsService,
               private el: ElementRef,
@@ -42,6 +43,11 @@ export class AccountsPageComponent implements OnInit {
   selectChange(event){
     console.log("select change:", event)
     this.accountDisplay$ = this.account.filterAccounts(this.selectedAccount);
+    if (this.tableComponent !== undefined){
+      this.accountDisplay$.subscribe(data => {
+        this.tableComponent.getSubject().next(data.data);
+      })
+    }
   }
 
   /*

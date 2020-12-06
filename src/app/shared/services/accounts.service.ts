@@ -1,8 +1,8 @@
 import { HttpBackend, HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, ReplaySubject, Subject, throwError, timer } from 'rxjs';
+import { BehaviorSubject, Observable, of, ReplaySubject, Subject, throwError, timer } from 'rxjs';
 import { catchError, delayWhen, map, retry, retryWhen, tap } from 'rxjs/operators';
-import { DetailAttributes, Details, IAccount } from '../interfaces/IAccount';
+import { Data, DetailAttributes, Details, IAccount } from '../interfaces/IAccount';
 import { AddAccountRequest } from '../models/AddAccountRequest';
 import { RegisterUserService } from './register-user.service';
 
@@ -137,7 +137,7 @@ export class AccountsService {
   }
 
   // enable filtering of accounts with find()
-  filterAccounts(name:string){
+  filterAccounts(name:string):Observable<DetailAttributes>{
     return this.accountsData$
     .pipe(
       map(accounts => {
@@ -147,4 +147,5 @@ export class AccountsService {
       })
     );
   }
+  
 }
