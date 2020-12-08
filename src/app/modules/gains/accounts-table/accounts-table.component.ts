@@ -1,24 +1,32 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
-import { Data, DetailAttributes } from 'src/app/shared/interfaces/IAccount';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { Data, DetailAttributes, Values } from 'src/app/shared/interfaces/IAccount';
 
 @Component({
   selector: 'app-accounts-table',
   templateUrl: './accounts-table.component.html',
-  styleUrls: ['./accounts-table.component.css']
+  styleUrls: ['./accounts-table.component.css'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class AccountsTableComponent implements OnInit {
   @Input('accountData') accountData:DetailAttributes;
-  displayedColumns: string[] = ["symbol", "position", "price"]//, "shares", "price"]//, "date"];
-  //dataSource$:Observable<any[]>;
+  displayedColumns: string[] = ["symbol", "position", "price", "cost-basis"]
+  expandedElement:Data | null;
 
   //behavior subject to listen to data changes
   // might want to make a separate, distinct structure for table usage
   private dataSubject:BehaviorSubject<Data[]>;
   dataObserv:Observable<Data[]>;
-  constructor() {
+  upDownIcon = "keyboard_arrow_up";
+  innerColumns:string[] = ["openDate", "position", "sharePrice"];
+  constructor(private cdr : ChangeDetectorRef) {
     
    }
 
@@ -32,41 +40,44 @@ export class AccountsTableComponent implements OnInit {
   getSubject(){
     return this.dataSubject;
   }
-  print(toPrint){
-    console.log(toPrint)
+
+  // return the data at the symbol
+  curVals(s:string):Data{
+    return this.dataSubject.value.find(_ => _.symbol === s);
   }
 
   accumulateTotalPosition(symbol:string){
-    return this.dataSubject.value.find(d => d.symbol === symbol).values.reduce(((tot, acc) => tot += acc.position), 0);
+    return this.curVals(symbol).values.reduce(((tot, acc) => tot += acc.position), 0);
   }
 
   determineCostBasis(symbol:string){
-    return this.dataSubject.value.find(d => d.symbol === symbol).values.reduce(((tot, acc) => tot += acc.priceOfBuy), 0);
+    return this.determineAvgPriceOfShare(symbol) * this.accumulateTotalPosition(symbol);
   }
-/*
 
-CREATE SEPARATE STRUCTURE FOR TABLE WITH THESE METHODS
-
-  getAvgPrice(symbol:string){
-    let data = this.dataSource.data.find(d => { return d.symbol === symbol});
-    let total = 0;
-    data.values.forEach(element => {
-      total += element.priceOfBuy;
-    })
-    return total / data.values.length;
+  determineAvgPriceOfShare(symbol:string){
+    let totPrice = 0;
+    let totAccumulated = 0;
+    const values = this.curVals(symbol).values;
+    for (let i = 0; i < values.length; i++){
+      totPrice += (values[i].priceOfBuy * values[i].position)
+      totAccumulated += values[i].position;
+    }
+    return (totPrice / totAccumulated)
+  //  return (this.curVals(symbol).values.reduce(((tot, acc) => tot += (acc.priceOfBuy*acc.position)), 0) / this.curVals(symbol).values.length).toFixed(2);
   }
-  condensePositions(symbol:string){
-    let temp = this.dataSource.data.find(d => { return d.symbol === symbol});
-    let total = 0;
-    temp.values.forEach(element => {
-      total += element.position;
-    })
-    return total;
+  
+  generateExpansionArray(symbol:string):Array<Values>{
+    return this.curVals(symbol).values.sort((a, b) => this.sortDates(a.dateOfBuy, b.dateOfBuy));
   }
-  */
 
-  ngAfterViewInit(){
-    //this.accountData.
+  sortDates(date1:string, date2:string){
+    let a = new Date(date1);
+    let b = new Date(date2);
+    return (b.getTime() - a.getTime());
+  }
+
+  ngAfterViewChecked(){
+    this.cdr.detectChanges();
   }
 
 }
