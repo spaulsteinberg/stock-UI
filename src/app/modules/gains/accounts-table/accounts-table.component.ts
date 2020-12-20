@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Data, DetailAttributes, Values } from 'src/app/shared/interfaces/IAccount';
+import { AccountsService } from 'src/app/shared/services/accounts.service';
 
 @Component({
   selector: 'app-accounts-table',
@@ -22,28 +23,27 @@ export class AccountsTableComponent implements OnInit {
 
   //behavior subject to listen to data changes
   // might want to make a separate, distinct structure for table usage
-  private dataSubject:BehaviorSubject<Data[]>;
   dataObserv:Observable<Data[]>;
   upDownIcon = "keyboard_arrow_up";
   innerColumns:string[] = ["openDate", "position", "sharePrice"];
-  constructor(private cdr : ChangeDetectorRef) {
+  constructor(private cdr : ChangeDetectorRef, private accounts: AccountsService) {
     
    }
 
   ngOnInit(): void {
     console.log(this.accountData)
     console.log("Data:", this.accountData.data)
-    this.dataSubject = new BehaviorSubject<Data[]>(this.accountData.data);
-    this.dataObserv = this.dataSubject.asObservable();
+    this.accounts.initTableSubject(this.accountData.data);
+    this.dataObserv = this.accounts.tableData$;
   }
 
   getSubject(){
-    return this.dataSubject;
+    return this.accounts.tableDataSubject;
   }
 
   // return the data at the symbol
   curVals(s:string):Data{
-    return this.dataSubject.value.find(_ => _.symbol === s);
+    return this.accounts.tableDataSubject.value.find(_ => _.symbol === s);
   }
 
   accumulateTotalPosition(symbol:string){

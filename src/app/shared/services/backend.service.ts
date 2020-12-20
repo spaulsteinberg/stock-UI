@@ -55,6 +55,10 @@ export class BackendService {
             .subscribe(data => this.listSubject.next(data), err => console.log(err, "IN BACKEND SERVICE"));
   }
 
+  getCurrentStockListFromSubject(){
+    return this.listSubject.value;
+  }
+
   errorAddingUser(error: HttpErrorResponse){
     return throwError(error || "Something went wrong adding a stock. Please try again.");
   }

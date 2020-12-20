@@ -1,0 +1,37 @@
+<h1 mat-dialog-title class="mx-3 text-center">{{flag === 0 ? 'Add a Position' : 'Remove a Position'}}</h1>
+<div mat-dialog-content>
+    <form [formGroup]="form">
+        <p>
+            <mat-form-field appearance="standard" class="mx-4">
+                <mat-label>Symbol</mat-label>
+                <input type="text" matInput formControlName="symbol" autocomplete="off">
+                <mat-error *ngIf="symbol.invalid">{{configureError(symbol)}}</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="standard" class="mx-4">
+                <mat-label>Position</mat-label>
+                <input type="text" matInput formControlName="position" autocomplete="off">
+                <mat-error *ngIf="position.invalid">{{configureError(position)}}</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="standard" class="mx-4">
+                <mat-label>Share Price</mat-label>
+                <input type="text" matInput formControlName="priceOfBuy" autocomplete="off">
+                <mat-error *ngIf="priceOfBuy.invalid">{{configureError(priceOfBuy)}}</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput [matDatepicker]="picker" type="datetime" formControlName="dateOfBuy" [min]="minDate" [max]="maxDate" [matDatepickerFilter]="utils.dateFilter" placeholder="Choose a Date">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker color="primary"></mat-datepicker>
+                <mat-error *ngIf="dateOfBuy.invalid">{{configureError(dateOfBuy)}}</mat-error>
+            </mat-form-field>
+        </p>
+        <div class="text-center text-white justify-content-center">
+            <button mat-raised-button type="submit" [disabled]="form.invalid" *ngIf="flag === 0; else delFlag" id="add-button" (click)="sendData()">Add</button>
+            <ng-template #delFlag>
+                <button mat-raised-button type="submit" [disabled]="form.invalid" id="remove-button" (click)="sendData()">Remove</button>
+            </ng-template>
+        </div>
+        <p>
+
+        </p>
+    </form>
+</div>

@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AddAccountRequest } from 'src/app/shared/models/AddAccountRequest';
 import { AccountsService } from 'src/app/shared/services/accounts.service';
+import { UtilsService } from 'src/app/shared/services/utilities/utils.service';
 import { checkIfSymbolIsValid } from 'src/app/shared/validators/symbol-check.validator';
 
 @Component({
@@ -22,7 +23,8 @@ export class AddDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private account: AccountsService,
     private dialogRef: MatDialogRef<AddDialogComponent>,
-    private _snackBar: MatSnackBar) {
+    private _snackBar: MatSnackBar,
+    private utils: UtilsService) {
         this.addAccountForm = this.fb.group({
           name: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
           symbol: ['', [Validators.required, Validators.minLength(1), checkIfSymbolIsValid(data.symbols)]], //check is symbol is really there

@@ -4,6 +4,8 @@ import { BehaviorSubject, Observable, of, ReplaySubject, Subject, throwError, ti
 import { catchError, delayWhen, map, retry, retryWhen, tap } from 'rxjs/operators';
 import { Data, DetailAttributes, Details, IAccount } from '../interfaces/IAccount';
 import { AddAccountRequest } from '../models/AddAccountRequest';
+import { AddPositionRequest } from '../models/AddPositionRequest';
+import { AddPositionResponse, PositionDetails } from '../models/AddPositionResponse';
 import { RegisterUserService } from './register-user.service';
 
 @Injectable({
@@ -68,8 +70,26 @@ export class AccountsService {
 
   private subject = new BehaviorSubject<string[]>([]); //init subject
   private accountDataSubject = new BehaviorSubject<DetailAttributes[]>([]);
+  public tableDataSubject:BehaviorSubject<Data[]> = new BehaviorSubject<Data[]>([]);
   accountNames$:Observable<string[]> = this.subject.asObservable(); //get observable from subject data
   accountsData$:Observable<DetailAttributes[]> = this.accountDataSubject.asObservable();
+  tableData$:Observable<Data[]> = this.tableDataSubject.asObservable();
+
+  addPosition(request:AddPositionRequest, nameRef:string){
+    return this.http.patch<any>(this.URLS.POSITION, JSON.stringify(request), {headers: this.createHeadersWithJsonContent()})
+           .pipe(
+             tap( (data) => console.log("Call to positions", data.details)),
+             tap( (data) => this.accountDataSubject.next(data.details)),
+             map( (data) => data.details.find(_ => _.name === nameRef)),
+             catchError((err:HttpErrorResponse) => throwError(err))
+           )
+  }
+
+
+  initTableSubject(d){
+    this.tableDataSubject.next(d);
+  }
+
 
   createAccount(payload: AddAccountRequest){
     const accNames = this.subject.getValue();

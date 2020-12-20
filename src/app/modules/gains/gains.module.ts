@@ -10,6 +10,7 @@ import { RemoveDialogComponent } from './remove-dialog/remove-dialog.component';
 import { AddDialogComponent } from './add-dialog/add-dialog.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { AccountsTableComponent } from './accounts-table/accounts-table.component';
+import { PositionDialogComponent } from './position-dialog/position-dialog.component';
 
 
 
@@ -22,7 +23,8 @@ import { AccountsTableComponent } from './accounts-table/accounts-table.componen
     RemoveDialogComponent,
     AddDialogComponent,
     DialogComponent,
-    AccountsTableComponent
+    AccountsTableComponent,
+    PositionDialogComponent
   ],
   imports: [
     SharedModule,

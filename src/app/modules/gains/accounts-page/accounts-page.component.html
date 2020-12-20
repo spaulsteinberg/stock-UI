@@ -9,7 +9,7 @@
 </div>
 <div class="row" *ngIf="accountNames$ | async as names; else empty">
     <div class="col col-md-2 offset-md-1" >
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" [matTooltipPosition]="tooltipPosition" [matTooltip]="tooltipMessage">
             <mat-label class="text-success">Choose an Account</mat-label>
             <mat-select class="text-white" [(value)]="selectedAccount" (selectionChange)="selectChange($event)">
                 <mat-option class="text-white" *ngFor="let name of names" [value]="name">{{name}}</mat-option>
@@ -25,6 +25,15 @@
     <p *ngIf="isErr">An error occurred. Please reload and try again.</p>
 </ng-template>
 <div class="row" *ngIf="selectedAccount !== undefined">
+    Add/remove placeholder position: 
+    <button mat-raised-button id="add-position-button" [matTooltipPosition]="tooltipPosition" [matTooltip]="tooltipAddPosition" class="mx-3" (click)="openPositionDialog(0)">
+        <mat-icon>add</mat-icon>
+        Add Position
+    </button>
+    <button mat-raised-button id="remove-position-button"  [matTooltipPosition]="tooltipPosition" [matTooltip]="tooltipRemovePosition" class="mx-3" (click)="openPositionDialog(1)">
+        <mat-icon>remove</mat-icon>
+        Remove Position
+    </button>
     <div class="col col-md-10 offset-md-1">
         <app-accounts-table [accountData]="accountDisplay$ | async"></app-accounts-table>
     </div>

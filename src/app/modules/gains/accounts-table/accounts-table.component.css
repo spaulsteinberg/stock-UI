@@ -45,3 +45,6 @@ line-height: normal;
     top: -5px;
     margin-left: 5px; /* optional */
 }
+.table-col {
+    width: 25%;
+}

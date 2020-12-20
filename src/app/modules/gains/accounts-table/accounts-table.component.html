@@ -1,7 +1,7 @@
 <table mat-table #outerTable *ngIf="accountData !== undefined" [dataSource]="dataObserv" class="mat-elevation-z8" multiTemplateDataRows>
     
   <ng-container matColumnDef="symbol">
-    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <th mat-header-cell *matHeaderCellDef class="table-col text-left"> Name </th>
     <td mat-cell *matCellDef="let element"> 
       <mat-icon *ngIf="element === expandedElement">{{upDownIcon}}</mat-icon> 
       <mat-icon *ngIf="element !== expandedElement">keyboard_arrow_down</mat-icon> 
@@ -9,18 +9,18 @@
   </ng-container>
 
   <ng-container matColumnDef="position">
-      <th mat-header-cell *matHeaderCellDef> Position </th>
-      <td mat-cell *matCellDef="let element"> {{accumulateTotalPosition(element.symbol)}}</td>
+      <th mat-header-cell *matHeaderCellDef class="table-col text-center"> Position </th>
+      <td mat-cell *matCellDef="let element" class="text-center"> {{accumulateTotalPosition(element.symbol)}}</td>
   </ng-container>
 
   <ng-container matColumnDef="price">
-    <th mat-header-cell *matHeaderCellDef> Price/Share </th>
-    <td mat-cell *matCellDef="let element">{{determineAvgPriceOfShare(element.symbol) | currency}}</td>
+    <th mat-header-cell *matHeaderCellDef class="table-col text-center"> Price/Share </th>
+    <td mat-cell *matCellDef="let element" class="text-center">{{determineAvgPriceOfShare(element.symbol) | currency}}</td>
   </ng-container>
 
   <ng-container matColumnDef="cost-basis">
-    <th mat-header-cell *matHeaderCellDef> Cost Basis </th>
-    <td mat-cell *matCellDef="let element">{{determineCostBasis(element.symbol) | currency}}</td>
+    <th mat-header-cell *matHeaderCellDef class="table-col text-center"> Cost Basis </th>
+    <td mat-cell *matCellDef="let element" class="text-center">{{determineCostBasis(element.symbol) | currency}}</td>
   </ng-container>
 
   <ng-container matColumnDef="expandedDetail">
