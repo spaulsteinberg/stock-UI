@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import { AddPositionRequest } from 'src/app/shared/models/AddPositionRequest';
+import { RemovePositionRequest } from 'src/app/shared/models/RemovePositionRequest';
 import { AccountsService } from 'src/app/shared/services/accounts.service';
 import { BackendService } from 'src/app/shared/services/backend.service';
 import { UtilsService } from 'src/app/shared/services/utilities/utils.service';
@@ -21,6 +22,8 @@ export class PositionDialogComponent implements OnInit {
   form:FormGroup;
   minDate:Date = new Date(1960, 1, 1);
   maxDate:Date = new Date();
+  isDialogErr:boolean = false;
+  dialogErrMessage:string;
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
               private fb: FormBuilder,
               public utils: UtilsService,
@@ -88,13 +91,14 @@ export class PositionDialogComponent implements OnInit {
 
   sendData() {
     const date = this.utils.convertToSlashes(this._dateOfBuy);
-    const obj = {
-      position: this._position,
-      priceOfBuy: this._priceOfBuy,
-      dateOfBuy: date
-    };
+    console.log("DATE AFTER SLASHES:", date)
     // if add account else remove
     if (this.flag === 0) {
+      const obj = {
+        position: this._position,
+        priceOfBuy: this._priceOfBuy,
+        dateOfBuy: date
+      };
       const request = new AddPositionRequest(this.accountName, this._symbol.toUpperCase(), obj);
       console.log(JSON.stringify(request))
       this.account.addPosition(request, this.accountName)
@@ -102,17 +106,42 @@ export class PositionDialogComponent implements OnInit {
         response => {
           console.log(response)
           console.log(response.data)
+          this.isDialogErr = false;
           this.account.tableDataSubject.next(response.data);
-          this.dialogRef.close()
+          this.openSnackbar(`${this._symbol.toUpperCase()} added to ${this.accountName}`, "Close");
+          this.dialogRef.close();
         },
-        err => console.log(err),
-        () => {
-          this.openSnackbar(`${this._symbol.toUpperCase()} added to ${this.accountName}`, "Close")
+        error => {
+          this.isDialogErr = true;
+          this.dialogErrMessage = "Something went wrong processing your request. Please check your input and try again."
         }
       )
     }
     else if (this.flag === 1){
-
+      const rawObj = {
+        name: this.accountName,
+        symbol: this._symbol.toUpperCase(),
+        position: this._position,
+        price: this._priceOfBuy,
+        date: date
+      }
+      const request = new RemovePositionRequest(rawObj);
+      console.log(request)
+      this.account.removePosition(request)
+      .subscribe(
+        response => {
+          console.log(response);
+          this.isDialogErr = false;
+          this.account.tableDataSubject.next(response.data)
+          this.openSnackbar(`$Position of ${this._symbol.toUpperCase()} removed from ${this.accountName}`, "Close")
+          this.dialogRef.close();
+        },
+        error => {
+          this.isDialogErr = true;
+          error.status === 404 ? this.dialogErrMessage = "Error: Could not find specified position."
+                               : this.dialogErrMessage = "Error: Something went wrong. Please try again."
+        }
+      )
     }
   }
 

@@ -34,7 +34,7 @@ export class AccountsTableComponent implements OnInit {
     console.log(this.accountData)
     console.log("Data:", this.accountData.data)
     this.accounts.initTableSubject(this.accountData.data);
-    this.dataObserv = this.accounts.tableData$;
+    this.dataObserv = this.accounts.tableData$; //tableData$ is an observale of the table data subject
   }
 
   getSubject(){

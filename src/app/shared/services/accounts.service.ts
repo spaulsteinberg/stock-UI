@@ -1,11 +1,11 @@
 import { HttpBackend, HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, ReplaySubject, Subject, throwError, timer } from 'rxjs';
-import { catchError, delayWhen, map, retry, retryWhen, tap } from 'rxjs/operators';
-import { Data, DetailAttributes, Details, IAccount } from '../interfaces/IAccount';
+import { BehaviorSubject, Observable, throwError, timer } from 'rxjs';
+import { catchError, delayWhen, map, retryWhen, tap } from 'rxjs/operators';
+import { Data, DetailAttributes, IAccount } from '../interfaces/IAccount';
 import { AddAccountRequest } from '../models/AddAccountRequest';
 import { AddPositionRequest } from '../models/AddPositionRequest';
-import { AddPositionResponse, PositionDetails } from '../models/AddPositionResponse';
+import { RemovePositionRequest } from '../models/RemovePositionRequest';
 import { RegisterUserService } from './register-user.service';
 
 @Injectable({
@@ -83,6 +83,27 @@ export class AccountsService {
              map( (data) => data.details.find(_ => _.name === nameRef)),
              catchError((err:HttpErrorResponse) => throwError(err))
            )
+  }
+
+  
+  removePosition = (request:RemovePositionRequest) => {
+    return this.http.delete<any>(this.URLS.POSITION, 
+      {
+        headers: this.createHeadersWithJsonContent(),
+        params: {
+          name: request.name,
+          symbol: request.symbol,
+          position: request.position.toString(),
+          date: request.date,
+          price: request.price.toString()
+      }
+    })
+    .pipe(
+      tap( (data) => console.log("Call to remove", data, data.status)),
+      tap( (data) => this.accountDataSubject.next(data.details)),
+      map( (data) => data.details.find(_ => _.name === request.name)),
+      catchError( (err:HttpErrorResponse) => throwError(err || "Error in call to remove position"))
+    )
   }
 
 
