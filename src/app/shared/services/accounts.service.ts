@@ -75,12 +75,12 @@ export class AccountsService {
   accountsData$:Observable<DetailAttributes[]> = this.accountDataSubject.asObservable();
   tableData$:Observable<Data[]> = this.tableDataSubject.asObservable();
 
-  addPosition(request:AddPositionRequest, nameRef:string){
+  addPosition(request:AddPositionRequest){
     return this.http.patch<any>(this.URLS.POSITION, JSON.stringify(request), {headers: this.createHeadersWithJsonContent()})
            .pipe(
              tap( (data) => console.log("Call to positions", data.details)),
              tap( (data) => this.accountDataSubject.next(data.details)),
-             map( (data) => data.details.find(_ => _.name === nameRef)),
+             map( (data) => data.details.find(_ => _.name === request.name)),
              catchError((err:HttpErrorResponse) => throwError(err))
            )
   }
@@ -101,7 +101,7 @@ export class AccountsService {
     .pipe(
       tap( (data) => console.log("Call to remove", data, data.status)),
       tap( (data) => this.accountDataSubject.next(data.details)),
-      map( (data) => data.details.find(_ => _.name === request.name)),
+      map( (data) => data.details.find(_ => _.name === request.name)), // this will map us to the right account name
       catchError( (err:HttpErrorResponse) => throwError(err || "Error in call to remove position"))
     )
   }

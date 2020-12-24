@@ -1,4 +1,4 @@
-table {
+.outer-table {
     width: 100%;
     color: white;
 }
@@ -46,5 +46,14 @@ line-height: normal;
     margin-left: 5px; /* optional */
 }
 .table-col {
-    width: 25%;
+    width: 21%;
+}
+.symb-col {
+    width: 37%;
+}
+#delete-position {
+    background-color: red;
+}
+#add-onto {
+    background-color: green;
 }

@@ -24,6 +24,7 @@ export class PositionDialogComponent implements OnInit {
   maxDate:Date = new Date();
   isDialogErr:boolean = false;
   dialogErrMessage:string;
+  dataContainer;
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
               private fb: FormBuilder,
               public utils: UtilsService,
@@ -33,13 +34,15 @@ export class PositionDialogComponent implements OnInit {
               private snackBar:MatSnackBar) {
     this.accountName = data.accountName;
     this.flag = data.flag;
-    this.symbolList = this.backend.getCurrentStockListFromSubject();
-    this.form = this.fb.group({
-      symbol: ['', [Validators.required, checkIfSymbolIsValid(this.symbolList)]],
-      position: [null, [Validators.required, Validators.min(0.01), Validators.max(10000000)]],
-      priceOfBuy: [null, [Validators.required, Validators.max(10000), Validators.min(0.001)]],
-      dateOfBuy: ['', [Validators.required]]
-    })
+    if (this.flag === 0 || this.flag === 1){
+      this.symbolList = this.backend.getCurrentStockListFromSubject();
+      this.form = this.fb.group({
+        symbol: ['', [Validators.required, checkIfSymbolIsValid(this.symbolList)]],
+        position: [null, [Validators.required, Validators.min(0.01), Validators.max(10000000)]],
+        priceOfBuy: [null, [Validators.required, Validators.max(10000), Validators.min(0.001)]],
+        dateOfBuy: ['', [Validators.required]]
+      })
+    }
   }
 
   get symbol(){
@@ -101,21 +104,7 @@ export class PositionDialogComponent implements OnInit {
       };
       const request = new AddPositionRequest(this.accountName, this._symbol.toUpperCase(), obj);
       console.log(JSON.stringify(request))
-      this.account.addPosition(request, this.accountName)
-      .subscribe(
-        response => {
-          console.log(response)
-          console.log(response.data)
-          this.isDialogErr = false;
-          this.account.tableDataSubject.next(response.data);
-          this.openSnackbar(`${this._symbol.toUpperCase()} added to ${this.accountName}`, "Close");
-          this.dialogRef.close();
-        },
-        error => {
-          this.isDialogErr = true;
-          this.dialogErrMessage = "Something went wrong processing your request. Please check your input and try again."
-        }
-      )
+      this.addPosition(request, 1);
     }
     else if (this.flag === 1){
       const rawObj = {
@@ -127,13 +116,38 @@ export class PositionDialogComponent implements OnInit {
       }
       const request = new RemovePositionRequest(rawObj);
       console.log(request)
-      this.account.removePosition(request)
+      this.removePostion(request, 1);
+    }
+  }
+
+  addPosition(request:AddPositionRequest, option){
+    this.account.addPosition(request)
+      .subscribe(
+        response => {
+          console.log(response)
+          console.log(response.data)
+          this.isDialogErr = false;
+          this.account.tableDataSubject.next(response.data);
+          option === 1 ? this.openSnackbar(`${this._symbol.toUpperCase()} added to ${this.accountName}`, "Close")
+                       : this.openSnackbar(`${request.data.position} shares added to ${request.symbol}`, "Close")
+          this.dialogRef.close();
+        },
+        error => {
+          this.isDialogErr = true;
+          this.dialogErrMessage = "Something went wrong processing your request. Please check your input and try again."
+        }
+      )
+  }
+
+  removePostion(request, option){
+    this.account.removePosition(request)
       .subscribe(
         response => {
           console.log(response);
           this.isDialogErr = false;
           this.account.tableDataSubject.next(response.data)
-          this.openSnackbar(`$Position of ${this._symbol.toUpperCase()} removed from ${this.accountName}`, "Close")
+          option === 1 ? this.openSnackbar(`Position of ${this._symbol.toUpperCase()} removed from ${this.accountName}`, "Close")
+                       : this.openSnackbar(`Position of ${request.symbol.toUpperCase()} removed from ${request.name}`, "Close")
           this.dialogRef.close();
         },
         error => {
@@ -142,7 +156,43 @@ export class PositionDialogComponent implements OnInit {
                                : this.dialogErrMessage = "Error: Something went wrong. Please try again."
         }
       )
+  }
+
+  confirmDelete(){
+    this.removePostion(this.data.obj, 2)
+  }
+
+  positionToAdd:number;
+  addError:boolean = false;
+  addOntoPosition(){
+    console.log(this.positionToAdd)
+    if (this.positionToAdd === undefined || this.positionToAdd === 0 || this.positionToAdd < 0 || this.positionToAdd > 100000){
+      this.addError = true;
+      return;
     }
+    this.addError = false;
+    const name = this.data.accountName;
+    const symbol = this.data.symbol;
+    const rawObj = {
+      position: this.positionToAdd,
+      priceOfBuy: this.data.priceOfBuy,
+      dateOfBuy: this.data.dateOfBuy
+    };
+    const request = new AddPositionRequest(name, symbol, rawObj);
+    console.log(request)
+    this.addPosition(request, 2)
+  }
+
+  createDeleteHeaderString(){
+    return `Delete ${this.data.obj.position} shares of ${this.data.obj.symbol}`;
+  }
+
+  createAdditionHeader(){
+    return `Add onto ${this.data.symbol}`;
+  }
+
+  revert(){
+    this.dialogRef.close();
   }
 
   openSnackbar(message: string, action: string) {

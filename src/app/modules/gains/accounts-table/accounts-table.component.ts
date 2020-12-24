@@ -3,6 +3,12 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Data, DetailAttributes, Values } from 'src/app/shared/interfaces/IAccount';
 import { AccountsService } from 'src/app/shared/services/accounts.service';
+import { RemovePositionRequest } from 'src/app/shared/models/RemovePositionRequest';
+import { AddPositionRequest } from 'src/app/shared/models/AddPositionRequest';
+import { UtilsService } from 'src/app/shared/services/utilities/utils.service';
+import { error } from 'protractor';
+import { MatDialog } from '@angular/material/dialog';
+import { PositionDialogComponent } from '../position-dialog/position-dialog.component';
 
 @Component({
   selector: 'app-accounts-table',
@@ -25,10 +31,12 @@ export class AccountsTableComponent implements OnInit {
   // might want to make a separate, distinct structure for table usage
   dataObserv:Observable<Data[]>;
   upDownIcon = "keyboard_arrow_up";
-  innerColumns:string[] = ["openDate", "position", "sharePrice"];
-  constructor(private cdr : ChangeDetectorRef, private accounts: AccountsService) {
-    
-   }
+  innerColumns:string[] = ["openDate", "position", "sharePrice", "actions"];
+  constructor
+  (private cdr : ChangeDetectorRef,
+   private accounts: AccountsService,
+   private utils: UtilsService,
+   private dialog: MatDialog) { }
 
   ngOnInit(): void {
     console.log(this.accountData)
@@ -74,6 +82,38 @@ export class AccountsTableComponent implements OnInit {
     let a = new Date(date1);
     let b = new Date(date2);
     return (b.getTime() - a.getTime());
+  }
+
+  // keep track of symbol of expanded row
+  symbolContext:string;
+  createContext(row){
+    this.symbolContext = row;
+  }
+
+  openDeleteDialog = (element, flag) => {
+    const raw = {
+      name: this.accountData.name,
+      symbol: this.symbolContext,
+      position: element.position,
+      date: element.dateOfBuy,
+      price: element.priceOfBuy
+    }
+    const model = new RemovePositionRequest(raw)
+    this.dialog.open(PositionDialogComponent, {data: {
+      flag: flag,
+      accountName: model.name,
+      obj: model
+    }});
+  }
+
+  openAddDialog = (element, flag) => {
+    this.dialog.open(PositionDialogComponent, {data: {
+      flag: flag,
+      accountName: this.accountData.name,
+      priceOfBuy: element.priceOfBuy,
+      dateOfBuy: element.dateOfBuy,
+      symbol: this.symbolContext.toUpperCase()
+    }})
   }
 
   ngAfterViewChecked(){
