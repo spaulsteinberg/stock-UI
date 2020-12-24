@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, throwError, timer } from 'rxjs';
 import { catchError, delayWhen, map, retryWhen, tap } from 'rxjs/operators';
 import { Data, DetailAttributes, IAccount } from '../interfaces/IAccount';
 import { AddAccountRequest } from '../models/AddAccountRequest';
+import { AddAccountResponse } from '../models/AddAccountResponse';
 import { AddPositionRequest } from '../models/AddPositionRequest';
 import { RemovePositionRequest } from '../models/RemovePositionRequest';
 import { RegisterUserService } from './register-user.service';
@@ -68,6 +69,8 @@ export class AccountsService {
 
   /***************************************** Implementing store pattern *****************************************/
 
+  // account data subject updates all big picture state management
+  //table data subject is specific to table and is updated in component
   private subject = new BehaviorSubject<string[]>([]); //init subject
   private accountDataSubject = new BehaviorSubject<DetailAttributes[]>([]);
   public tableDataSubject:BehaviorSubject<Data[]> = new BehaviorSubject<Data[]>([]);
@@ -117,9 +120,14 @@ export class AccountsService {
     const newArray = accNames.slice(0);
     newArray.push(payload.name);
     this.subject.next(newArray);
-    return this.http.patch<any>(this.URLS.ACCOUNT, JSON.stringify(payload), {headers: this.createHeadersWithJsonContent()})
+    return this.http.patch<AddAccountResponse>(this.URLS.ACCOUNT, JSON.stringify(payload), {headers: this.createHeadersWithJsonContent()})
            .pipe(
              tap( () => console.log("Call to accounts")),
+             tap( (response) => {
+               const currentState = this.accountDataSubject.getValue();
+               currentState.push(response.details)
+               this.accountDataSubject.next(currentState);
+             }),
              catchError( (err:HttpErrorResponse) => throwError(err.message))
            )
   }

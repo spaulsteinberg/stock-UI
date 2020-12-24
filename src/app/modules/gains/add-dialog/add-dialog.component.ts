@@ -110,7 +110,7 @@ get _name(){
 
   createAccountObject(dateOfBuy:string):AddAccountRequest {
     try {
-      return this.request.createNewAddAccountRequest(this._name, this._symbol, this._shares, this._price, dateOfBuy);
+      return this.request.createNewAddAccountRequest(this._name, this._symbol.toUpperCase(), this._shares, this._price, dateOfBuy);
     } catch (err) {
       console.log(err)
       this.errCreatingRequest = true;
