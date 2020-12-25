@@ -12,6 +12,7 @@ import { RemoveDialogComponent } from '../remove-dialog/remove-dialog.component'
 export class DialogComponent implements OnInit {
   @Input('accountNames') accountNames;
   @Input('symbols') listOfSymbols:string[];
+  @Input('currentAccount') curName:string;
   constructor(private dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -23,7 +24,8 @@ export class DialogComponent implements OnInit {
   tooltipMessageRemove = "Delete an account";
   openRemoveDialog() {
     this.dialog.open(RemoveDialogComponent, { data: {
-      names: this.accountNames
+      names: this.accountNames,
+      currentAccount: this.curName
     }});
   }
   openCreateAccountDialog(){

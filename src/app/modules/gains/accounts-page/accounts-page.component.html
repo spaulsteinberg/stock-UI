@@ -17,7 +17,7 @@
         </mat-form-field>
     </div>
     <div class="col col-md-5 offset-md-1">
-        <app-dialog [accountNames]="names" [symbols]="listOfSymbols$ | async"></app-dialog>
+        <app-dialog [accountNames]="names" [currentAccount]="selectedAccount" [symbols]="listOfSymbols$ | async"></app-dialog>
     </div>
 </div>
 <ng-template #empty>

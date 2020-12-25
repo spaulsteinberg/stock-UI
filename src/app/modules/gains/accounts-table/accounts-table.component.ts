@@ -116,6 +116,13 @@ export class AccountsTableComponent implements OnInit {
     }})
   }
 
+  tooltipProperties = {
+    tooltipPosition: "above",
+    tooltipAddPosition: "Add a position to account",
+    tooltipRemovePosition: "Remove a position from account",
+    showDelay: 3000
+  };
+
   ngAfterViewChecked(){
     this.cdr.detectChanges();
   }

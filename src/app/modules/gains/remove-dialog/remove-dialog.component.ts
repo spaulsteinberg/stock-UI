@@ -33,7 +33,14 @@ export class RemoveDialogComponent implements OnInit {
     return this.removeForm.get('confirmAccountName').value;
   }
 
+  openAccountError:boolean = false;
   confirm(){
+    const currentName = this.data.currentAccount;
+    if (currentName === this.confirmAccount){
+      this.openAccountError = true;
+      return;
+    }
+    this.openAccountError = false;
     this.account.deleteAnAccount(this.confirmAccount)
     .subscribe(response => {
       console.log(response)
