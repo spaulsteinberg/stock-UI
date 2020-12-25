@@ -1,7 +1,7 @@
 import { HttpBackend, HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError, timer } from 'rxjs';
-import { catchError, delayWhen, map, retryWhen, tap } from 'rxjs/operators';
+import { catchError, delayWhen, map, retry, retryWhen, take, tap } from 'rxjs/operators';
 import { Data, DetailAttributes, IAccount } from '../interfaces/IAccount';
 import { AddAccountRequest } from '../models/AddAccountRequest';
 import { AddAccountResponse } from '../models/AddAccountResponse';
@@ -45,19 +45,17 @@ export class AccountsService {
 
   //set the header of username is its undefined
   async setHeaders(){
-    if (this.auth.usernameSubject$.getValue() === undefined || this.auth.usernameSubject$.getValue() === null){
-      return await this.auth.getUsernameRefresh().toPromise()
-                .then(res => {
-                  return Promise.resolve(res.username);
-                })
-                .catch(err => {
-                  return Promise.reject(err);
-                })
-    } 
-    this.username = this.auth.usernameSubject$.getValue();
-    return this.username;
+    return await this.auth.getUsernameRefresh().toPromise()
+              .then(res => {
+                console.log("SET HEADER USERNAME", res.username)
+                return Promise.resolve(res.username);
+              })
+              .catch(err => {
+                return Promise.reject(err);
+              })
   }
   createHeaders(){
+    console.log("In create headers:", this.username)
     this.headers = new HttpHeaders().set('Authorization', `Bearer ${this.auth.getToken()}`).set('username', this.username)
   }
   createHeadersWithJsonContent(){
@@ -163,16 +161,21 @@ export class AccountsService {
   }
 
   async getAccounts(){
-    if (this.username === undefined) this.username = await this.setHeaders();
-    this.createHeaders();
+    try {
+      this.username = await this.setHeaders();
+      this.createHeaders();
+    }
+    catch (err){
+      console.log(err)
+    }
     console.log("HEADERS:", this.headers)
+    console.log("USERNAME SENT:", this.username)
     this.http.get<IAccount>(this.URLS.ACCOUNT, {headers: this.headers})
             .pipe(
               tap((data) => console.log("TAPPED ACCOUNT", data)),
               catchError((err:HttpErrorResponse) => throwError(err.message)),
-              retryWhen(errors => errors.pipe(
-                delayWhen(() => timer(2000)
-              )))
+              retryWhen(errors => errors.pipe(delayWhen(() => timer(2000)), take(4)
+              ))
             )
             .subscribe({
               next: (response) => {
@@ -195,6 +198,12 @@ export class AccountsService {
         })
       })
     );
+  }
+
+  public completeSubjectsForLogout():void{
+    this.tableDataSubject.next([]);
+    this.subject.next([]);
+    this.accountDataSubject.next([]);
   }
   
 }

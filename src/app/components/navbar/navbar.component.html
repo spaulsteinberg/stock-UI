@@ -12,7 +12,7 @@
             <a class="navbar-brand" *ngIf="!_auth.isUserLoggedIn()" routerLink="login" routerLinkActive="active">Login</a>
             <a class="navbar-brand" *ngIf="!_auth.isUserLoggedIn()" routerLink="register" routerLinkActive="active">Register</a>
             <span class="navbar-brand" style="color:magenta; cursor: default;" *ngIf="_auth.isUserLoggedIn() && username !== undefined"> Hello, {{username}}</span>
-            <a class="navbar-brand" style="padding-left:2%;" *ngIf="_auth.isUserLoggedIn()" (click)="_auth.logoutUser()" style="color:white">Logout</a>
+            <a class="navbar-brand" style="padding-left:2%;" *ngIf="_auth.isUserLoggedIn()" (click)="signOut()" style="color:white">Logout</a>
         </li>
     </ul>
 </nav>

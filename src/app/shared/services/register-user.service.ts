@@ -1,16 +1,17 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ListServiceService } from 'src/app/shared/services/list-service.service';
+import { AccountsService } from './accounts.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RegisterUserService {
 
-  constructor(private http: HttpClient, private router: Router, private _list: ListServiceService) { }
+  constructor(private http: HttpClient, private router: Router, private _list: ListServiceService) {}
   private _url = "http://localhost:3000/api";
 
   private params:HttpParams;
@@ -46,6 +47,7 @@ export class RegisterUserService {
 
   //log the user out
   logoutUser(){
+
     localStorage.removeItem('token');
     localStorage.removeItem('u');
     this._list.clearQuotes(); //clears list for logout/login
