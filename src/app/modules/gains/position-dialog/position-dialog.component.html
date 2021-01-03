@@ -34,6 +34,9 @@
             </div>
         </form>
     </div>
+    <div class="loading-container position my-2" *ngIf="confirmClickLoading">
+        <mat-progress-bar mode="buffer" color="warn"></mat-progress-bar>
+    </div>
 </div>
 <div *ngIf="flag === 2">
     <h1 mat-dialog-title class="mx-3 text-center">{{createDeleteHeaderString()}}</h1>
@@ -44,6 +47,9 @@
             <button mat-raised-button class="bg-warning mx-2" (click)="revert()">Leave</button>
         </div>
     </div>
+    <div class="loading-container position" *ngIf="confirmClickLoading">
+        <mat-progress-bar mode="buffer" color="warn"></mat-progress-bar>
+    </div>
 </div>
 <div *ngIf="flag === 3">
     <h1 mat-dialog-title class="mx-3 text-center">{{createAdditionHeader()}}</h1>
@@ -53,9 +59,13 @@
             <input matInput type="number" autocomplete="off" [(ngModel)]="positionToAdd" required>
         </mat-form-field>
         <div class="my-2 text-center">
-            <button mat-raised-button class="bg-success mx-2" (click)="addOntoPosition()">Confirm</button>
+            <button mat-raised-button class="bg-success mx-2" (click)="addOntoPosition()"
+            [disabled]="addIsDisabled()">Confirm</button>
             <button mat-raised-button class="bg-warning mx-2" (click)="revert()">Leave</button>
             <mat-error *ngIf="addError">Invalid Position</mat-error>
         </div>
+    </div>
+    <div class="loading-container position" *ngIf="confirmClickLoading">
+        <mat-progress-bar mode="buffer" color="warn"></mat-progress-bar>
     </div>
 </div>

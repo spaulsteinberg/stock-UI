@@ -32,6 +32,7 @@ export class AccountsTableComponent implements OnInit {
   dataObserv:Observable<Data[]>;
   upDownIcon = "keyboard_arrow_up";
   innerColumns:string[] = ["openDate", "position", "sharePrice", "actions"];
+  costBasis:number[] = [];
   constructor
   (private cdr : ChangeDetectorRef,
    private accounts: AccountsService,
@@ -122,6 +123,11 @@ export class AccountsTableComponent implements OnInit {
     tooltipRemovePosition: "Remove a position from account",
     showDelay: 3000
   };
+
+  getTotalAccountValue(){
+    console.log(this.costBasis)
+    this.costBasis.reduce((acc, cur) => acc += cur, 0)
+  }
 
   ngAfterViewChecked(){
     this.cdr.detectChanges();

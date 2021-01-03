@@ -92,9 +92,11 @@ export class PositionDialogComponent implements OnInit {
     }
   }
 
+  confirmClickLoading = false;
   sendData() {
     const date = this.utils.convertToSlashes(this._dateOfBuy);
     console.log("DATE AFTER SLASHES:", date)
+    this.confirmClickLoading = true;
     // if add account else remove
     if (this.flag === 0) {
       const obj = {
@@ -128,14 +130,15 @@ export class PositionDialogComponent implements OnInit {
           console.log(response.data)
           this.isDialogErr = false;
           this.account.tableDataSubject.next(response.data);
-          option === 1 ? this.openSnackbar(`${this._symbol.toUpperCase()} added to ${this.accountName}`, "Close")
+          option === 1 ? this.openSnackbar(`${request.data.position} shares of ${this._symbol.toUpperCase()} added to ${this.accountName}`, "Close")
                        : this.openSnackbar(`${request.data.position} shares added to ${request.symbol}`, "Close")
           this.dialogRef.close();
         },
         error => {
           this.isDialogErr = true;
           this.dialogErrMessage = "Something went wrong processing your request. Please check your input and try again."
-        }
+        },
+        () => this.confirmClickLoading = false
       )
   }
 
@@ -154,19 +157,22 @@ export class PositionDialogComponent implements OnInit {
           this.isDialogErr = true;
           error.status === 404 ? this.dialogErrMessage = "Error: Could not find specified position."
                                : this.dialogErrMessage = "Error: Something went wrong. Please try again."
-        }
+        },
+        () => this.confirmClickLoading = false
       )
   }
 
   confirmDelete(){
+    this.confirmClickLoading = true;
     this.removePostion(this.data.obj, 2)
   }
 
   positionToAdd:number;
   addError:boolean = false;
   addOntoPosition(){
+    this.confirmClickLoading = true;
     console.log(this.positionToAdd)
-    if (this.positionToAdd === undefined || this.positionToAdd === 0 || this.positionToAdd < 0 || this.positionToAdd > 100000){
+    if (this.positionToAdd === undefined || this.positionToAdd === 0 || this.positionToAdd < 0 || this.positionToAdd > 100000 || isNaN(this.positionToAdd)){
       this.addError = true;
       return;
     }
@@ -181,6 +187,24 @@ export class PositionDialogComponent implements OnInit {
     const request = new AddPositionRequest(name, symbol, rawObj);
     console.log(request)
     this.addPosition(request, 2)
+  }
+
+  addIsDisabled = ():boolean => {
+    //console.log(this.positionToAdd)
+    try {
+      if (this.positionToAdd === undefined
+         || this.positionToAdd === 0 
+         || this.positionToAdd < 0 
+         || this.positionToAdd > 100000 
+         || isNaN(this.positionToAdd)
+         || this.positionToAdd === null){
+        return true;
+      }
+      else return false;
+    }
+    catch (err){
+      return true;
+    }
   }
 
   createDeleteHeaderString(){
