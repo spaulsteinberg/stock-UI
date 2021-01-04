@@ -47,6 +47,7 @@ export class AccountsPageComponent implements OnInit {
     this.router.navigate([".."], {relativeTo: this.route})
   }
 
+  // give the next data to subject
   selectChange(event){
     console.log("select change:", event)
     this.accountDisplay$ = this.account.filterAccounts(this.selectedAccount);

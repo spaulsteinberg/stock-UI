@@ -6,7 +6,6 @@ import { AccountsService } from 'src/app/shared/services/accounts.service';
 import { RemovePositionRequest } from 'src/app/shared/models/RemovePositionRequest';
 import { AddPositionRequest } from 'src/app/shared/models/AddPositionRequest';
 import { UtilsService } from 'src/app/shared/services/utilities/utils.service';
-import { error } from 'protractor';
 import { MatDialog } from '@angular/material/dialog';
 import { PositionDialogComponent } from '../position-dialog/position-dialog.component';
 
@@ -32,7 +31,6 @@ export class AccountsTableComponent implements OnInit {
   dataObserv:Observable<Data[]>;
   upDownIcon = "keyboard_arrow_up";
   innerColumns:string[] = ["openDate", "position", "sharePrice", "actions"];
-  costBasis:number[] = [];
   constructor
   (private cdr : ChangeDetectorRef,
    private accounts: AccountsService,
@@ -42,10 +40,11 @@ export class AccountsTableComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.accountData)
     console.log("Data:", this.accountData.data)
-    this.accounts.initTableSubject(this.accountData.data);
+    this.accounts.initTableSubject(this.accountData.data); // initialize the subject in service
     this.dataObserv = this.accounts.tableData$; //tableData$ is an observale of the table data subject
   }
 
+  // let accounts page (parent) access subject
   getSubject(){
     return this.accounts.tableDataSubject;
   }
@@ -124,9 +123,16 @@ export class AccountsTableComponent implements OnInit {
     showDelay: 3000
   };
 
+  // get total cost
   getTotalAccountValue(){
-    console.log(this.costBasis)
-    this.costBasis.reduce((acc, cur) => acc += cur, 0)
+    const dataArr = this.accounts.tableDataSubject.value;
+    let total = 0;
+    for (const element of dataArr){
+      for (const val of element.values){
+        total += (val.position*val.priceOfBuy);
+      }
+    }
+    return total.toFixed(2);
   }
 
   ngAfterViewChecked(){

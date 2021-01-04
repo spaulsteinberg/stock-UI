@@ -1,4 +1,6 @@
-<h3 class="display-5 text-white">Total Account Value: </h3>
+<div class="text-center">
+  <h3 class="display-5 text-white">Total Account Value: {{getTotalAccountValue() | currency}}</h3>
+</div>
 <table mat-table #outerTable *ngIf="accountData !== undefined" [dataSource]="dataObserv" class="mat-elevation-z8 outer-table" multiTemplateDataRows>
     
   <ng-container matColumnDef="symbol">
