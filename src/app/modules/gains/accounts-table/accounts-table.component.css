@@ -57,3 +57,7 @@ line-height: normal;
 #add-onto {
     background-color: green;
 }
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+}

@@ -150,6 +150,7 @@ export class AccountsTableComponent implements OnInit {
   getPaginatorCeiling():Array<number>{
     const len = this.accountData.data.length;
     let temp = []
+    if (len <= 5) return [5];
     for (let i = 0; i < len; i++){
       if (i%5 == 0 && i != 0) temp.push(i);
     }
@@ -158,6 +159,10 @@ export class AccountsTableComponent implements OnInit {
       return [...temp, ceil]
     }
     else return [...temp, 100]
+  }
+
+  applyFilter(filterValue:string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   ngAfterViewChecked(){

@@ -1,6 +1,10 @@
-<div class="text-center">
+<div class="text-center my-2">
   <h3 class="display-5 text-white">Total Account Value: {{getTotalAccountValue() | currency}}</h3>
 </div>
+<mat-form-field class="mat-typography" appearance="standard" autocomplete="off">
+  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter By Symbol">
+</mat-form-field>
+
 <table mat-table #outerTable *ngIf="accountData !== undefined" [dataSource]="dataSource" class="mat-elevation-z8 outer-table" multiTemplateDataRows>
     
   <ng-container matColumnDef="symbol">
