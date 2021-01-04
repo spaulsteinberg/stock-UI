@@ -17,6 +17,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import {MatTableModule} from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 export const modules = [
@@ -38,7 +39,8 @@ export const modules = [
     MatSnackBarModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatTableModule
+    MatTableModule,
+    MatPaginatorModule
   ];
   @NgModule({
     declarations: [],

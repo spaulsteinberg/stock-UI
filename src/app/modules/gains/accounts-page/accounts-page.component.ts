@@ -54,6 +54,7 @@ export class AccountsPageComponent implements OnInit {
     if (this.tableComponent !== undefined){
       this.accountDisplay$.subscribe(data => {
         this.tableComponent.getSubject().next(data.data);
+        this.tableComponent.getDataSource().data = data.data
       })
     }
   }

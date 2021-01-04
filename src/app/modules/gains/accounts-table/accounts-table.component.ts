@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Data, DetailAttributes, Values } from 'src/app/shared/interfaces/IAccount';
@@ -8,6 +8,8 @@ import { AddPositionRequest } from 'src/app/shared/models/AddPositionRequest';
 import { UtilsService } from 'src/app/shared/services/utilities/utils.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PositionDialogComponent } from '../position-dialog/position-dialog.component';
+import {MatPaginator} from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-accounts-table',
@@ -23,6 +25,7 @@ import { PositionDialogComponent } from '../position-dialog/position-dialog.comp
 })
 export class AccountsTableComponent implements OnInit {
   @Input('accountData') accountData:DetailAttributes;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   displayedColumns: string[] = ["symbol", "position", "price", "cost-basis"]
   expandedElement:Data | null;
 
@@ -31,22 +34,30 @@ export class AccountsTableComponent implements OnInit {
   dataObserv:Observable<Data[]>;
   upDownIcon = "keyboard_arrow_up";
   innerColumns:string[] = ["openDate", "position", "sharePrice", "actions"];
+  paginatorOptionsArray:Array<number> = [5, 10, 15];
   constructor
   (private cdr : ChangeDetectorRef,
    private accounts: AccountsService,
    private utils: UtilsService,
    private dialog: MatDialog) { }
 
+   dataSource = new MatTableDataSource<Data>();
   ngOnInit(): void {
     console.log(this.accountData)
     console.log("Data:", this.accountData.data)
     this.accounts.initTableSubject(this.accountData.data); // initialize the subject in service
     this.dataObserv = this.accounts.tableData$; //tableData$ is an observale of the table data subject
+    this.dataSource.data = this.accountData.data;
+    this.dataSource.paginator = this.paginator;
   }
 
   // let accounts page (parent) access subject
   getSubject(){
     return this.accounts.tableDataSubject;
+  }
+
+  getDataSource():MatTableDataSource<Data>{
+    return this.dataSource
   }
 
   // return the data at the symbol
@@ -123,7 +134,7 @@ export class AccountsTableComponent implements OnInit {
     showDelay: 3000
   };
 
-  // get total cost
+  // get total value in account
   getTotalAccountValue(){
     const dataArr = this.accounts.tableDataSubject.value;
     let total = 0;
@@ -133,6 +144,20 @@ export class AccountsTableComponent implements OnInit {
       }
     }
     return total.toFixed(2);
+  }
+
+  // get nearest multiple of 5 for paginator...if over 100 cap it
+  getPaginatorCeiling():Array<number>{
+    const len = this.accountData.data.length;
+    let temp = []
+    for (let i = 0; i < len; i++){
+      if (i%5 == 0 && i != 0) temp.push(i);
+    }
+    if (len < 100){
+      let ceil = Math.ceil(len/5.0) * 5;
+      return [...temp, ceil]
+    }
+    else return [...temp, 100]
   }
 
   ngAfterViewChecked(){

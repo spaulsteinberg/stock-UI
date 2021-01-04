@@ -1,7 +1,7 @@
 <div class="text-center">
   <h3 class="display-5 text-white">Total Account Value: {{getTotalAccountValue() | currency}}</h3>
 </div>
-<table mat-table #outerTable *ngIf="accountData !== undefined" [dataSource]="dataObserv" class="mat-elevation-z8 outer-table" multiTemplateDataRows>
+<table mat-table #outerTable *ngIf="accountData !== undefined" [dataSource]="dataSource" class="mat-elevation-z8 outer-table" multiTemplateDataRows>
     
   <ng-container matColumnDef="symbol">
     <th mat-header-cell *matHeaderCellDef class="text-left"> Name </th>
@@ -81,15 +81,4 @@
     </tr>
     <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
 </table>
-<!--
-  change parent back to observable for this to work
-  <div *ngIf="accountData | async as acc">
-  {{acc.name}}
-  <div *ngFor="let s of acc.data">
-    {{s.symbol}}
-    <div *ngFor="let ss of s.values">
-      {{ss.position + "   " + ss.dateOfBuy + "    " + ss.priceOfBuy}}
-    </div>
-  </div>
-</div>
--->
+<mat-paginator showFirstLastButtons [pageSizeOptions]="getPaginatorCeiling()" [pageSize]="paginatorOptionsArray[0]"></mat-paginator>
