@@ -9,3 +9,9 @@
 #remove-position-button {
     background-color: orange;
 }
+.home-button-actual {
+    background-color: #2979ff;
+}
+.home-button:hover {
+    opacity: .8;
+}

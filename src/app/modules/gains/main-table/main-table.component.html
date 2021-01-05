@@ -1,10 +1,17 @@
 <div class="jumbotron text-center">
     <h4 class="display-3">Interactive Watch List</h4>
-    <div class="text-left">
-        <button mat-raised-button (click)="navBack()">
-            <mat-icon>arrow_back_ios</mat-icon>
-            Back
-        </button>
+    <div class="row">
+        <div class="col col-md-1 offset-md-1 text-left">
+            <button mat-raised-button (click)="nav('HOME')">
+                <mat-icon>home</mat-icon>
+            </button>
+        </div>
+        <div class="col col-md-1 offset-md-8 text-left">
+            <button mat-raised-button (click)="nav('ACCOUNTS')">
+                Accounts
+                <mat-icon>arrow_forward_ios</mat-icon>
+            </button>
+        </div>
     </div>
 </div>
 <div class="row">

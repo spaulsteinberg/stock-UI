@@ -11,6 +11,7 @@ import { AddDialogComponent } from './add-dialog/add-dialog.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { AccountsTableComponent } from './accounts-table/accounts-table.component';
 import { PositionDialogComponent } from './position-dialog/position-dialog.component';
+import { InteractiveComponent } from './interactive/interactive.component';
 
 
 
@@ -24,7 +25,8 @@ import { PositionDialogComponent } from './position-dialog/position-dialog.compo
     AddDialogComponent,
     DialogComponent,
     AccountsTableComponent,
-    PositionDialogComponent
+    PositionDialogComponent,
+    InteractiveComponent
   ],
   imports: [
     SharedModule,

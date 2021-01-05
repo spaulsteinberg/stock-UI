@@ -4,6 +4,7 @@ import { TooltipPosition } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { DetailAttributes } from 'src/app/shared/interfaces/IAccount';
+import { ICombinationRoute } from 'src/app/shared/interfaces/ICombinationRoute';
 import { AccountsService } from 'src/app/shared/services/accounts.service';
 import { BackendService } from 'src/app/shared/services/backend.service';
 import { AccountsTableComponent } from '../accounts-table/accounts-table.component';
@@ -43,8 +44,14 @@ export class AccountsPageComponent implements OnInit {
     this.listOfSymbols$ = this.backend.stockList$;
   }
 
-  navBack() {
-    this.router.navigate([".."], {relativeTo: this.route})
+  ROUTES:Array<ICombinationRoute> = new Array<ICombinationRoute>(
+    {name: "WATCHLIST", route: "../watchlist/table"},
+    {name: "CHARTS", route: "../interactive/accounts/charts"},
+    {name: "HOME", route: ".."}
+  )
+  nav(name:string) {
+    const routeTo = this.ROUTES.find(_ => _.name === name);
+    this.router.navigate([routeTo.route], {relativeTo: this.route})
   }
 
   // give the next data to subject

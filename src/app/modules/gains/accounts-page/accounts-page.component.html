@@ -1,10 +1,23 @@
 <div class="jumbotron text-center">
-    <h4 class="display-3">Accounts View</h4>
-    <div class="text-left">
-        <button mat-raised-button (click)="navBack()">
-            <mat-icon>arrow_back_ios</mat-icon>
-            Back
+    <div class="text-left home-button">
+        <button mat-raised-button class="home-button-actual" (click)="nav('HOME')">
+            <mat-icon>home</mat-icon>
         </button>
+    </div>
+    <h4 class="display-3">Accounts View</h4>
+    <div class="row">
+        <div class="col col-md-1 offset-md-1 text-left">
+            <button mat-raised-button (click)="nav('WATCHLIST')">
+                <mat-icon>arrow_back_ios</mat-icon>
+                Watchlist
+            </button>
+        </div>
+        <div class="col col-md-1 offset-md-8 text-left">
+            <button mat-raised-button (click)="nav('CHARTS')">
+                Charts
+                <mat-icon>arrow_forward_ios</mat-icon>
+            </button>
+        </div>
     </div>
 </div>
 <div class="row" *ngIf="accountNames$ | async as names; else empty">

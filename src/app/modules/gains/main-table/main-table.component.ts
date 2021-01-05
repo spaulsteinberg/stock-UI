@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, ElementRef, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router';
 import { timer } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
+import { ICombinationRoute } from 'src/app/shared/interfaces/ICombinationRoute';
 import { ILightWeightQuote } from 'src/app/shared/interfaces/ILightWeightQuote';
 import { IQuote } from 'src/app/shared/interfaces/IQuote';
 import { DashboardService } from 'src/app/shared/services/dashboard.service';
@@ -31,9 +32,21 @@ export class MainTableComponent implements OnInit {
   onInitLoadingProgressBarDisplay:boolean = true;
   tickingSub$;
   sumColumnValues:number[] = [];
+
+  ROUTES:ICombinationRoute[] = [
+    {name: "HOME", route: "../.."},
+    {name: "ACCOUNTS", route: "../../accounts"}
+  ];
+
   ngOnInit(): void {
     this.getSymbols();
   }
+
+  nav(name:string) {
+    let route = this.ROUTES.find(_ => _.name === name);
+    this.router.navigate([route.route], {relativeTo: this.route})
+  }
+
   getSymbols(){
     this.dash.getUserList()
     .subscribe(
@@ -64,7 +77,7 @@ export class MainTableComponent implements OnInit {
           quote["quote"]["lastTradeTime"] = undefined;
         }
         this.sumColumnValues = new Array(refined.length).fill(0);
-        return refined.map(_ => _["quote"]);
+        return refined.map(_ => _["quote"]); // map to a list of quotes
       })
     )
     .subscribe(
@@ -175,9 +188,6 @@ export class MainTableComponent implements OnInit {
     }
     this.cdr.detectChanges();
  }
- navBack() {
-  this.router.navigate(["../.."], {relativeTo: this.route})
-}
 
   ngOnDestroy(){
     if (this.tickingSub$ !== undefined) this.tickingSub$.unsubscribe();
