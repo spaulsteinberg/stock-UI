@@ -66,27 +66,41 @@ export class AccountsTableComponent implements OnInit {
   }
 
   accumulateTotalPosition(symbol:string){
-    return this.curVals(symbol).values.reduce(((tot, acc) => tot += acc.position), 0);
+    try {
+      return this.curVals(symbol).values.reduce(((tot, acc) => tot += acc.position), 0);
+    }catch (err){
+      console.log("ERR ACCUMULATING TOTAL POSITION", err)
+    }
   }
 
   determineCostBasis(symbol:string){
-    return this.determineAvgPriceOfShare(symbol) * this.accumulateTotalPosition(symbol);
+    try {
+      return this.determineAvgPriceOfShare(symbol) * this.accumulateTotalPosition(symbol);
+    }
+    catch (err){
+      console.log("err in cost basis")
+    }
   }
 
   determineAvgPriceOfShare(symbol:string){
-    let totPrice = 0;
-    let totAccumulated = 0;
-    const values = this.curVals(symbol).values;
-    for (let i = 0; i < values.length; i++){
-      totPrice += (values[i].priceOfBuy * values[i].position)
-      totAccumulated += values[i].position;
+    try {
+      let totPrice = 0;
+      let totAccumulated = 0;
+      const values = this.curVals(symbol).values;
+      for (let i = 0; i < values.length; i++){
+        totPrice += (values[i].priceOfBuy * values[i].position)
+        totAccumulated += values[i].position;
+      }
+      return (totPrice / totAccumulated)
     }
-    return (totPrice / totAccumulated)
+    catch (err) { console.log("err in avg share")}
   //  return (this.curVals(symbol).values.reduce(((tot, acc) => tot += (acc.priceOfBuy*acc.position)), 0) / this.curVals(symbol).values.length).toFixed(2);
   }
   
   generateExpansionArray(symbol:string):Array<Values>{
-    return this.curVals(symbol).values.sort((a, b) => this.sortDates(a.dateOfBuy, b.dateOfBuy));
+    try {
+      return this.curVals(symbol).values.sort((a, b) => this.sortDates(a.dateOfBuy, b.dateOfBuy));
+    }catch (err) {}
   }
 
   sortDates(date1:string, date2:string){

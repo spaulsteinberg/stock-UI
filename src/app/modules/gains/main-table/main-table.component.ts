@@ -7,6 +7,8 @@ import { ILightWeightQuote } from 'src/app/shared/interfaces/ILightWeightQuote';
 import { IQuote } from 'src/app/shared/interfaces/IQuote';
 import { DashboardService } from 'src/app/shared/services/dashboard.service';
 import { ListServiceService } from 'src/app/shared/services/list-service.service';
+import { RouteDirect } from 'src/app/shared/services/utilities/RouteEnum';
+import { UtilsService } from 'src/app/shared/services/utilities/utils.service';
 
 @Component({
   selector: 'app-main-table',
@@ -20,7 +22,8 @@ export class MainTableComponent implements OnInit {
               private el : ElementRef,
               private cdr : ChangeDetectorRef,
               private router: Router,
-              private route: ActivatedRoute) {
+              public route: ActivatedRoute,
+              public utils: UtilsService) {
                   this.el.nativeElement.ownerDocument.body.style.backgroundColor = "lightblue"
                   this.el.nativeElement.ownerDocument.body.style.backgroundImage = "none"
                }
@@ -32,19 +35,10 @@ export class MainTableComponent implements OnInit {
   onInitLoadingProgressBarDisplay:boolean = true;
   tickingSub$;
   sumColumnValues:number[] = [];
-
-  ROUTES:ICombinationRoute[] = [
-    {name: "HOME", route: "../.."},
-    {name: "ACCOUNTS", route: "../../accounts"}
-  ];
+  public direct = RouteDirect.TABLE;
 
   ngOnInit(): void {
     this.getSymbols();
-  }
-
-  nav(name:string) {
-    let route = this.ROUTES.find(_ => _.name === name);
-    this.router.navigate([route.route], {relativeTo: this.route})
   }
 
   getSymbols(){

@@ -1,13 +1,13 @@
 <div class="jumbotron text-center">
+    <div class="text-left home-button">
+        <button mat-raised-button class="home-button-actual" (click)="utils.nav('HOME', route, direct)">
+            <mat-icon>home</mat-icon>
+        </button>
+    </div>
     <h4 class="display-3">Interactive Watch List</h4>
     <div class="row">
-        <div class="col col-md-1 offset-md-1 text-left">
-            <button mat-raised-button (click)="nav('HOME')">
-                <mat-icon>home</mat-icon>
-            </button>
-        </div>
-        <div class="col col-md-1 offset-md-8 text-left">
-            <button mat-raised-button (click)="nav('ACCOUNTS')">
+        <div class="col col-md-1 offset-md-10 text-left">
+            <button mat-raised-button (click)="utils.nav('ACCOUNTS', route, direct)">
                 Accounts
                 <mat-icon>arrow_forward_ios</mat-icon>
             </button>

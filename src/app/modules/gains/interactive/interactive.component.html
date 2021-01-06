@@ -1,1 +1,16 @@
-<p>interactive works!</p>
+<div class="jumbotron text-center">
+    <div class="text-left home-button">
+        <button mat-raised-button class="home-button-actual" (click)="utils.nav('HOME', route, direct)">
+            <mat-icon>home</mat-icon>
+        </button>
+    </div>
+    <h4 class="display-3">Interactive Watch List</h4>
+    <div class="row">
+        <div class="col col-md-1 offset-md-1 text-left">
+            <button mat-raised-button (click)="utils.nav('ACCOUNTS', route, direct)">
+                <mat-icon>arrow_back_ios</mat-icon>
+                Watchlist
+            </button>
+        </div>
+    </div>
+</div>

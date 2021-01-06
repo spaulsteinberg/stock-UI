@@ -13,10 +13,13 @@ export class NavGainsComponent implements OnInit {
 
   ngOnInit(): void {
     // init account data
-    this.account.getAccounts();
+   // if (!this.account.isInit){
+      this.account.getAccounts();
+   // }
   }
   WATCHLIST_ROUTE:string = "watchlist/table";
   ACCOUNTS_VIEW_ROUTE:string = "accounts";
+  INTERACTIVE_ROUTE:string = "interactive/accounts/charts"
   relativeTo = {relativeTo: this.route};
 
   nav(key:number){
@@ -24,6 +27,9 @@ export class NavGainsComponent implements OnInit {
       this.router.navigate([this.WATCHLIST_ROUTE], this.relativeTo);
     } else if (key === 2){
       this.router.navigate([this.ACCOUNTS_VIEW_ROUTE], this.relativeTo);
+    }
+    else if (key === 3){
+      this.router.navigate([this.INTERACTIVE_ROUTE], this.relativeTo);
     }
   }
 

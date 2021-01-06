@@ -142,6 +142,7 @@ export class AccountsService {
     return this.http.delete<any>(url, {'headers': this.headers});
   }
 
+  
   async initData(){
     if (this.username === undefined) this.username = await this.setHeaders();
     this.createHeaders();
@@ -159,7 +160,7 @@ export class AccountsService {
               error => console.log(error),
               () => console.log("subscribe complete"))
   }
-
+  isInit:boolean = false;
   async getAccounts(){
     try {
       this.username = await this.setHeaders();
@@ -184,7 +185,10 @@ export class AccountsService {
                 this.accountDataSubject.next(Object.values(response.details))
               },
               error: (error) => console.log(error),
-              complete: () => console.log("request subscribe completed")
+              complete: () => {
+                console.log("request subscribe completed")
+                this.isInit = true;
+              }
             })
   }
 

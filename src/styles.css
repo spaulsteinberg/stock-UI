@@ -66,3 +66,9 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+.home-button-actual {
+  background-color: #2979ff;
+}
+.home-button:hover {
+  opacity: .8;
+}
