@@ -34,7 +34,7 @@
             </div>
         </form>
     </div>
-    <div class="loading-container position my-2" *ngIf="confirmClickLoading">
+    <div class="loading-container position my-2" *ngIf="confirmClickLoading && (!isDialogErr && !addError)">
         <mat-progress-bar mode="buffer" color="warn"></mat-progress-bar>
     </div>
 </div>
@@ -47,7 +47,7 @@
             <button mat-raised-button class="bg-warning mx-2" (click)="revert()">Leave</button>
         </div>
     </div>
-    <div class="loading-container position" *ngIf="confirmClickLoading">
+    <div class="loading-container position" *ngIf="confirmClickLoading && !isDialogErr">
         <mat-progress-bar mode="buffer" color="warn"></mat-progress-bar>
     </div>
 </div>
@@ -65,7 +65,7 @@
             <mat-error *ngIf="addError">Invalid Position</mat-error>
         </div>
     </div>
-    <div class="loading-container position" *ngIf="confirmClickLoading">
+    <div class="loading-container position" *ngIf="confirmClickLoading && !addError">
         <mat-progress-bar mode="buffer" color="warn"></mat-progress-bar>
     </div>
 </div>

@@ -13,9 +13,9 @@ export class NavGainsComponent implements OnInit {
 
   ngOnInit(): void {
     // init account data
-   // if (!this.account.isInit){
+    if (!this.account.isInit){
       this.account.getAccounts();
-   // }
+    }
   }
   WATCHLIST_ROUTE:string = "watchlist/table";
   ACCOUNTS_VIEW_ROUTE:string = "accounts";

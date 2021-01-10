@@ -132,7 +132,7 @@ export class PositionDialogComponent implements OnInit {
           this.account.tableDataSubject.next(response.data);
           option === 1 ? this.openSnackbar(`${request.data.position} shares of ${this._symbol.toUpperCase()} added to ${this.accountName}`, "Close")
                        : this.openSnackbar(`${request.data.position} shares added to ${request.symbol}`, "Close")
-          this.dialogRef.close();
+          this.dialogRef.close({data: response.data});
         },
         error => {
           this.isDialogErr = true;
@@ -151,7 +151,7 @@ export class PositionDialogComponent implements OnInit {
           this.account.tableDataSubject.next(response.data)
           option === 1 ? this.openSnackbar(`Position of ${this._symbol.toUpperCase()} removed from ${this.accountName}`, "Close")
                        : this.openSnackbar(`Position of ${request.symbol.toUpperCase()} removed from ${request.name}`, "Close")
-          this.dialogRef.close();
+          this.dialogRef.close({data: response.data});
         },
         error => {
           this.isDialogErr = true;

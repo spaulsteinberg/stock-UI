@@ -66,6 +66,7 @@ export class AccountsTableComponent implements OnInit {
   }
 
   accumulateTotalPosition(symbol:string){
+    if(this.curVals(symbol) === undefined) return;
     try {
       return this.curVals(symbol).values.reduce(((tot, acc) => tot += acc.position), 0);
     }catch (err){
@@ -74,6 +75,7 @@ export class AccountsTableComponent implements OnInit {
   }
 
   determineCostBasis(symbol:string){
+    if(this.curVals(symbol) === undefined) return;
     try {
       return this.determineAvgPriceOfShare(symbol) * this.accumulateTotalPosition(symbol);
     }
@@ -83,6 +85,7 @@ export class AccountsTableComponent implements OnInit {
   }
 
   determineAvgPriceOfShare(symbol:string){
+    if(this.curVals(symbol) === undefined) return;
     try {
       let totPrice = 0;
       let totAccumulated = 0;
@@ -98,6 +101,7 @@ export class AccountsTableComponent implements OnInit {
   }
   
   generateExpansionArray(symbol:string):Array<Values>{
+    if(this.curVals(symbol) === undefined) return;
     try {
       return this.curVals(symbol).values.sort((a, b) => this.sortDates(a.dateOfBuy, b.dateOfBuy));
     }catch (err) {}
@@ -124,21 +128,33 @@ export class AccountsTableComponent implements OnInit {
       price: element.priceOfBuy
     }
     const model = new RemovePositionRequest(raw)
-    this.dialog.open(PositionDialogComponent, {data: {
+    let dialogRef = this.dialog.open(PositionDialogComponent, {data: {
       flag: flag,
       accountName: model.name,
       obj: model
     }});
+    dialogRef.afterClosed().subscribe({
+      next: (data) => {
+        console.log("Data recieved back:", data.data)
+        this.dataSource.data = data.data;
+      }
+    })
   }
 
   openAddDialog = (element, flag) => {
-    this.dialog.open(PositionDialogComponent, {data: {
+    let dialogRef = this.dialog.open(PositionDialogComponent, {data: {
       flag: flag,
       accountName: this.accountData.name,
       priceOfBuy: element.priceOfBuy,
       dateOfBuy: element.dateOfBuy,
       symbol: this.symbolContext.toUpperCase()
-    }})
+    }});
+    dialogRef.afterClosed().subscribe({
+      next: (data) => {
+        console.log("Data recieved back:", data.data)
+        this.dataSource.data = data.data;
+      }
+    })
   }
 
   tooltipProperties = {

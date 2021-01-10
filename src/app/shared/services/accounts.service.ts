@@ -77,6 +77,7 @@ export class AccountsService {
   tableData$:Observable<Data[]> = this.tableDataSubject.asObservable();
 
   addPosition(request:AddPositionRequest){
+    console.log("ADD REQUEST:", request)
     return this.http.patch<any>(this.URLS.POSITION, JSON.stringify(request), {headers: this.createHeadersWithJsonContent()})
            .pipe(
              tap( (data) => console.log("Call to positions", data.details)),
@@ -88,6 +89,7 @@ export class AccountsService {
 
   
   removePosition = (request:RemovePositionRequest) => {
+    console.log("REMOVE REQUEST:", request)
     return this.http.delete<any>(this.URLS.POSITION, 
       {
         headers: this.createHeadersWithJsonContent(),

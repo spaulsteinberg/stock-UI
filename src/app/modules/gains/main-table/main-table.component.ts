@@ -62,7 +62,7 @@ export class MainTableComponent implements OnInit {
     this._stocks.getBatchQuotes(this.symbolList)
     .pipe(
       map(raw => {
-        let refined = Object.values(raw); //convert obj of obj into array of obj
+        let refined = Object.values(raw); //convert obj of obj into array of obj values (keys discarded)
         for (let quote of refined){
           console.log(quote)
           quote["quote"]["latestUpdate"] = this.renderDate(quote["quote"]["latestUpdate"]);

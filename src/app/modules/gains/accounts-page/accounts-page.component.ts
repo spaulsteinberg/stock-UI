@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TooltipPosition } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -31,13 +31,17 @@ export class AccountsPageComponent implements OnInit {
               private router: Router,
               private route: ActivatedRoute,
               private backend: BackendService,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private cdr: ChangeDetectorRef) {
     this.el.nativeElement.ownerDocument.body.style.backgroundColor = "lightblue"
     this.el.nativeElement.ownerDocument.body.style.backgroundImage = "none"
   }
   isErr: boolean = false;
   //init account data
   async ngOnInit() {
+    if (!this.account.isInit){
+      this.account.getAccounts();
+    }
     this.accountNames$ = this.account.accountNames$;
     this.accountData$ = this.account.accountsData$;
     this.backend.getStockListAsObservable();
@@ -67,10 +71,18 @@ export class AccountsPageComponent implements OnInit {
   }
 
   openPositionDialog(flag:number){
-    this.dialog.open(PositionDialogComponent, {data: {
+    let dialogRef = this.dialog.open(PositionDialogComponent, {data: {
       flag: flag,
       accountName: this.selectedAccount
     }});
+
+    dialogRef.afterClosed().subscribe(data => {
+      this.tableComponent.getDataSource().data = data.data;
+    })
+  }
+
+  ngAfterViewChecked(){
+    this.cdr.detectChanges();
   }
 
   /*
