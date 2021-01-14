@@ -80,6 +80,7 @@ export class AccountsPageComponent implements OnInit {
       this.tableComponent.getDataSource().data = data.data;
     })
   }
+  
 
   ngAfterViewChecked(){
     this.cdr.detectChanges();

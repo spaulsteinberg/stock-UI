@@ -37,6 +37,32 @@
     <p>No accounts. Please click 'Add Account' to interact with your real stocks.</p>
     <p *ngIf="isErr">An error occurred. Please reload and try again.</p>
 </ng-template>
+<!-- Work starting here for menu-->
+<button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger" (mouseenter)="menuTrigger.openMenu()">
+    <mat-icon>settings</mat-icon>
+</button>
+<mat-menu #menu="matMenu">
+    <button mat-menu-item [matMenuTriggerFor]="positions">
+        <mat-icon style="background-color: green;">attach_money</mat-icon>
+        <span>Position</span>
+    </button>
+    <button mat-menu-item [matMenuTriggerFor]="accounts">
+        <mat-icon style="background-color: #b2dfdb;">account_balance</mat-icon>
+        <span>Account</span>
+    </button>
+</mat-menu>
+<mat-menu #positions="matMenu">
+    <button class="positions-menu add" mat-menu-item [matTooltipPosition]="tooltipPosition" [matTooltip]="tooltipAddPosition" (click)="openPositionDialog(0)">
+        <mat-icon>add</mat-icon>
+    </button>
+    <button class="positions-menu remove" mat-menu-item [matTooltipPosition]="tooltipPosition" [matTooltip]="tooltipRemovePosition" (click)="openPositionDialog(1)">
+        <mat-icon>remove</mat-icon>
+    </button>
+</mat-menu>
+<mat-menu #accounts="matMenu">
+
+</mat-menu>
+<!-- Ending here -->
 <div class="row" *ngIf="selectedAccount !== undefined">
     Add/remove placeholder position: 
     <button mat-raised-button id="add-position-button" [matTooltipPosition]="tooltipPosition" [matTooltip]="tooltipAddPosition" class="mx-3" (click)="openPositionDialog(0)">
