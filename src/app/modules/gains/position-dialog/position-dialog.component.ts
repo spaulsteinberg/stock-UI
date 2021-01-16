@@ -77,19 +77,19 @@ export class PositionDialogComponent implements OnInit {
     return this.form.get('dateOfBuy').value;
   }
 
-  configureError(v:any){
-    if (v.hasError('required')){
-      return "This field is required";
-    }
-    else if (v.hasError('min')){
-      return "Must be greater than .01"
-    }
-    else if (v.hasError('max')){
-      return "Number is too large."
-    }
-    else {
-      return "Invalid format or symbol."
-    }
+  configureError = (v:any):string => {
+      if (v.hasError('required')){
+        return "This field is required";
+      }
+      else if (v.hasError('min')){
+        return "Must be greater than .01"
+      }
+      else if (v.hasError('max')){
+        return "Number is too large."
+      }
+      else {
+        return "Invalid format or symbol."
+      }
   }
 
   confirmClickLoading = false;

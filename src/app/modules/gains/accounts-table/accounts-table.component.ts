@@ -49,6 +49,7 @@ export class AccountsTableComponent implements OnInit {
     this.dataObserv = this.accounts.tableData$; //tableData$ is an observale of the table data subject
     this.dataSource.data = this.accountData.data;
     this.dataSource.paginator = this.paginator;
+  //  this.dataSource.filterPredicate = (data: Data, filter:string) => data.symbol.startsWith(filter);
   }
 
   // let accounts page (parent) access subject

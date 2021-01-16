@@ -76,9 +76,15 @@ export class AccountsPageComponent implements OnInit {
       accountName: this.selectedAccount
     }});
 
-    dialogRef.afterClosed().subscribe(data => {
-      this.tableComponent.getDataSource().data = data.data;
-    })
+    try {
+      dialogRef.afterClosed().subscribe(data => {
+        if (data !== undefined){
+          this.tableComponent.getDataSource().data = data.data;
+        }
+      })
+    }
+    //swallow, might be when theres a 404
+    catch (err){ }
   }
   
 

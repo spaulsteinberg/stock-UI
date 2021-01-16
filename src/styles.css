@@ -72,3 +72,18 @@ input[type=number] {
 .home-button:hover {
   opacity: .8;
 }
+
+.positions-menu.add {
+  background-color:#2196f3;
+}
+.positions-menu.remove {
+  background-color: #f44336;
+}
+.positions-menu.remove:hover {
+  background-color: #f44336;
+  opacity: .9;
+}
+.positions-menu.add:hover {
+  background-color:#2196f3;
+  opacity: .9;
+}

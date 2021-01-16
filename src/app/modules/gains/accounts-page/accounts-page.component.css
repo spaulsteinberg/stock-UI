@@ -9,17 +9,3 @@
 #remove-position-button {
     background-color: orange;
 }
-.add {
-    background-color:#2196f3;
-}
-.remove {
-    background-color: #f44336;
-}
-.remove:hover {
-    background-color: #f44336;
-    opacity: .9;
-}
-.add:hover {
-    background-color:#2196f3;
-    opacity: .9;
-}

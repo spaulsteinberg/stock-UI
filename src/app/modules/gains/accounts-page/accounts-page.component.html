@@ -29,51 +29,21 @@
             </mat-select>
         </mat-form-field>
     </div>
-    <div class="col col-md-5 offset-md-1">
-        <app-dialog [accountNames]="names" [currentAccount]="selectedAccount" [symbols]="listOfSymbols$ | async"></app-dialog>
-    </div>
 </div>
 <ng-template #empty>
     <p>No accounts. Please click 'Add Account' to interact with your real stocks.</p>
     <p *ngIf="isErr">An error occurred. Please reload and try again.</p>
 </ng-template>
-<!-- Work starting here for menu-->
-<button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger" (mouseenter)="menuTrigger.openMenu()">
-    <mat-icon>settings</mat-icon>
-</button>
-<mat-menu #menu="matMenu">
-    <button mat-menu-item [matMenuTriggerFor]="positions">
-        <mat-icon style="background-color: green;">attach_money</mat-icon>
-        <span>Position</span>
-    </button>
-    <button mat-menu-item [matMenuTriggerFor]="accounts">
-        <mat-icon style="background-color: #b2dfdb;">account_balance</mat-icon>
-        <span>Account</span>
-    </button>
-</mat-menu>
-<mat-menu #positions="matMenu">
-    <button class="positions-menu add" mat-menu-item [matTooltipPosition]="tooltipPosition" [matTooltip]="tooltipAddPosition" (click)="openPositionDialog(0)">
-        <mat-icon>add</mat-icon>
-    </button>
-    <button class="positions-menu remove" mat-menu-item [matTooltipPosition]="tooltipPosition" [matTooltip]="tooltipRemovePosition" (click)="openPositionDialog(1)">
-        <mat-icon>remove</mat-icon>
-    </button>
-</mat-menu>
-<mat-menu #accounts="matMenu">
 
-</mat-menu>
-<!-- Ending here -->
-<div class="row" *ngIf="selectedAccount !== undefined">
-    Add/remove placeholder position: 
-    <button mat-raised-button id="add-position-button" [matTooltipPosition]="tooltipPosition" [matTooltip]="tooltipAddPosition" class="mx-3" (click)="openPositionDialog(0)">
-        <mat-icon>add</mat-icon>
-        Add Position
-    </button>
-    <button mat-raised-button id="remove-position-button"  [matTooltipPosition]="tooltipPosition" [matTooltip]="tooltipRemovePosition" class="mx-3" (click)="openPositionDialog(1)">
-        <mat-icon>remove</mat-icon>
-        Remove Position
-    </button>
-    <div class="col col-md-10 offset-md-1">
-        <app-accounts-table [accountData]="accountDisplay$ | async"></app-accounts-table>
+<div *ngIf="selectedAccount !== undefined">
+    <div class="row">
+        <div class="col col-md-2 offset-md-9">
+            <app-menu-dialog-container [accountNames]="accountNames$ | async" [currentAccount]="selectedAccount" [symbols]="listOfSymbols$ | async" [tableComponent]="tableComponent"></app-menu-dialog-container>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col col-md-10 offset-md-1">
+            <app-accounts-table [accountData]="accountDisplay$ | async"></app-accounts-table>
+        </div>
     </div>
 </div>

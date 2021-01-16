@@ -1,10 +1,8 @@
-<button mat-raised-button id="add-account-button" class="mx-3"
+<button mat-menu-item class="positions-menu add"
         [matTooltipPosition]="tooltipPosition" [matTooltip]="tooltipMessageCreate" (click)="openCreateAccountDialog()">
         <mat-icon>add_circle</mat-icon>
-        Add Account
 </button>
-<button mat-raised-button id="remove-account-button" class="mx-3" 
+<button mat-menu-item class="positions-menu remove"
     [matTooltipPosition]="tooltipPosition" [matTooltip]="tooltipMessageRemove" (click)="openRemoveDialog()">
     <mat-icon>remove_circle</mat-icon>
-    Remove Account
 </button>

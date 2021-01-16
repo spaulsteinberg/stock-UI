@@ -10,6 +10,7 @@ export class UtilsService {
 
   constructor(private router: Router) { }
 
+  /**** Date functions ****/
   public dateFilter = (date) => { return date.getDay() !== 0 && date.getDay() !== 6; }
 
   public convertToSlashes(date):string{
@@ -20,6 +21,8 @@ export class UtilsService {
     console.log("date:", d, "year", year, "month", month, "day", day)
     return `${year}-${month}-${day}`;
   }
+
+  /***** Shared Route *****/
   ACCOUNT_LEVEL_ROUTES:Array<ICombinationRoute> = new Array<ICombinationRoute>(
     {name: "WATCHLIST", route: "../watchlist/table"},
     {name: "CHARTS", route: "../interactive/accounts/charts"},
