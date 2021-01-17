@@ -22,10 +22,9 @@ export class AccountsPageComponent implements OnInit {
   accountData$:Observable<DetailAttributes[]>;
   accountDisplay$:Observable<DetailAttributes>;
   selectedAccount:string;
+  public userHasProfile:boolean;
   tooltipPosition: TooltipPosition = "above";
   tooltipMessage = "Select an account to view";
-  tooltipAddPosition = "Add a position to account";
-  tooltipRemovePosition = "Remove a position from account";
   constructor(private account: AccountsService,
               private el: ElementRef,
               private router: Router,
@@ -33,19 +32,23 @@ export class AccountsPageComponent implements OnInit {
               private backend: BackendService,
               private dialog: MatDialog,
               private cdr: ChangeDetectorRef) {
-    this.el.nativeElement.ownerDocument.body.style.backgroundColor = "lightblue"
-    this.el.nativeElement.ownerDocument.body.style.backgroundImage = "none"
+    this.el.nativeElement.ownerDocument.body.style.backgroundColor = "lightblue";
+    this.el.nativeElement.ownerDocument.body.style.backgroundImage = "none";
   }
   isErr: boolean = false;
+  initialLoad:boolean = true;
   //init account data
   async ngOnInit() {
-    if (!this.account.isInit){
+    let c = await this.account.checkForProfile();
+    if (this.account.userHasProfile && !this.account.isInit){
       this.account.getAccounts();
     }
+    if (this.account.userHasProfile) this.backend.getStockListAsObservable();
     this.accountNames$ = this.account.accountNames$;
     this.accountData$ = this.account.accountsData$;
-    this.backend.getStockListAsObservable();
     this.listOfSymbols$ = this.backend.stockList$;
+    this.userHasProfile = this.account.userHasProfile;
+    this.initialLoad = false;
   }
 
   ROUTES:Array<ICombinationRoute> = new Array<ICombinationRoute>(
@@ -61,41 +64,22 @@ export class AccountsPageComponent implements OnInit {
   // give the next data to subject
   selectChange(event){
     console.log("select change:", event)
-    this.accountDisplay$ = this.account.filterAccounts(this.selectedAccount);
+    this.accountDisplay$ = this.account.filterAccounts(this.selectedAccount); // get the filtered account to give data to table
     if (this.tableComponent !== undefined){
       this.accountDisplay$.subscribe(data => {
-        this.tableComponent.getSubject().next(data.data);
-        this.tableComponent.getDataSource().data = data.data
+          if (data !== undefined){
+            this.tableComponent.getSubject().next(data.data);
+            this.tableComponent.getDataSource().data = data.data
+          }
       })
     }
   }
 
-  openPositionDialog(flag:number){
-    let dialogRef = this.dialog.open(PositionDialogComponent, {data: {
-      flag: flag,
-      accountName: this.selectedAccount
-    }});
-
-    try {
-      dialogRef.afterClosed().subscribe(data => {
-        if (data !== undefined){
-          this.tableComponent.getDataSource().data = data.data;
-        }
-      })
-    }
-    //swallow, might be when theres a 404
-    catch (err){ }
+  createProfileClick(){
+    console.log("user wants to create an account")
   }
-  
 
   ngAfterViewChecked(){
     this.cdr.detectChanges();
   }
-
-  /*
-    REMOVE: 
-    - If there are no accounts then give a toast message if they try to remove
-    - Pass in account names as data
-
-  */
 }

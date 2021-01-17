@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError, timer } from 'rxjs';
 import { catchError, delayWhen, map, retry, retryWhen, take, tap } from 'rxjs/operators';
 import { Data, DetailAttributes, IAccount } from '../interfaces/IAccount';
+import { IProfileCheck } from '../interfaces/IProfileCheck';
 import { AddAccountRequest } from '../models/AddAccountRequest';
 import { AddAccountResponse } from '../models/AddAccountResponse';
 import { AddPositionRequest } from '../models/AddPositionRequest';
@@ -20,8 +21,7 @@ export class AccountsService {
   private URLS = {
     ACCOUNT: "http://localhost:3000/api/account",
     PROFILE: "http://localhost:3000/api/profile",
-    POSITION: "http://localhost:3000/api/position",
-    ACCOUNT_LIST: "http://localhost:3000/api/account/list"
+    POSITION: "http://localhost:3000/api/position"
   };
   private headers;
   private username;
@@ -143,25 +143,35 @@ export class AccountsService {
     const url = `${this.URLS.ACCOUNT}?${params}`;
     return this.http.delete<any>(url, {'headers': this.headers});
   }
-
   
-  async initData(){
-    if (this.username === undefined) this.username = await this.setHeaders();
-    this.createHeaders();
-    this.http.get<any>(this.URLS.ACCOUNT_LIST, {headers: this.headers})
-            .pipe(
-              tap(() => console.log("init data sent")),
-              map(res => {return res.details;}),
-              catchError((err:HttpErrorResponse) => throwError(err.message))
-            )
-            .subscribe(
-              data => {
-                console.log("Accounts: ", data);
-                this.subject.next(data); // call next with the updated data array
-              },
-              error => console.log(error),
-              () => console.log("subscribe complete"))
+
+  // TODO: Integrate
+  public userHasProfile:boolean = false;
+  public hasBeenCheckedForProfile:boolean = false;
+  checkForProfile = async ():Promise<boolean> => {
+    try {
+      this.username = await this.setHeaders();
+    }
+    catch (err){
+      console.log("ERROR OCCURRED: ", err)
+    }
+    return await this.http.get<IProfileCheck>(`${this.URLS.PROFILE}/exists`, {headers: this.createHeadersWithJsonContent()})
+    .toPromise()
+    .then(response => {
+      this.hasBeenCheckedForProfile = true;
+      switch(response.details.length){
+        case 0:
+          this.userHasProfile = false;
+          return Promise.resolve(false);
+        default:
+          this.userHasProfile = true;
+          return Promise.resolve(true);
+      }
+    })
+    .catch( () => {this.userHasProfile = false; return Promise.reject(false)})
   }
+
+
   isInit:boolean = false;
   async getAccounts(){
     try {
@@ -175,17 +185,17 @@ export class AccountsService {
     console.log("USERNAME SENT:", this.username)
     this.http.get<IAccount>(this.URLS.ACCOUNT, {headers: this.headers})
             .pipe(
-              tap((data) => console.log("TAPPED ACCOUNT", data)),
+              tap((data) => {
+                console.log("TAPPED ACCOUNT", data)
+                this.subject.next(data.names)
+                this.accountDataSubject.next(Object.values(data.details))
+              }),
               catchError((err:HttpErrorResponse) => throwError(err.message)),
-              retryWhen(errors => errors.pipe(delayWhen(() => timer(2000)), take(4)
+              retryWhen(errors => errors.pipe(delayWhen(() => timer(2000)), take(4)  //try 4 times
               ))
             )
             .subscribe({
-              next: (response) => {
-                console.log("acc response:", response)
-                this.subject.next(response.names)
-                this.accountDataSubject.next(Object.values(response.details))
-              },
+              next: (response) => console.log("acc response:", response),
               error: (error) => console.log(error),
               complete: () => {
                 console.log("request subscribe completed")
@@ -194,22 +204,21 @@ export class AccountsService {
             })
   }
 
-  // enable filtering of accounts with find()
+  // enable filtering of accounts with find() to give back to filter on name for table
   filterAccounts(name:string):Observable<DetailAttributes>{
     return this.accountsData$
     .pipe(
-      map(accounts => {
-        return accounts.find(account => {
-          return account.name === name
-        })
-      })
-    );
+      map(accounts => accounts.find(account => account.name === name)
+    ))
   }
 
   public completeSubjectsForLogout():void{
     this.tableDataSubject.next([]);
     this.subject.next([]);
     this.accountDataSubject.next([]);
+    this.isInit = false;
+    this.userHasProfile = false;
+    this.hasBeenCheckedForProfile = false;
   }
   
 }

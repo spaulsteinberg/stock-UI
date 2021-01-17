@@ -11,11 +11,12 @@ export class NavGainsComponent implements OnInit {
 
   constructor(private router: Router, private route: ActivatedRoute, private account: AccountsService) { }
 
-  ngOnInit(): void {
-    // init account data
-    if (!this.account.isInit){
+  async ngOnInit() {
+    if (!this.account.hasBeenCheckedForProfile) await this.account.checkForProfile();
+    if (this.account.userHasProfile && !this.account.isInit){
       this.account.getAccounts();
     }
+    console.log("user has a profile:", this.account.userHasProfile)
   }
   WATCHLIST_ROUTE:string = "watchlist/table";
   ACCOUNTS_VIEW_ROUTE:string = "accounts";

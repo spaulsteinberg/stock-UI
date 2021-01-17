@@ -20,30 +20,55 @@
         </div>
     </div>
 </div>
-<div class="row" *ngIf="accountNames$ | async as names; else empty">
-    <div class="col col-md-2 offset-md-1" >
-        <mat-form-field appearance="outline" [matTooltipPosition]="tooltipPosition" [matTooltip]="tooltipMessage">
-            <mat-label class="text-success">Choose an Account</mat-label>
-            <mat-select class="text-white" [(value)]="selectedAccount" (selectionChange)="selectChange($event)">
-                <mat-option class="text-white" *ngFor="let name of names" [value]="name">{{name}}</mat-option>
-            </mat-select>
-        </mat-form-field>
-    </div>
-</div>
-<ng-template #empty>
-    <p>No accounts. Please click 'Add Account' to interact with your real stocks.</p>
-    <p *ngIf="isErr">An error occurred. Please reload and try again.</p>
-</ng-template>
 
-<div *ngIf="selectedAccount !== undefined">
-    <div class="row">
-        <div class="col col-md-2 offset-md-9">
-            <app-menu-dialog-container [accountNames]="accountNames$ | async" [currentAccount]="selectedAccount" [symbols]="listOfSymbols$ | async" [tableComponent]="tableComponent"></app-menu-dialog-container>
-        </div>
+<div [ngSwitch]="initialLoad">
+    <div *ngSwitchCase="true">
+        <mat-progress-bar mode="buffer" color="warn" style="width:50%; margin-left:25%"></mat-progress-bar>
     </div>
-    <div class="row">
-        <div class="col col-md-10 offset-md-1">
-            <app-accounts-table [accountData]="accountDisplay$ | async"></app-accounts-table>
+    <div *ngSwitchCase="false">
+        <div *ngIf="userHasProfile && !initialLoad; else createProfileSection">
+            <div class="row" *ngIf="accountNames$ | async as names; else empty">
+                <div class="col col-md-2 offset-md-1" >
+                    <mat-form-field appearance="outline" [matTooltipPosition]="tooltipPosition" [matTooltip]="tooltipMessage">
+                        <mat-label class="text-success">Choose an Account</mat-label>
+                        <mat-select class="text-white" [(value)]="selectedAccount" (selectionChange)="selectChange($event)">
+                            <mat-option class="text-white" *ngFor="let name of names" [value]="name">{{name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <ng-template #empty>
+                <p>No accounts. Please click 'Add Account' to interact with your real stocks.</p>
+                <p *ngIf="isErr">An error occurred. Please reload and try again.</p>
+            </ng-template>
+            
+            <div *ngIf="selectedAccount !== undefined">
+                <div class="row">
+                    <div class="col col-md-2 offset-md-9">
+                        <app-menu-dialog-container [accountNames]="accountNames$ | async" [currentAccount]="selectedAccount" [symbols]="listOfSymbols$ | async" [tableComponent]="tableComponent"></app-menu-dialog-container>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-md-10 offset-md-1">
+                        <app-accounts-table [accountData]="accountDisplay$ | async"></app-accounts-table>
+                    </div>
+                </div>
+            </div>
         </div>
+        <ng-template #createProfileSection>
+            <div class="text-center">
+                <button mat-fab id="create-profile-button" class="mat-elevation-z0 my-4" (click)="createProfileClick()">
+                    <mat-icon>create</mat-icon>
+                </button>
+                <p>
+                    You do not currently have a profile. <br>Click the button above to create an account 
+                    (you will need to initialize it with an account and postion).
+                    <br>
+                    Creating an account allows you to track your investment value quickly, 
+                    and can act as a sandbox for you real account.
+                    You can visualize your investments in the Interactive tab.
+                </p>
+            </div>
+        </ng-template>
     </div>
 </div>

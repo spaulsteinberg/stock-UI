@@ -2,10 +2,7 @@
     padding-bottom: 1rem;
 }
 
-#add-position-button {
-    background-color: green;
-}
-
-#remove-position-button {
-    background-color: orange;
+#create-profile-button {
+    background-color: #f44336;
+    height: 80%;
 }
