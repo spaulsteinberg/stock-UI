@@ -3,10 +3,12 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError, timer } from 'rxjs';
 import { catchError, delayWhen, map, retry, retryWhen, take, tap } from 'rxjs/operators';
 import { Data, DetailAttributes, IAccount } from '../interfaces/IAccount';
+import { ICreateProfileResponse } from '../interfaces/ICreateProfileResponse';
 import { IProfileCheck } from '../interfaces/IProfileCheck';
 import { AddAccountRequest } from '../models/AddAccountRequest';
 import { AddAccountResponse } from '../models/AddAccountResponse';
 import { AddPositionRequest } from '../models/AddPositionRequest';
+import { CreateProfileRequest } from '../models/CreateProfileRequest';
 import { RemovePositionRequest } from '../models/RemovePositionRequest';
 import { RegisterUserService } from './register-user.service';
 
@@ -26,11 +28,17 @@ export class AccountsService {
   private headers;
   private username;
 
+  get _username():string {
+    return this.username;
+  }
+
   //get profiles to see if the user exists
   async doesUserExist(){
+    console.log("I AM HERE")
     this.username = await this.setHeaders();
     console.log(this.username)
     this.createHeaders();
+    console.log("I AM HERE")
     return await this.http.get<any>(this.URLS.PROFILE, {'headers': this.headers})
                 .toPromise()
                 .then(res => {
@@ -38,7 +46,7 @@ export class AccountsService {
                   return Promise.resolve(res.details.accountNames)
                 })
                 .catch(err => {
-                  console.log(err)
+                  console.log("ERROR:", err)
                   return Promise.reject([])
                 });
   }
@@ -149,6 +157,7 @@ export class AccountsService {
   public userHasProfile:boolean = false;
   public hasBeenCheckedForProfile:boolean = false;
   checkForProfile = async ():Promise<boolean> => {
+    console.log("checking for profile. Has user been checked -->", this.hasBeenCheckedForProfile)
     try {
       this.username = await this.setHeaders();
     }
@@ -157,9 +166,9 @@ export class AccountsService {
     }
     return await this.http.get<IProfileCheck>(`${this.URLS.PROFILE}/exists`, {headers: this.createHeadersWithJsonContent()})
     .toPromise()
-    .then(response => {
+    .then(profile => {
       this.hasBeenCheckedForProfile = true;
-      switch(response.details.length){
+      switch(profile.details.length){
         case 0:
           this.userHasProfile = false;
           return Promise.resolve(false);
@@ -169,6 +178,21 @@ export class AccountsService {
       }
     })
     .catch( () => {this.userHasProfile = false; return Promise.reject(false)})
+  }
+
+  createNewProfile = (request:CreateProfileRequest) => {
+    return this.http.post<ICreateProfileResponse>(this.URLS.PROFILE, JSON.stringify(request), {headers: this.createHeadersWithJsonContent()})
+    .pipe(
+      tap((profile) => {
+        console.log(profile);
+        this.userHasProfile = true;
+        console.log("names", profile.accountNames);
+        console.log("meat:", profile.accounts)
+        this.subject.next(profile.accountNames);
+        this.accountDataSubject.next(new Array(profile.accounts[0]));
+      }),
+      catchError((err:HttpErrorResponse) => throwError(err.message))
+    )
   }
 
 

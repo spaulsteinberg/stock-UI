@@ -69,3 +69,50 @@
         <mat-progress-bar mode="buffer" color="warn"></mat-progress-bar>
     </div>
 </div>
+<div *ngIf="flag === 4">
+    <h1 mat-dialog-title class="mx-3 text-center">Create Profile</h1>
+    <div mat-dialog-content>
+        <form [formGroup]="createProfileForm">
+            <div class="text-center">
+                <p>
+                    <mat-form-field appearance="standard" class="mx-4">
+                        <mat-label>Account Name</mat-label>
+                        <input type="text" matInput formControlName="profileName" autocomplete="off">
+                        <mat-error *ngIf="profileName?.invalid">{{configureError(profileName)}}</mat-error>
+                    </mat-form-field>
+                </p>
+            </div>
+            <p>
+                <mat-form-field appearance="standard" class="mx-4">
+                    <mat-label>Symbol</mat-label>
+                    <input type="text" matInput formControlName="profileSymbol" autocomplete="off">
+                    <mat-error *ngIf="!profileSymbol.errors?.OK || profileSymbol?.invalid">{{configureError(profileSymbol)}}</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="standard" class="mx-4">
+                    <mat-label>Position</mat-label>
+                    <input type="number" matInput formControlName="profilePosition" autocomplete="off">
+                    <mat-error *ngIf="profilePosition?.invalid">{{configureError(profilePosition)}}</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="standard" class="mx-4">
+                    <mat-label>Share Price ($)</mat-label>
+                    <input type="number" matInput formControlName="profilePriceOfBuy" autocomplete="off">
+                    <mat-error *ngIf="profilePriceOfBuy?.invalid">{{configureError(profilePriceOfBuy)}}</mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput [matDatepicker]="picker" type="datetime" formControlName="profileDateOfBuy" [min]="minDate" [max]="maxDate" [matDatepickerFilter]="utils.dateFilter" placeholder="Choose a Date">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker color="primary"></mat-datepicker>
+                    <mat-error *ngIf="profileDateOfBuy?.invalid">{{configureError(profileDateOfBuy)}}</mat-error>
+                </mat-form-field>
+            </p>
+            <div class="text-center text-white justify-content-center">
+                <button mat-raised-button type="submit" style="background-color: #32cb00;" [disabled]="createProfileForm.invalid" (click)="createProfileClick()">Create</button>
+                <button mat-raised-button class="bg-warning mx-4" (click)="revert()">Cancel</button>
+                <p class="text-danger" *ngIf="createError">{{profileCreateError}}</p>
+            </div>
+        </form>
+    </div>
+    <div class="loading-container position" *ngIf="confirmClickLoading && !createError">
+        <mat-progress-bar mode="buffer" color="warn"></mat-progress-bar>
+    </div>
+</div>

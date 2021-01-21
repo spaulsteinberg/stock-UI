@@ -3,7 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
+import { AddAccountRequest } from 'src/app/shared/models/AddAccountRequest';
 import { AddPositionRequest } from 'src/app/shared/models/AddPositionRequest';
+import { CreateProfileRequest } from 'src/app/shared/models/CreateProfileRequest';
 import { RemovePositionRequest } from 'src/app/shared/models/RemovePositionRequest';
 import { AccountsService } from 'src/app/shared/services/accounts.service';
 import { BackendService } from 'src/app/shared/services/backend.service';
@@ -25,6 +27,7 @@ export class PositionDialogComponent implements OnInit {
   isDialogErr:boolean = false;
   dialogErrMessage:string;
   dataContainer;
+  createProfileForm:FormGroup;
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
               private fb: FormBuilder,
               public utils: UtilsService,
@@ -42,6 +45,17 @@ export class PositionDialogComponent implements OnInit {
         priceOfBuy: [null, [Validators.required, Validators.max(10000), Validators.min(0.001)]],
         dateOfBuy: ['', [Validators.required]]
       })
+    }
+    if (this.flag === 4){
+      this.symbolList = this.backend.getCurrentStockListFromSubject();
+      this.createProfileForm = this.fb.group({
+        profileName: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(15)]],
+        profileSymbol: ['', [Validators.required, checkIfSymbolIsValid(this.symbolList)]],
+        profilePosition: [null, [Validators.required, Validators.min(0.01), Validators.max(1000000)]],
+        profilePriceOfBuy: [null, [Validators.required, Validators.max(10000), Validators.min(0.001)]],
+        profileDateOfBuy: ['', [Validators.required]]
+      });
+      console.log(this.symbolList)
     }
   }
 
@@ -77,6 +91,38 @@ export class PositionDialogComponent implements OnInit {
     return this.form.get('dateOfBuy').value;
   }
 
+  // creating profile form getters
+  get profileName(){
+    return this.createProfileForm.get('profileName');
+  }
+  get profileSymbol(){
+    return this.createProfileForm.get('profileSymbol');
+  }
+  get profilePosition(){
+    return this.createProfileForm.get('profilePosition')
+  }
+  get profilePriceOfBuy(){
+    return this.createProfileForm.get('profilePriceOfBuy');
+  }
+  get profileDateOfBuy(){
+    return this.createProfileForm.get('profileDateOfBuy');
+  }
+  get _profileName(){
+    return this.createProfileForm.get('profileName').value;
+  }
+  get _profileSymbol(){
+    return this.createProfileForm.get('profileSymbol').value;
+  }
+  get _profilePosition(){
+    return this.createProfileForm.get('profilePosition').value;
+  }
+  get _profilePriceOfBuy(){
+    return this.createProfileForm.get('profilePriceOfBuy').value;
+  }
+  get _profileDateOfBuy(){
+    return this.createProfileForm.get('profileDateOfBuy').value;
+  }
+
   configureError = (v:any):string => {
       if (v.hasError('required')){
         return "This field is required";
@@ -87,12 +133,51 @@ export class PositionDialogComponent implements OnInit {
       else if (v.hasError('max')){
         return "Number is too large."
       }
+      else if (v.hasError('minlength')){
+        return "Must be at least 5 characters long";
+      }
+      else if (v.hasError('maxlength')){
+        return "Must be at less than 21 characters long";
+      }
       else {
         return "Invalid format or symbol."
       }
   }
-
   confirmClickLoading = false;
+  createError:boolean = false;
+  profileCreateError:string = "Could not create profile. Please reload and try again.";
+  createProfileClick = () => {
+    const date = this.utils.convertToSlashes(this._profileDateOfBuy);
+    this.confirmClickLoading = true;
+    const obj = {
+      name: this._profileName,
+      symbol: this._profileSymbol.toUpperCase(),
+      position: this._profilePosition,
+      priceOfBuy: this._profilePriceOfBuy,
+      dateOfBuy: date
+    };
+    const request = new CreateProfileRequest(this._profileName, obj);
+    console.log(request)
+    //TODO: get the userHasProfile set to true back to the accounts page so it renders the new data...
+    //might have to call getAccounts() separately?
+    // check for other flags that need to be set
+    // afterClosed() subscribe
+    this.account.createNewProfile(request)
+    .subscribe(
+      response => {
+        this.createError = false;
+        console.log("subscribed:", response);
+        this.openSnackbar(response.msg, "Close");
+        this.dialogRef.close({data: response.accounts[0]});
+      },
+      error => {
+        this.createError = true;
+        console.log(error);
+      },
+      () => this.confirmClickLoading = false
+    )
+  }
+
   sendData() {
     const date = this.utils.convertToSlashes(this._dateOfBuy);
     console.log("DATE AFTER SLASHES:", date)
@@ -225,7 +310,8 @@ export class PositionDialogComponent implements OnInit {
     });
   }
   
-  ngOnInit(): void {
+  async ngOnInit() {
+    await this.account.setHeaders();
   }
 
 }

@@ -1,0 +1,7 @@
+export enum DialogEnum {
+    ADD_FULL_POSITION = 0,
+    REMOVE_FULL_POSITION = 1,
+    REMOVE_FROM_TABLE = 2,
+    ADD_FROM_TABLE = 3,
+    CREATE_PROFILE = 4
+}

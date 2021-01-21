@@ -12,10 +12,14 @@ export class NavGainsComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute, private account: AccountsService) { }
 
   async ngOnInit() {
-    if (!this.account.hasBeenCheckedForProfile) await this.account.checkForProfile();
+    // swallow the exception -- user w 400 does not exist yet
+    try {
+      if (!this.account.hasBeenCheckedForProfile) await this.account.checkForProfile();
+    } catch (err){ }
     if (this.account.userHasProfile && !this.account.isInit){
       this.account.getAccounts();
     }
+    console.log("user has been check in nav:", this.account.hasBeenCheckedForProfile);
     console.log("user has a profile:", this.account.userHasProfile)
   }
   WATCHLIST_ROUTE:string = "watchlist/table";

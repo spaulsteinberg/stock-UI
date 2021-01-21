@@ -19,7 +19,7 @@ export class AddAccountRequest implements IAddAccountRequest {
     }
 }
 
-class Account {
+export class Account {
     name:string;
     data:AccountData[] = new Array();
     constructor(n:string, data:AccountData){
@@ -28,7 +28,7 @@ class Account {
     }
 }
 
-class AccountData {
+export class AccountData {
     symbol:string;
     values:AttributeData[] = new Array();
     constructor(sym:string, vals:AttributeData){
@@ -37,7 +37,7 @@ class AccountData {
     }
 }
 
-class AttributeData {
+export class AttributeData {
     position:number;
     dateOfBuy:string;
     priceOfBuy:number;

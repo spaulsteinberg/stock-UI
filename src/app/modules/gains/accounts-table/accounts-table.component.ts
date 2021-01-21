@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PositionDialogComponent } from '../position-dialog/position-dialog.component';
 import {MatPaginator} from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { DialogEnum } from 'src/app/shared/services/utilities/DialogEnum';
 
 @Component({
   selector: 'app-accounts-table',
@@ -41,7 +42,9 @@ export class AccountsTableComponent implements OnInit {
    private utils: UtilsService,
    private dialog: MatDialog) { }
 
-   dataSource = new MatTableDataSource<Data>();
+  dataSource = new MatTableDataSource<Data>();
+  addFromTableFlag = DialogEnum.ADD_FROM_TABLE;
+  removeFromTableFlag = DialogEnum.REMOVE_FROM_TABLE;
   ngOnInit(): void {
     console.log(this.accountData)
     console.log("Data:", this.accountData.data)
@@ -136,8 +139,11 @@ export class AccountsTableComponent implements OnInit {
     }});
     dialogRef.afterClosed().subscribe({
       next: (data) => {
-        console.log("Data recieved back:", data.data)
-        this.dataSource.data = data.data;
+        // data will come back undefined if user clicks out with entering data
+        if (data !== undefined){
+          console.log("Data recieved back:", data.data)
+          this.dataSource.data = data.data;
+        }
       }
     })
   }
@@ -152,8 +158,10 @@ export class AccountsTableComponent implements OnInit {
     }});
     dialogRef.afterClosed().subscribe({
       next: (data) => {
-        console.log("Data recieved back:", data.data)
-        this.dataSource.data = data.data;
+        if (data !== undefined){
+          console.log("Data recieved back:", data.data)
+          this.dataSource.data = data.data;
+        }
       }
     })
   }

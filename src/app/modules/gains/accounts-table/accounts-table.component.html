@@ -59,13 +59,13 @@
               [matTooltip]="tooltipProperties.tooltipAddPosition"
               [matTooltipShowDelay]="tooltipProperties.showDelay" 
               [matTooltipPosition]="tooltipProperties.tooltipPosition"
-              (click)="openAddDialog(element, 3)">
+              (click)="openAddDialog(element, addFromTableFlag)">
               <mat-icon>add_box</mat-icon>
             </button>
             <button mat-raised-button id="delete-position" 
                   [matTooltip]="tooltipProperties.tooltipRemovePosition"
                   [matTooltipShowDelay]="tooltipProperties.showDelay" 
-                  [matTooltipPosition]="tooltipProperties.tooltipPosition" (click)="openDeleteDialog(element, 2)">
+                  [matTooltipPosition]="tooltipProperties.tooltipPosition" (click)="openDeleteDialog(element, removeFromTableFlag)">
               <mat-icon>delete</mat-icon>
             </button>
           </td>

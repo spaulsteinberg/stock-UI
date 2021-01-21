@@ -3,10 +3,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { TooltipPosition } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 import { DetailAttributes } from 'src/app/shared/interfaces/IAccount';
 import { ICombinationRoute } from 'src/app/shared/interfaces/ICombinationRoute';
 import { AccountsService } from 'src/app/shared/services/accounts.service';
 import { BackendService } from 'src/app/shared/services/backend.service';
+import { DialogEnum } from 'src/app/shared/services/utilities/DialogEnum';
 import { AccountsTableComponent } from '../accounts-table/accounts-table.component';
 import { PositionDialogComponent } from '../position-dialog/position-dialog.component';
 
@@ -39,11 +41,14 @@ export class AccountsPageComponent implements OnInit {
   initialLoad:boolean = true;
   //init account data
   async ngOnInit() {
-    let c = await this.account.checkForProfile();
+    //swallow the exception -- user needs to create an account
+    try {
+      if (!this.account.hasBeenCheckedForProfile) await this.account.checkForProfile();
+    } catch (err){ }
     if (this.account.userHasProfile && !this.account.isInit){
       this.account.getAccounts();
     }
-    if (this.account.userHasProfile) this.backend.getStockListAsObservable();
+    this.backend.getStockListAsObservable();
     this.accountNames$ = this.account.accountNames$;
     this.accountData$ = this.account.accountsData$;
     this.listOfSymbols$ = this.backend.stockList$;
@@ -75,8 +80,23 @@ export class AccountsPageComponent implements OnInit {
     }
   }
 
-  createProfileClick(){
+  createProfileClick = () => {
     console.log("user wants to create an account")
+    let dialogRef = this.dialog.open(PositionDialogComponent, {data: {
+      flag: DialogEnum.CREATE_PROFILE
+    }})
+
+    dialogRef.afterClosed().pipe(finalize(() => console.log("dialog ref create profile complete")))
+    .subscribe(
+      data => {
+        if (data !== undefined){
+          console.log(data)
+        //  this.tableComponent.getSubject().next(data);
+        //  this.tableComponent.getDataSource().data = data;
+          this.userHasProfile = true;
+        }
+      }
+    )
   }
 
   ngAfterViewChecked(){

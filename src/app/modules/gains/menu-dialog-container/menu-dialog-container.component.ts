@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TooltipPosition } from '@angular/material/tooltip';
+import { DialogEnum } from 'src/app/shared/services/utilities/DialogEnum';
 import { AccountsTableComponent } from '../accounts-table/accounts-table.component';
 import { PositionDialogComponent } from '../position-dialog/position-dialog.component';
 
@@ -18,7 +19,9 @@ export class MenuDialogContainerComponent implements OnInit {
   tooltipMessage = "Select an account to view";
   tooltipAddPosition = "Add a position to account";
   tooltipRemovePosition = "Remove a position from account";
-
+  
+  addFullPositionFlag = DialogEnum.ADD_FULL_POSITION;
+  removeFullPositionFlag = DialogEnum.REMOVE_FULL_POSITION;
   constructor(private dialog: MatDialog) { }
 
   ngOnInit(): void {

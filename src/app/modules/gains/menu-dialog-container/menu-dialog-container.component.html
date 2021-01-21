@@ -14,10 +14,10 @@
     </button>
 </mat-menu>
 <mat-menu #positions="matMenu">
-    <button class="positions-menu add" mat-menu-item [matTooltipPosition]="tooltipPosition" [matTooltip]="tooltipAddPosition" (click)="openPositionDialog(0)">
+    <button class="positions-menu add" mat-menu-item [matTooltipPosition]="tooltipPosition" [matTooltip]="tooltipAddPosition" (click)="openPositionDialog(addFullPositionFlag)">
         <mat-icon>add</mat-icon>
     </button>
-    <button class="positions-menu remove" mat-menu-item [matTooltipPosition]="tooltipPosition" [matTooltip]="tooltipRemovePosition" (click)="openPositionDialog(1)">
+    <button class="positions-menu remove" mat-menu-item [matTooltipPosition]="tooltipPosition" [matTooltip]="tooltipRemovePosition" (click)="openPositionDialog(removeFullPositionFlag)">
         <mat-icon>remove</mat-icon>
     </button>
 </mat-menu>
