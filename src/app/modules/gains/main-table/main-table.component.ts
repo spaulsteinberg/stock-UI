@@ -50,12 +50,18 @@ export class MainTableComponent implements OnInit {
         console.log(error)
       },
       () => {
-        this.getQuotes();
+        if (this.symbolList.length > 0) {
+          this.getQuotes();
+          if (this.marketIsOpen() && !this.isError && this.symbolList.length > 0){
+            this.updatePrices();
+          }
+        }
+        else {
+          this.onInitLoadingProgressBarDisplay = false;
+        }
       }
     );
-    if (this.marketIsOpen()){
-      this.updatePrices();
-    }
+    
   }
 
   getQuotes(){

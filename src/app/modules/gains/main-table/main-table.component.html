@@ -19,7 +19,7 @@
         <div class="text-danger" *ngIf="isError">
             Something went wrong. Please reload and try again. If the issue persists, log out and log back in.
         </div>
-        <div class="text-info" *ngIf="!isError && symbolList.length === 0 && onInitLoadingProgressBarDisplay === false">
+        <div class="text-info" *ngIf="symbolList.length === 0 && onInitLoadingProgressBarDisplay === false">
             You don't have any stocks! Navigate to the dash <a routerLink="/dash">here</a> to add some!
         </div>
         <div class="loading-container" *ngIf="onInitLoadingProgressBarDisplay === true && !isError" style="margin-left: 55%;">

@@ -156,12 +156,10 @@ export class PositionDialogComponent implements OnInit {
       priceOfBuy: this._profilePriceOfBuy,
       dateOfBuy: date
     };
+    
     const request = new CreateProfileRequest(this._profileName, obj);
     console.log(request)
-    //TODO: get the userHasProfile set to true back to the accounts page so it renders the new data...
-    //might have to call getAccounts() separately?
-    // check for other flags that need to be set
-    // afterClosed() subscribe
+
     this.account.createNewProfile(request)
     .subscribe(
       response => {

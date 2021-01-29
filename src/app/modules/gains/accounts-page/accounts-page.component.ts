@@ -91,8 +91,6 @@ export class AccountsPageComponent implements OnInit {
       data => {
         if (data !== undefined){
           console.log(data)
-        //  this.tableComponent.getSubject().next(data);
-        //  this.tableComponent.getDataSource().data = data;
           this.userHasProfile = true;
         }
       }
