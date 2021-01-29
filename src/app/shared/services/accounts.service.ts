@@ -145,9 +145,10 @@ export class AccountsService {
     const accNames = this.subject.getValue();
     const newNameArray = accNames.slice(0);
     newNameArray.splice(accNames.findIndex(name => nameToDelete === name), 1);
-    console.log("Accounts after delete: ", newNameArray)
     this.subject.next(newNameArray);
-    const params = new HttpParams().set('name', nameToDelete);
+    let encoded = encodeURI(nameToDelete);
+    console.log(encoded)
+    const params = new HttpParams().set('name', encoded);
     const url = `${this.URLS.ACCOUNT}?${params}`;
     return this.http.delete<any>(url, {'headers': this.headers});
   }
