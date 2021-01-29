@@ -5,3 +5,9 @@
 #discard-button {
     background-color: red;
 }
+.loading-container {
+    width: 50%;
+}
+.position {
+    margin-left: 25%;
+}

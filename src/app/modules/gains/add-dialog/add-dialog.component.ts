@@ -34,7 +34,7 @@ export class AddDialogComponent implements OnInit {
         })
         console.log(data.symbols)
   }
-get _name(){
+ get _name(){
     return this.addAccountForm.get('name').value;
  }
  get _symbol(){
@@ -66,26 +66,26 @@ get _name(){
     return this.addAccountForm.get('date');
   }
 
+  isLoading = false;
   submitAccount(){
-   // const req = new AddAccountRequest();
-   /* -check to see if symbol exists here  or in service.
-      -JSON stringfiy to get into json format and add application/json as the headers
-   */
-    const dateOfBuy = this.convertToSlashes(this._date);
+    this.isLoading = true;
+    const dateOfBuy = this.utils.convertToSlashes(this._date);
     const req = this.createAccountObject(dateOfBuy);
     this.account.createAccount(req)
     .subscribe(
       response => {
-        console.log(response)
+        this.errCreatingRequest = false;
         this.dialogRef.close();
         this.openSnackbar(`${req.name} added successfully`, "Close");
       },
       err => {
         console.log(err)
+        this.errCreatingRequest = true;
         this.openSnackbar(`${req.name} failed to save. Please try again.`, "Close");
       },
       () => {
         console.log("add account request complete")
+        this.isLoading = false;
       }
     )
   }
@@ -98,14 +98,6 @@ get _name(){
 
   discard(){
     this.addAccountForm.reset();
-  }
-
-  convertToSlashes(date):string{
-    const d = new Date(date);
-    const year = d.getFullYear();
-    const month = d.getMonth();
-    const day = d.getDay();
-    return `${year}-${month}-${day}`;
   }
 
   createAccountObject(dateOfBuy:string):AddAccountRequest {

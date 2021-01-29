@@ -9,6 +9,13 @@
     background-color:lightgray !important;
     border-color: green !important;
   }
-  ::ng-deep .mat-simple-snackbar-action {
-    color: red;
-  }
+::ng-deep .mat-simple-snackbar-action {
+  color: red;
+}
+
+.loading-container {
+    width: 50%;
+}
+.position {
+    margin-left: 25%;
+}

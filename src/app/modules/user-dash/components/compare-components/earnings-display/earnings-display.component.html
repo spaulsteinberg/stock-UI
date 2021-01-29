@@ -1,4 +1,4 @@
-<div class="loading-box" *ngIf="showLoading">
+<div class="loading-box" *ngIf="showLoading && !isError">
     <mat-progress-spinner mode="indeterminate" color="warn"></mat-progress-spinner>
 </div>
 <div class="my-table" *ngIf="estimates !== undefined && estimates.length === 2 && isError === false && !showLoading; else errBlock">
@@ -41,5 +41,5 @@
     </table>
 </div>
 <ng-template #errBlock>
-    <p class="text-danger">{{errMessage}}</p>
+    <p class="text-danger">Something went wrong loading earnings. Please re-load and try again.</p>
 </ng-template>

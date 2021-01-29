@@ -34,7 +34,10 @@ export class RemoveDialogComponent implements OnInit {
   }
 
   openAccountError:boolean = false;
+  confirmError:boolean = false;
+  isLoading:boolean = false;
   confirm(){
+    this.isLoading = true;
     const currentName = this.data.currentAccount;
     if (currentName === this.confirmAccount){
       this.openAccountError = true;
@@ -48,9 +51,11 @@ export class RemoveDialogComponent implements OnInit {
     },
     error => {
       console.log(error)
+      this.confirmError = true;
       this.openSnackbar(`${error.status} error`, "Close")
     },
     () => {
+      this.isLoading = false;
       this.dialogRef.close();
     })
   }

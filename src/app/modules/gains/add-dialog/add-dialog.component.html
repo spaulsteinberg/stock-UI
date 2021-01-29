@@ -33,5 +33,8 @@
             <button mat-raised-button class="mx-3" id="discard-button" (click)="discard()" mat-dialog-close>Discard</button>
             <mat-error *ngIf="errCreatingRequest">Something went wrong creating request. Please try again.</mat-error>
         </div>
+        <div class="loading-container position" *ngIf="!errCreatingRequest && isLoading">
+            <mat-progress-bar mode="buffer" color="warn"></mat-progress-bar>
+        </div>
     </form>
 </div>
