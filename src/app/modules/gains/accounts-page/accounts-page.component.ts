@@ -39,6 +39,7 @@ export class AccountsPageComponent implements OnInit {
   }
   isErr: boolean = false;
   initialLoad:boolean = true;
+
   //init account data
   async ngOnInit() {
     //swallow the exception -- user needs to create an account
@@ -54,6 +55,11 @@ export class AccountsPageComponent implements OnInit {
     this.listOfSymbols$ = this.backend.stockList$;
     this.userHasProfile = this.account.userHasProfile;
     this.initialLoad = false;
+    this.account.deleteProfileRelay.subscribe(data => {
+      if (data === false){
+        this.userHasProfile = false;
+      }
+    })
   }
 
   ROUTES:Array<ICombinationRoute> = new Array<ICombinationRoute>(

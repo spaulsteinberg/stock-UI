@@ -22,6 +22,7 @@ export class MenuDialogContainerComponent implements OnInit {
   
   addFullPositionFlag = DialogEnum.ADD_FULL_POSITION;
   removeFullPositionFlag = DialogEnum.REMOVE_FULL_POSITION;
+  deleteProfileFlag = DialogEnum.DELETE_PROFILE;
   constructor(private dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -42,6 +43,10 @@ export class MenuDialogContainerComponent implements OnInit {
     }
     //swallow, might be when theres a 404
     catch (err){ }
+  }
+
+  deleteProfileDialog = (flag:number) => {
+    console.log("delete profile click", 5)
   }
 
 }

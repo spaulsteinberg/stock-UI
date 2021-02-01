@@ -1,9 +1,10 @@
 import { HttpBackend, HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, throwError, timer } from 'rxjs';
-import { catchError, delayWhen, map, retry, retryWhen, take, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, Subject, throwError, timer } from 'rxjs';
+import { catchError, delayWhen, finalize, map, retry, retryWhen, take, tap } from 'rxjs/operators';
 import { Data, DetailAttributes, IAccount } from '../interfaces/IAccount';
 import { ICreateProfileResponse } from '../interfaces/ICreateProfileResponse';
+import { IDeleteProfileResponse } from '../interfaces/IDeleteProfileResponse';
 import { IProfileCheck } from '../interfaces/IProfileCheck';
 import { AddAccountRequest } from '../models/AddAccountRequest';
 import { AddAccountResponse } from '../models/AddAccountResponse';
@@ -194,6 +195,21 @@ export class AccountsService {
       }),
       catchError((err:HttpErrorResponse) => throwError(err.message))
     )
+  }
+
+  // subject to relay the deleted account from remove-dialog to account-page to now show only the create account
+  deleteProfileRelay:Subject<boolean> = new Subject();
+  deleteProfile = () => {
+    return this.http.delete<IDeleteProfileResponse>(this.URLS.PROFILE, {headers: this.createHeadersWithJsonContent()})
+      .pipe(
+        tap((response) => {
+          if (response.status === 200){
+            this.completeSubjectsForLogout();
+            this.deleteProfileRelay.next(false);
+          }
+        },
+        catchError((err) => of(err))),
+        finalize(() => console.log("delete profile complete")));
   }
 
 

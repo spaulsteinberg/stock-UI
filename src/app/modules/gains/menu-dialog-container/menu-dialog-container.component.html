@@ -12,6 +12,10 @@
         <mat-icon style="background-color: #b2dfdb;">account_balance</mat-icon>
         <span>Account</span>
     </button>
+    <button mat-menu-item [matMenuTriggerFor]="profile">
+        <mat-icon style="background-color: #ff9800;">perm_identity</mat-icon>
+        <span>Profile</span>
+    </button>
 </mat-menu>
 <mat-menu #positions="matMenu">
     <button class="positions-menu add" mat-menu-item [matTooltipPosition]="tooltipPosition" [matTooltip]="tooltipAddPosition" (click)="openPositionDialog(addFullPositionFlag)">
@@ -23,4 +27,9 @@
 </mat-menu>
 <mat-menu #accounts="matMenu">
     <app-dialog [accountNames]="accountNames" [currentAccount]="currentAccount" [symbols]="symbols"></app-dialog>
+</mat-menu>
+<mat-menu #profile="matMenu">
+    <button mat-menu-item class="positions-menu remove" [matTooltipPosition]="tooltipPosition" [matTooltip]="tooltipAddPosition" (click)="deleteProfileDialog(deleteProfileFlag)">
+        <mat-icon>remove</mat-icon>
+    </button>
 </mat-menu>

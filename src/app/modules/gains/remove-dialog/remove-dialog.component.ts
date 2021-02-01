@@ -33,31 +33,50 @@ export class RemoveDialogComponent implements OnInit {
     return this.removeForm.get('confirmAccountName').value;
   }
 
+  accountArrayNameLength = () => this.data.names.length > 1;
+
   openAccountError:boolean = false;
   confirmError:boolean = false;
   isLoading:boolean = false;
   confirm(){
     this.isLoading = true;
     const currentName = this.data.currentAccount;
-    if (currentName === this.confirmAccount){
-      this.openAccountError = true;
-      return;
+    if (this.accountArrayNameLength() === false){
+      this.oneAccountDeleteProfile();
+    } else {
+      if (currentName === this.confirmAccount){
+        this.openAccountError = true;
+        return;
+      }
+      this.openAccountError = false;
+      this.account.deleteAnAccount(this.confirmAccount)
+      .subscribe(response => {
+        console.log(response)
+        this.openSnackbar(response.details, "Close")
+      },
+      error => {
+        console.log(error)
+        this.confirmError = true;
+        this.openSnackbar(`${error.status} error`, "Close")
+      },
+      () => {
+        this.isLoading = false;
+        this.dialogRef.close();
+      })
     }
-    this.openAccountError = false;
-    this.account.deleteAnAccount(this.confirmAccount)
-    .subscribe(response => {
-      console.log(response)
-      this.openSnackbar(response.details, "Close")
-    },
-    error => {
-      console.log(error)
-      this.confirmError = true;
-      this.openSnackbar(`${error.status} error`, "Close")
-    },
-    () => {
-      this.isLoading = false;
-      this.dialogRef.close();
-    })
+  }
+
+  errDeletingProfile:boolean = false;
+  oneAccountDeleteProfile = () => {
+    this.account.deleteProfile().subscribe(
+      (response) => {
+        this.openSnackbar("Profile deleted.", "Close");
+        this.dialogRef.close();
+      },
+      error => this.errDeletingProfile = true,
+      () => this.isLoading = false
+    )
+
   }
 
   discard(){

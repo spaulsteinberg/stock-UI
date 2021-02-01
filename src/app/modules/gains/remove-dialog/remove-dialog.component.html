@@ -21,8 +21,13 @@
         <button mat-raised-button class="mx-3" id="discard-button" (click)="discard()" mat-dialog-close>Discard</button>
     </p>
     <mat-error *ngIf="removeForm.errors?.nameMisMatch && (accountName.touched && confirmAccountName.touched)" class="text-center">Account names must match.</mat-error>
-    <mat-error *ngIf="openAccountError" class="text-center">Cannot remove an open account.</mat-error>
-    <div class="loading-container position" *ngIf="!confirmError && isLoading">
+    <mat-error *ngIf="openAccountError && accountArrayNameLength() === true" class="text-center">Cannot remove an open account.</mat-error>
+    <mat-error *ngIf="errDeletingProfile">Something went wrong. Please try again.</mat-error>
+    <div *ngIf="accountArrayNameLength() === false" class="text-center text-warning">
+        <p>This is your only account.</p>
+        <p>Deleting it will <strong>delete your profile.</strong></p>
+    </div>
+    <div class="loading-container position" *ngIf="!confirmError && !openAccountError && isLoading">
         <mat-progress-bar mode="buffer" color="warn"></mat-progress-bar>
     </div>
 </div>
