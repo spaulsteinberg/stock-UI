@@ -140,4 +140,7 @@
         <button mat-raised-button class="bg-primary mx-2" (click)="revert()">Discard Op</button>
         <mat-error *ngIf="!deleteProfileForm.errors?.OK && password.touched && confirmPassword.touched">*Passwords do not match.</mat-error>
     </div>
+    <div class="text-center text-danger" *ngIf="errOnDelete">
+        Please check your credentials and try again.
+    </div>
 </div>

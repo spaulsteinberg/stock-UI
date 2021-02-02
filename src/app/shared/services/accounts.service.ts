@@ -221,7 +221,7 @@ export class AccountsService {
     return this.http.post<any>(url, {}, {headers: headers})
     .pipe(
       switchMap(() => this.deleteProfile()),
-      catchError(err => err),
+      catchError(err => throwError(err)),
       finalize(() => console.log("confirm pass and delete profile requests complete"))
     )
   }

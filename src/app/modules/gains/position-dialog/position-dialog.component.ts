@@ -304,8 +304,9 @@ export class PositionDialogComponent implements OnInit {
     }
   }
 
-  // TO-DO validation complete -> make call 
+  errOnDelete:boolean = false;
   deleteUserProfile = () => {
+    this.errOnDelete = false;
     this.account.confirmUserPasswordAndDeleteProfile(this._password)
     .subscribe({
       next: (response) => {
@@ -313,7 +314,10 @@ export class PositionDialogComponent implements OnInit {
         this.openSnackbar("Profile deleted", "Close");
         this.dialogRef.close();
       },
-      error: (err) => console.log(err)
+      error: (err) => {
+        this.errOnDelete = true;
+        console.log(err)
+      }
     })
   }
 
