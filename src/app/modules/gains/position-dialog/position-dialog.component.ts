@@ -10,6 +10,7 @@ import { RemovePositionRequest } from 'src/app/shared/models/RemovePositionReque
 import { AccountsService } from 'src/app/shared/services/accounts.service';
 import { BackendService } from 'src/app/shared/services/backend.service';
 import { UtilsService } from 'src/app/shared/services/utilities/utils.service';
+import { confirmPasswordCheck } from 'src/app/shared/validators/delete-profile-password.validator';
 import { checkIfSymbolIsValid } from 'src/app/shared/validators/symbol-check.validator';
 
 @Component({
@@ -28,6 +29,7 @@ export class PositionDialogComponent implements OnInit {
   dialogErrMessage:string;
   dataContainer;
   createProfileForm:FormGroup;
+  deleteProfileForm:FormGroup;
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
               private fb: FormBuilder,
               public utils: UtilsService,
@@ -56,6 +58,12 @@ export class PositionDialogComponent implements OnInit {
         profileDateOfBuy: ['', [Validators.required]]
       });
       console.log(this.symbolList)
+    }
+    if (this.flag === 5){
+      this.deleteProfileForm = this.fb.group({
+        password: ['', [Validators.required]],
+        confirmPassword: ['', [Validators.required]]
+      }, {validators: confirmPasswordCheck('password', 'confirmPassword')})
     }
   }
 
@@ -122,6 +130,12 @@ export class PositionDialogComponent implements OnInit {
   get _profileDateOfBuy(){
     return this.createProfileForm.get('profileDateOfBuy').value;
   }
+
+  // delete profile getters
+  get password(){ return this.deleteProfileForm.get('password'); }
+  get confirmPassword(){ return this.deleteProfileForm.get('confirmPassword') }
+  get _password(){ return this.deleteProfileForm.get('password').value; }
+  get _confirmPassword(){ return this.deleteProfileForm.get('confirmPassword').value; }
 
   configureError = (v:any):string => {
       if (v.hasError('required')){
@@ -288,6 +302,19 @@ export class PositionDialogComponent implements OnInit {
     catch (err){
       return true;
     }
+  }
+
+  // TO-DO validation complete -> make call 
+  deleteUserProfile = () => {
+    this.account.confirmUserPasswordAndDeleteProfile(this._password)
+    .subscribe({
+      next: (response) => {
+        console.log(response);
+        this.openSnackbar("Profile deleted", "Close");
+        this.dialogRef.close();
+      },
+      error: (err) => console.log(err)
+    })
   }
 
   createDeleteHeaderString(){

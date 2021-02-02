@@ -45,8 +45,10 @@ export class MenuDialogContainerComponent implements OnInit {
     catch (err){ }
   }
 
-  deleteProfileDialog = (flag:number) => {
-    console.log("delete profile click", 5)
+  deleteProfileDialog = (deleteProfileFlag:number) => {
+    this.dialog.open(PositionDialogComponent, {data: {
+      flag: deleteProfileFlag
+    }})
   }
 
 }

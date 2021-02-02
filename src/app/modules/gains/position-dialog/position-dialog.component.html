@@ -116,3 +116,28 @@
         <mat-progress-bar mode="buffer" color="warn"></mat-progress-bar>
     </div>
 </div>
+<div *ngIf="flag === 5" class="mat-typography">
+    <div class="text-center text-danger">
+        <h1 mat-dialog-title class="mx-3" style="margin-bottom: 0">Delete Profile</h1>
+        <small>*Warning: This cannot be undone</small>
+    </div>
+    <div mat-dialog-content class="text-warning">
+        <form [formGroup]="deleteProfileForm">
+            <mat-form-field appearance="standard" class="mx-4">
+                <mat-label>Password</mat-label>
+                <input type="password" matInput formControlName="password" autocomplete="off">
+                <mat-error *ngIf="password.invalid">{{configureError(password)}}</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="standard" class="mx-4">
+                <mat-label>Confirm Password</mat-label>
+                <input type="password" matInput formControlName="confirmPassword" autocomplete="off">
+                <mat-error *ngIf="confirmPassword.invalid">{{configureError(confirmPassword)}}</mat-error>
+            </mat-form-field>
+        </form>
+    </div>
+    <div class="text-center text-white my-2">
+        <button mat-raised-button class="bg-danger" [disabled]="password.value === '' || confirmPassword.value === '' || deleteProfileForm.errors?.OK === false" (click)="deleteUserProfile()">Delete Profile</button>
+        <button mat-raised-button class="bg-primary mx-2" (click)="revert()">Discard Op</button>
+        <mat-error *ngIf="!deleteProfileForm.errors?.OK && password.touched && confirmPassword.touched">*Passwords do not match.</mat-error>
+    </div>
+</div>

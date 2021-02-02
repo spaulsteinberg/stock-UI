@@ -1,7 +1,7 @@
 import { HttpBackend, HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subject, throwError, timer } from 'rxjs';
-import { catchError, delayWhen, finalize, map, retry, retryWhen, take, tap } from 'rxjs/operators';
+import { catchError, delayWhen, finalize, map, retry, retryWhen, switchMap, take, tap } from 'rxjs/operators';
 import { Data, DetailAttributes, IAccount } from '../interfaces/IAccount';
 import { ICreateProfileResponse } from '../interfaces/ICreateProfileResponse';
 import { IDeleteProfileResponse } from '../interfaces/IDeleteProfileResponse';
@@ -210,6 +210,20 @@ export class AccountsService {
         },
         catchError((err) => of(err))),
         finalize(() => console.log("delete profile complete")));
+  }
+
+  confirmUserPasswordAndDeleteProfile = (requestPassword):Observable<any> => {
+    const headers = new HttpHeaders()
+      .set('Authorization', `Bearer ${this.auth.getToken()}`)
+      .set('user', this.username)
+      .set('pass', requestPassword);
+    const url = "http://localhost:3000/api/authorize/profile/delete";
+    return this.http.post<any>(url, {}, {headers: headers})
+    .pipe(
+      switchMap(() => this.deleteProfile()),
+      catchError(err => err),
+      finalize(() => console.log("confirm pass and delete profile requests complete"))
+    )
   }
 
 
