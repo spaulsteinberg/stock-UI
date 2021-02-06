@@ -32,16 +32,18 @@
         </a>
     </div>
     <div class="col col-md-3 offset-sm-1">
-        <mat-card>
-            <mat-card-header>
-                <mat-card-title>Interactive Gains</mat-card-title>
-            </mat-card-header>
-            <img mat-card-image src="../../../../assets/general-images/chart-nav-gains.jpg" alt="gains-chart.jpg">
-            <mat-card-content>
-                <p>
-                    Check your unrealized gains overtime in an informative, visual way.
-                </p>
-            </mat-card-content>
-        </mat-card>
+        <a (click)="nav(3)">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>Interactive Gains</mat-card-title>
+                </mat-card-header>
+                <img mat-card-image src="../../../../assets/general-images/chart-nav-gains.jpg" alt="gains-chart.jpg">
+                <mat-card-content>
+                    <p>
+                        Check your unrealized gains overtime in an informative, visual way.
+                    </p>
+                </mat-card-content>
+            </mat-card>
+        </a>
     </div>
 </div>

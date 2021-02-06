@@ -1,4 +1,6 @@
-
 .jumbotron {
     padding-bottom: 1rem;
-  }
+}
+svg {
+  border: 1px solid black;
+}

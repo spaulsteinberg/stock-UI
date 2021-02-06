@@ -10,6 +10,7 @@ import { AddAccountRequest } from '../models/AddAccountRequest';
 import { AddAccountResponse } from '../models/AddAccountResponse';
 import { AddPositionRequest } from '../models/AddPositionRequest';
 import { CreateProfileRequest } from '../models/CreateProfileRequest';
+import { PortfolioStatistics, PositionAccumulation } from '../models/PortfolioStatisticsModel';
 import { RemovePositionRequest } from '../models/RemovePositionRequest';
 import { RegisterUserService } from './register-user.service';
 
@@ -257,6 +258,39 @@ export class AccountsService {
                 this.isInit = true;
               }
             })
+  }
+
+  getTotalPortfolioStats = ():Observable<PortfolioStatistics> => {
+    return this.accountsData$
+    .pipe(
+      map(accounts => {
+        let start = window.performance.now();
+        let totalAccounts = this.subject.value.length;
+        let map = new Map<string, PositionAccumulation>();
+        let total = 0;
+        let totalPositions = 0;
+        let accValuePerPosition = 0;
+        for (let details of accounts){
+          for (let data of details.data){
+            totalPositions = 0;
+            accValuePerPosition = 0;
+            if (!map.has(data.symbol)) map.set(data.symbol, new PositionAccumulation(0, 0))
+            let current = map.get(data.symbol);
+            for (let vals of data.values){
+              total += vals.position * vals.priceOfBuy;
+              current.numShares += vals.position;
+              current.totalValue += vals.position * vals.priceOfBuy;
+            }
+            map.set(data.symbol, current);
+          }
+        }
+        let end = window.performance.now();
+        console.log(`Execution time: ${end - start} ms`);
+        return new PortfolioStatistics(parseFloat(total.toFixed(2)), totalAccounts, map);
+      }),
+      catchError(err => throwError(err)),
+      finalize(() => console.log("done getting total portfolio value"))
+    );
   }
 
   // enable filtering of accounts with find() to give back to filter on name for table

@@ -17,7 +17,6 @@ export class DialogComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.accountNames)
-    console.log(this.listOfSymbols)
   }
   tooltipPosition: TooltipPosition = "above";
   tooltipMessageCreate = "Create a new account";

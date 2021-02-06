@@ -9,8 +9,11 @@
         <div class="col col-md-1 offset-md-1 text-left">
             <button mat-raised-button (click)="utils.nav('ACCOUNTS', route, direct)">
                 <mat-icon>arrow_back_ios</mat-icon>
-                Watchlist
+                Accounts
             </button>
         </div>
     </div>
 </div>
+<ng-container *ngIf="userHasNoProfile" class="text-danger">
+    You need to create a profile. Redirecting to accounts page...
+</ng-container>
