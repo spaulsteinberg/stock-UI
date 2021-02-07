@@ -4,7 +4,7 @@ import { RouteDirect } from 'src/app/shared/services/utilities/RouteEnum';
 import { UtilsService } from 'src/app/shared/services/utilities/utils.service';
 import * as d3 from 'd3';
 import { color } from 'd3';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { AccountsService } from 'src/app/shared/services/accounts.service';
 import { PortfolioStatistics } from 'src/app/shared/models/PortfolioStatisticsModel';
 
@@ -25,29 +25,68 @@ export class InteractiveComponent implements OnInit {
     this.el.nativeElement.ownerDocument.body.style.backgroundColor = "lightblue"
     this.el.nativeElement.ownerDocument.body.style.backgroundImage = "none"
    }
+  portfolioStatisticsWrapper:PortfolioStatistics;
   totalPortfolioValue:Observable<PortfolioStatistics>;
+  portfolioSub:Subscription;
+  loading:boolean = false;
+  accountNames:string[];
+  errorOnRetrieval:boolean = false;
   userHasNoProfile:boolean = false;
   async ngOnInit() {
+    this.loading = true;
     try {
       if (!this.account.hasBeenCheckedForProfile) await this.account.checkForProfile();
     } catch (err){ }
-    if (this.account.userHasProfile && !this.account.isInit){
-      this.account.getAccounts();
-    }
-    if (this.account.userHasProfile){
-      this.totalPortfolioValue = this.account.getTotalPortfolioStats();
-      this.totalPortfolioValue.subscribe(data => console.log(data))
-    }
-    if (!this.account.userHasProfile){
+    this.retrieveData();
+  }
+
+  retrieveData = () => {
+    if (this.account.userHasProfile && !this.account.isInit) this.account.getAccounts();
+    if (this.account.userHasProfile) this.getPortfolioData();
+    else this.redirectWhenNoPortfolioPresent();
+  }
+
+  getPortfolioData = () => {
+    this.totalPortfolioValue = this.account.getTotalPortfolioStats();
+      this.portfolioSub = this.totalPortfolioValue.subscribe({
+        next: (data) => {
+          this.portfolioStatisticsWrapper = data;
+          this.accountNames = Array.from(data.accountTotalsMap.keys())
+          this.loading = false;
+          try {
+            console.log("Potfolio stats:", data)
+            console.log(data.totalAccountsInPortfolio)
+            console.log(data.totalPortfolioValue)
+            console.log(data.accountTotalsMap.keys())
+          }
+          catch (err) {console.log(err); this.errorOnRetrieval = true}
+        },
+        error: (err) => {
+          this.errorOnRetrieval = true;
+          console.log(err)
+          this.loading = false;
+        }
+      })
+  }
+
+  redirectWhenNoPortfolioPresent = () => {
+    this.loading = false;
       this.userHasNoProfile = true;
       setTimeout(() => {
         this.router.navigate(["../../../accounts"], {relativeTo: this.route})
       }, 2000)
-    }
+  }
+
+  totalValueMap = new Map<string, number>();
+  getValueByAccounts = (name:string) => {
+    //TO-DO -> get value by account
   }
 
   ngAfterViewChecked(){
     this.cdr.detectChanges();
+  }
+  ngOnDestroy(){
+    this.portfolioSub.unsubscribe();
   }
 
 }

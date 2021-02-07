@@ -17,3 +17,31 @@
 <ng-container *ngIf="userHasNoProfile" class="text-danger">
     You need to create a profile. Redirecting to accounts page...
 </ng-container>
+<!--portfolio value will be 0 while we are waiting for the getAccounts to update accountData$-->
+<div *ngIf="loading || portfolioStatisticsWrapper?.totalPortfolioValue === 0">
+    <mat-progress-spinner mode="indeterminate" color="warn"></mat-progress-spinner>
+</div>
+<div class="row">
+    <div class="col col-md-3 offset-md-1">
+        <div *ngIf="!errorOnRetrieval && !loading && portfolioStatisticsWrapper !== undefined">
+            <ng-container *ngIf="portfolioStatisticsWrapper.totalPortfolioValue !== 0" class="text-success text-center">
+                <p>Total Value: {{portfolioStatisticsWrapper.totalPortfolioValue}}</p>
+                <p>Total Accounts in Portfolio: {{portfolioStatisticsWrapper.totalAccountsInPortfolio}}</p>
+                
+                <ul>
+                    Account Names: 
+                    <li *ngFor="let accNames of accountNames">{{accNames}}</li>
+                </ul>
+            </ng-container>
+        </div>
+        <p>
+            totalPortfolioValue:number;
+    totalAccountsInPortfolio:number;
+    accountTotalsMap:Mapstring, Mapstring, PositionAccumulation;
+    positionTotalsMap:Mapstring, PositionAccumulation;
+        </p>
+        <div class="text-danger" *ngIf="errorOnRetrieval">
+            Something went wrong. Please reload and try again.
+        </div>
+    </div>
+</div>

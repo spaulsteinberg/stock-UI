@@ -36,11 +36,9 @@ export class AccountsService {
 
   //get profiles to see if the user exists
   async doesUserExist(){
-    console.log("I AM HERE")
     this.username = await this.setHeaders();
     console.log(this.username)
     this.createHeaders();
-    console.log("I AM HERE")
     return await this.http.get<any>(this.URLS.PROFILE, {'headers': this.headers})
                 .toPromise()
                 .then(res => {
@@ -162,6 +160,7 @@ export class AccountsService {
   checkForProfile = async ():Promise<boolean> => {
     console.log("checking for profile. Has user been checked -->", this.hasBeenCheckedForProfile)
     try {
+      console.log("checking for profile.....")
       this.username = await this.setHeaders();
     }
     catch (err){
@@ -260,33 +259,42 @@ export class AccountsService {
             })
   }
 
+  accountDataSubjectIsEmpty = ():boolean => this.accountDataSubject.value.length === 0;
+
   getTotalPortfolioStats = ():Observable<PortfolioStatistics> => {
     return this.accountsData$
     .pipe(
       map(accounts => {
         let start = window.performance.now();
         let totalAccounts = this.subject.value.length;
-        let map = new Map<string, PositionAccumulation>();
+        let portMap = new Map<string, PositionAccumulation>();
+        let accMap = new Map<string, Map<string, PositionAccumulation>>();
         let total = 0;
         let totalPositions = 0;
         let accValuePerPosition = 0;
         for (let details of accounts){
+          accMap.set(details.name, new Map<string, PositionAccumulation>())
           for (let data of details.data){
             totalPositions = 0;
             accValuePerPosition = 0;
-            if (!map.has(data.symbol)) map.set(data.symbol, new PositionAccumulation(0, 0))
-            let current = map.get(data.symbol);
+            if (!accMap.get(details.name).get(data.symbol)) accMap.get(details.name).set(data.symbol, new PositionAccumulation(0,0))
+            if (!portMap.has(data.symbol)) portMap.set(data.symbol, new PositionAccumulation(0, 0))
+            let portCurrent = portMap.get(data.symbol);
+            let accCurrent = accMap.get(details.name).get(data.symbol);
             for (let vals of data.values){
               total += vals.position * vals.priceOfBuy;
-              current.numShares += vals.position;
-              current.totalValue += vals.position * vals.priceOfBuy;
+              portCurrent.numShares += vals.position;
+              accCurrent.numShares += vals.position;
+              portCurrent.totalValue += vals.position * vals.priceOfBuy;
+              accCurrent.totalValue += vals.position * vals.priceOfBuy;
             }
-            map.set(data.symbol, current);
+            portMap.set(data.symbol, portCurrent);
+            accMap.get(details.name).set(data.symbol, accCurrent);
           }
         }
         let end = window.performance.now();
         console.log(`Execution time: ${end - start} ms`);
-        return new PortfolioStatistics(parseFloat(total.toFixed(2)), totalAccounts, map);
+        return new PortfolioStatistics(parseFloat(total.toFixed(2)), totalAccounts, accMap, portMap);
       }),
       catchError(err => throwError(err)),
       finalize(() => console.log("done getting total portfolio value"))

@@ -1,11 +1,13 @@
 export class PortfolioStatistics {
-    totalPorfolioValue:number;
+    totalPortfolioValue:number;
     totalAccountsInPortfolio:number;
-    positionTotals:Map<string, PositionAccumulation>;
-    constructor(totalValue:number, totalAccounts:number, map:Map<string, PositionAccumulation>){
-        this.totalPorfolioValue = totalValue;
+    accountTotalsMap:Map<string, Map<string, PositionAccumulation>> = new Map<string, Map<string, PositionAccumulation>>();
+    positionTotalsMap:Map<string, PositionAccumulation> = new Map<string, PositionAccumulation>();
+    constructor(totalValue:number, totalAccounts:number, accMap:Map<string, Map<string, PositionAccumulation>>, portMap:Map<string, PositionAccumulation>){
+        this.totalPortfolioValue = totalValue;
         this.totalAccountsInPortfolio = totalAccounts;
-        this.positionTotals = map;
+        this.accountTotalsMap = accMap;
+        this.positionTotalsMap = portMap;
     }
 }
 
