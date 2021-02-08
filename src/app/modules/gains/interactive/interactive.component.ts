@@ -26,10 +26,11 @@ export class InteractiveComponent implements OnInit {
     this.el.nativeElement.ownerDocument.body.style.backgroundImage = "none"
    }
   portfolioStatisticsWrapper:PortfolioStatistics;
+  accountsValues:Map<string, number>;
   totalPortfolioValue:Observable<PortfolioStatistics>;
+  accountValuesSub:Subscription;
   portfolioSub:Subscription;
   loading:boolean = false;
-  accountNames:string[];
   errorOnRetrieval:boolean = false;
   userHasNoProfile:boolean = false;
   async ngOnInit() {
@@ -51,13 +52,12 @@ export class InteractiveComponent implements OnInit {
       this.portfolioSub = this.totalPortfolioValue.subscribe({
         next: (data) => {
           this.portfolioStatisticsWrapper = data;
-          this.accountNames = Array.from(data.accountTotalsMap.keys())
           this.loading = false;
           try {
             console.log("Potfolio stats:", data)
             console.log(data.totalAccountsInPortfolio)
             console.log(data.totalPortfolioValue)
-            console.log(data.accountTotalsMap.keys())
+          //  console.log(data.accountTotalsMap.keys())
           }
           catch (err) {console.log(err); this.errorOnRetrieval = true}
         },
@@ -67,6 +67,11 @@ export class InteractiveComponent implements OnInit {
           this.loading = false;
         }
       })
+    this.accountValuesSub = this.account.getTotalAccountValue()
+      .subscribe(
+        data => this.accountsValues = data,
+        err => console.log(err)
+      )
   }
 
   redirectWhenNoPortfolioPresent = () => {
@@ -77,16 +82,12 @@ export class InteractiveComponent implements OnInit {
       }, 2000)
   }
 
-  totalValueMap = new Map<string, number>();
-  getValueByAccounts = (name:string) => {
-    //TO-DO -> get value by account
-  }
-
   ngAfterViewChecked(){
     this.cdr.detectChanges();
   }
   ngOnDestroy(){
     this.portfolioSub.unsubscribe();
+    this.accountValuesSub.unsubscribe();
   }
 
 }

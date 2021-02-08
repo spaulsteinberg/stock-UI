@@ -29,9 +29,9 @@
                 <p>Total Accounts in Portfolio: {{portfolioStatisticsWrapper.totalAccountsInPortfolio}}</p>
                 
                 <ul>
-                    Account Names: 
-                    <li *ngFor="let accNames of accountNames">{{accNames}}</li>
-                </ul>
+                    Accounts: 
+                    <li *ngFor="let item of accountsValues | keyvalue">{{item.key + " : "}} {{ item.value | currency:'USD'}}</li>
+                </ul> 
             </ng-container>
         </div>
         <p>

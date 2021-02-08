@@ -2,7 +2,7 @@ import { HttpBackend, HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } f
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subject, throwError, timer } from 'rxjs';
 import { catchError, delayWhen, finalize, map, retry, retryWhen, switchMap, take, tap } from 'rxjs/operators';
-import { Data, DetailAttributes, IAccount } from '../interfaces/IAccount';
+import { Data, DetailAttributes, IAccount, Values } from '../interfaces/IAccount';
 import { ICreateProfileResponse } from '../interfaces/ICreateProfileResponse';
 import { IDeleteProfileResponse } from '../interfaces/IDeleteProfileResponse';
 import { IProfileCheck } from '../interfaces/IProfileCheck';
@@ -299,6 +299,23 @@ export class AccountsService {
       catchError(err => throwError(err)),
       finalize(() => console.log("done getting total portfolio value"))
     );
+  }
+
+  getTotalAccountValue = ():Observable<Map<string, number>> => {
+    return this.accountsData$
+      .pipe(
+        map((accounts) => {
+          let valMap = new Map<string, number>();
+          accounts.forEach(account => {
+            valMap.set(account.name, account.data.map(_ => _.values).reduce<number>((acc, cur, ind) => {
+              return acc += cur.reduce<number>((acc, cur) => {
+                return acc += cur.priceOfBuy * cur.position
+              }, 0)
+            }, 0));
+          })
+          return valMap;
+        })
+      )
   }
 
   // enable filtering of accounts with find() to give back to filter on name for table
