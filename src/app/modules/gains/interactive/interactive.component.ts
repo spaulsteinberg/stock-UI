@@ -30,6 +30,8 @@ export class InteractiveComponent implements OnInit {
   totalPortfolioValue:Observable<PortfolioStatistics>;
   accountValuesSub:Subscription;
   portfolioSub:Subscription;
+  portfolioTotalValueList = []; //make a list of tuples with the symbol and val
+  accountTotalValueList = [];
   loading:boolean = false;
   errorOnRetrieval:boolean = false;
   userHasNoProfile:boolean = false;
@@ -53,11 +55,11 @@ export class InteractiveComponent implements OnInit {
         next: (data) => {
           this.portfolioStatisticsWrapper = data;
           this.loading = false;
+          this.tupleWrap();
           try {
             console.log("Potfolio stats:", data)
             console.log(data.totalAccountsInPortfolio)
             console.log(data.totalPortfolioValue)
-          //  console.log(data.accountTotalsMap.keys())
           }
           catch (err) {console.log(err); this.errorOnRetrieval = true}
         },
@@ -66,12 +68,28 @@ export class InteractiveComponent implements OnInit {
           console.log(err)
           this.loading = false;
         }
-      })
+    });
     this.accountValuesSub = this.account.getTotalAccountValue()
       .subscribe(
-        data => this.accountsValues = data,
+        data => {
+          this.accountsValues = data;
+          let tempMap = new Map([...this.accountsValues.entries()].sort((a, b) => b[1] - a[1]))
+          for (const [key, value] of tempMap){
+            this.accountTotalValueList.push([key, value]);
+          }
+        },
         err => console.log(err)
       )
+  }
+
+  //convert the map into a list of tuples
+  tupleWrap = () => {
+    if (this.portfolioStatisticsWrapper.totalPortfolioValue === 0) return;
+    let pMap = this.portfolioStatisticsWrapper.positionTotalsMap;
+    pMap = new Map([...pMap.entries()].sort( (a, b) => b[1].totalValue - a[1].totalValue));
+    for (const [key, value] of pMap){
+      this.portfolioTotalValueList.push([key, value.totalValue])
+    }
   }
 
   redirectWhenNoPortfolioPresent = () => {
@@ -85,9 +103,10 @@ export class InteractiveComponent implements OnInit {
   ngAfterViewChecked(){
     this.cdr.detectChanges();
   }
+
   ngOnDestroy(){
-    this.portfolioSub.unsubscribe();
-    this.accountValuesSub.unsubscribe();
+    if (this.portfolioSub !== undefined) this.portfolioSub.unsubscribe();
+    if (this.accountValuesSub !== undefined)  this.accountValuesSub.unsubscribe();
   }
 
 }

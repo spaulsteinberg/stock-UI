@@ -314,7 +314,8 @@ export class AccountsService {
             }, 0));
           })
           return valMap;
-        })
+        }),
+        finalize(() => console.log("total account value subscription closed"))
       )
   }
 
