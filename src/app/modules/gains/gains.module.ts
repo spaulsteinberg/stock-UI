@@ -13,6 +13,7 @@ import { AccountsTableComponent } from './accounts-table/accounts-table.componen
 import { PositionDialogComponent } from './position-dialog/position-dialog.component';
 import { InteractiveComponent } from './interactive/interactive.component';
 import { MenuDialogContainerComponent } from './menu-dialog-container/menu-dialog-container.component';
+import { PieChartVisualComponent } from './pie-chart-visual/pie-chart-visual.component';
 
 
 
@@ -28,7 +29,8 @@ import { MenuDialogContainerComponent } from './menu-dialog-container/menu-dialo
     AccountsTableComponent,
     PositionDialogComponent,
     InteractiveComponent,
-    MenuDialogContainerComponent
+    MenuDialogContainerComponent,
+    PieChartVisualComponent
   ],
   imports: [
     SharedModule,

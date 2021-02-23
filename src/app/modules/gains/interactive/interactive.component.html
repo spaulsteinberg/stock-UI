@@ -21,8 +21,8 @@
 <div *ngIf="loading || portfolioStatisticsWrapper?.totalPortfolioValue === 0">
     <mat-progress-spinner mode="indeterminate" color="warn"></mat-progress-spinner>
 </div>
-<div class="row" *ngIf="!errorOnRetrieval && !loading && portfolioStatisticsWrapper !== undefined">
-    <ng-container *ngIf="portfolioStatisticsWrapper.totalPortfolioValue !== 0">
+<ng-container *ngIf="!errorOnRetrieval && !loading && portfolioStatisticsWrapper !== undefined && portfolioStatisticsWrapper.totalPortfolioValue !== 0">
+    <div class="row">
         <div class="col col-md-3 offset-md-1">
             <div class="text-left">
                 <p>Total Value: {{portfolioStatisticsWrapper.totalPortfolioValue | currency}}</p>
@@ -57,5 +57,11 @@
                 </li>
             </ol>
         </div>
-    </ng-container>
-</div>
+    </div>
+    <app-pie-chart-visual 
+        *ngIf="accountTotalValueList !== undefined && portfolioTotalValueList !== undefined"
+        [accountTotalValueList]="accountTotalValueList" 
+        [portfolioTotalValueList]="portfolioTotalValueList"
+        [portfolioStatisticsWrapper]="portfolioStatisticsWrapper">
+    </app-pie-chart-visual>
+</ng-container>

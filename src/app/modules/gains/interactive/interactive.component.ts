@@ -2,8 +2,6 @@ import { ChangeDetectorRef, Component, ElementRef, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouteDirect } from 'src/app/shared/services/utilities/RouteEnum';
 import { UtilsService } from 'src/app/shared/services/utilities/utils.service';
-import * as d3 from 'd3';
-import { color } from 'd3';
 import { Observable, Subscription } from 'rxjs';
 import { AccountsService } from 'src/app/shared/services/accounts.service';
 import { PortfolioStatistics } from 'src/app/shared/models/PortfolioStatisticsModel';
@@ -99,6 +97,7 @@ export class InteractiveComponent implements OnInit {
         this.router.navigate(["../../../accounts"], {relativeTo: this.route})
       }, 2000)
   }
+
 
   ngAfterViewChecked(){
     this.cdr.detectChanges();
