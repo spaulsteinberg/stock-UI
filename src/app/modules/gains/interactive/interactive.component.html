@@ -27,29 +27,12 @@
             <div class="text-left">
                 <p>Total Value: {{portfolioStatisticsWrapper.totalPortfolioValue | currency}}</p>
                 <p>Total Accounts in Portfolio: {{portfolioStatisticsWrapper.totalAccountsInPortfolio}}</p>
-                
-                <ul>
-                    Accounts: 
-                    <li *ngFor="let item of accountsValues | keyvalue">{{item.key + " : "}} {{ item.value | currency:'USD'}}</li>
-                </ul>
             </div>
-            <p>
-                totalPortfolioValue:number;
-            totalAccountsInPortfolio:number;
-            accountTotalsMap:Mapstring, Mapstring, PositionAccumulation;
-            positionTotalsMap:Mapstring, PositionAccumulation;
-            </p>
             <div class="text-danger" *ngIf="errorOnRetrieval">
                 Something went wrong. Please reload and try again.
             </div>
         </div>
         <div class="col col-md-3 offset-md-1">
-            <ol>
-                Top 5 Positions:
-                <li *ngFor="let item of portfolioTotalValueList | slice:0:5 ">
-                    {{item[0]}} - {{item[1] | currency}}
-                </li>
-            </ol>
             <ol>
                 Top Accounts:
                 <li *ngFor="let account of accountTotalValueList">
@@ -64,4 +47,9 @@
         [portfolioTotalValueList]="portfolioTotalValueList"
         [portfolioStatisticsWrapper]="portfolioStatisticsWrapper">
     </app-pie-chart-visual>
+    <app-bar-chart-visual
+        *ngIf="accountTotalValueList !== undefined && portfolioTotalValueList !== undefined"
+        [accountTotalValueList]="accountTotalValueList" 
+        [portfolioTotalValueList]="portfolioTotalValueList">
+    </app-bar-chart-visual>
 </ng-container>

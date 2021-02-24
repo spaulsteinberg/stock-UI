@@ -45,4 +45,6 @@ export class UtilsService {
     this.router.navigate([routeTo.route], {relativeTo: route})
   }
 
+  public numberToCurrency = ():Intl.NumberFormat => new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'});
+  
 }

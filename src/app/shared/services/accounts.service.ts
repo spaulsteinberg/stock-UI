@@ -150,7 +150,15 @@ export class AccountsService {
     console.log(encoded)
     const params = new HttpParams().set('name', encoded);
     const url = `${this.URLS.ACCOUNT}?${params}`;
-    return this.http.delete<any>(url, {'headers': this.headers});
+    return this.http.delete<any>(url, {'headers': this.headers})
+      .pipe(
+        tap(res => {
+          if (res.status === 200){
+            let ind = this.accountDataSubject.value.findIndex(_ => _.name === nameToDelete);
+            this.accountDataSubject.value.splice(ind, 1);
+          }
+        })
+        );
   }
   
 

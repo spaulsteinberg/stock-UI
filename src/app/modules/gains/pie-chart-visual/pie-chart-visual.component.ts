@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import * as d3 from 'd3';
 import { Datum, IDatum } from 'src/app/shared/interfaces/IDatum';
 import { PortfolioStatistics } from 'src/app/shared/models/PortfolioStatisticsModel';
+import { UtilsService } from 'src/app/shared/services/utilities/utils.service';
 @Component({
   selector: 'app-pie-chart-visual',
   templateUrl: './pie-chart-visual.component.html',
@@ -12,7 +13,7 @@ export class PieChartVisualComponent implements OnInit {
   @Input('accountTotalValueList') accountValues;
   @Input('portfolioTotalValueList') portfolioValues;
   @Input('portfolioStatisticsWrapper') portfolioStatisticsWrapper:PortfolioStatistics;
-  constructor() { }
+  constructor(private utils: UtilsService) { }
 
   formatter:Intl.NumberFormat;
   WIDTH:number = Math.floor(window.screen.width * .45);
@@ -21,14 +22,9 @@ export class PieChartVisualComponent implements OnInit {
   RADIUS:number = Math.min(this.WIDTH, this.HEIGHT) / 2 - this.MARGIN;
   FLAGS = {ACCOUNT: 1, PORTFOLIO: 2};
   ngOnInit(): void {
-    console.log("pie chart accountTotalValue:", this.accountValues);
-    console.log(this.portfolioValues);
-    console.log(this.portfolioStatisticsWrapper)
-    this.formatter = this.numberToCurrency();
+    this.formatter = this.utils.numberToCurrency();
   }
-
-  private numberToCurrency = ():Intl.NumberFormat => new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'});
-  // much of this code taken from d3.js site examples and refactored/modified
+  // segments of this code derived from d3.js site examples and modified to needs
   private createAccountsSvg = (flag:number) => {
     let areaSelection = "";
     let data:Datum[] = new Array<Datum>();
@@ -48,8 +44,8 @@ export class PieChartVisualComponent implements OnInit {
         element[0] = `${element[0]} (${((element[1] / this.portfolioStatisticsWrapper.totalPortfolioValue) * 100).toFixed(2)}%)`;
         data.push(new Datum(element))
       })
+      data = data.length < 5 ? data : data.slice(0, 5);
     }
-    data = data.length < 5 ? data : data.slice(0, 5);
     let svg = d3.select(areaSelection)
       .append("svg")
         .attr("width", this.WIDTH)
@@ -61,24 +57,21 @@ export class PieChartVisualComponent implements OnInit {
       .domain(data.map(_ => _.k))
       .range(d3.schemeDark2);
 
-    // Compute the position of each group on the pie:
     let pie = d3.pie<IDatum>()
-      .sort(null) // Do not sort group by size
+      .sort(null)
       .value(d => d.amount)
 
     let data_ready = pie(data)
 
-    // The arc generator
     let arc = d3.arc<IDatum>()
-      .innerRadius(this.RADIUS * 0.5)         // This is the size of the donut hole
+      .innerRadius(this.RADIUS * 0.5)
       .outerRadius(this.RADIUS * 0.8)
 
-    // Another arc that won't be drawn. Just for labels positioning
+    // Labels positioning
     let outerArc = d3.arc<IDatum>()
       .innerRadius(this.RADIUS * 0.9)
       .outerRadius(this.RADIUS * 0.9)
 
-    // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
     svg
       .selectAll('allSlices')
       .data(data_ready)
@@ -96,7 +89,7 @@ export class PieChartVisualComponent implements OnInit {
       .attr("text-anchor", "middle")  
       .attr("font-size", "20px")
       .attr("font-weight", "bold")
-      .text(flag === 1 ? "Portfolio Accounts" : "My Top 5");
+      .text(flag === 1 ? "Portfolio Accounts" : "My Top 5 Positions");
 
     svg
       .selectAll('allPolylines')
@@ -153,6 +146,7 @@ export class PieChartVisualComponent implements OnInit {
   ngAfterViewInit(){
     this.createAccountsSvg(this.FLAGS.ACCOUNT);
     this.createAccountsSvg(this.FLAGS.PORTFOLIO);
+    console.log("after view")
   }
 
 }

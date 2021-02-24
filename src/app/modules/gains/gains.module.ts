@@ -14,6 +14,7 @@ import { PositionDialogComponent } from './position-dialog/position-dialog.compo
 import { InteractiveComponent } from './interactive/interactive.component';
 import { MenuDialogContainerComponent } from './menu-dialog-container/menu-dialog-container.component';
 import { PieChartVisualComponent } from './pie-chart-visual/pie-chart-visual.component';
+import { BarChartVisualComponent } from './bar-chart-visual/bar-chart-visual.component';
 
 
 
@@ -30,7 +31,8 @@ import { PieChartVisualComponent } from './pie-chart-visual/pie-chart-visual.com
     PositionDialogComponent,
     InteractiveComponent,
     MenuDialogContainerComponent,
-    PieChartVisualComponent
+    PieChartVisualComponent,
+    BarChartVisualComponent
   ],
   imports: [
     SharedModule,
