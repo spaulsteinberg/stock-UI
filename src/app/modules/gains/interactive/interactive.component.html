@@ -32,14 +32,6 @@
                 Something went wrong. Please reload and try again.
             </div>
         </div>
-        <div class="col col-md-3 offset-md-1">
-            <ol>
-                Top Accounts:
-                <li *ngFor="let account of accountTotalValueList">
-                    {{account[0]}} -> {{account[1] | currency}}
-                </li>
-            </ol>
-        </div>
     </div>
     <app-pie-chart-visual 
         *ngIf="accountTotalValueList !== undefined && portfolioTotalValueList !== undefined"
@@ -50,6 +42,7 @@
     <app-bar-chart-visual
         *ngIf="accountTotalValueList !== undefined && portfolioTotalValueList !== undefined"
         [accountTotalValueList]="accountTotalValueList" 
-        [portfolioTotalValueList]="portfolioTotalValueList">
+        [portfolioTotalValueList]="portfolioTotalValueList"
+        [portfolioStatisticsWrapper]="portfolioStatisticsWrapper">
     </app-bar-chart-visual>
 </ng-container>

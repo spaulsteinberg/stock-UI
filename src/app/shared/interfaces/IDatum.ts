@@ -7,8 +7,8 @@ export class Datum implements IDatum {
     k:string;
     amount:number;
 
-    constructor(inputTupleArrayElement:any[]){
-        this.k = inputTupleArrayElement[0];
+    constructor(inputTupleArrayElement:any[], altKey:string | null = null){
+        this.k = altKey === null ? inputTupleArrayElement[0] : altKey;
         this.amount = inputTupleArrayElement[1];
     }
 }

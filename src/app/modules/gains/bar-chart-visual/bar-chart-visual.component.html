@@ -3,3 +3,8 @@
         <div id="chart-area"></div>
     </div>
 </div>
+<div id="chart-area-2"></div>
+<mat-button-toggle-group [(ngModel)]="buttonGroupValue" appearance="standard" (ngModelChange)="onSelectionChange($event)">
+    <mat-button-toggle value="Accounts">Accounts</mat-button-toggle>
+    <mat-button-toggle value="Positions">Positions</mat-button-toggle>
+</mat-button-toggle-group>

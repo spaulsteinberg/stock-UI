@@ -16,7 +16,7 @@ export class PieChartVisualComponent implements OnInit {
   constructor(private utils: UtilsService) { }
 
   formatter:Intl.NumberFormat;
-  WIDTH:number = Math.floor(window.screen.width * .45);
+  WIDTH:number = Math.floor(window.screen.width * .6);
   HEIGHT:number = Math.floor(window.screen.height * .4);
   MARGIN:number = Math.floor(window.screen.height * .04);
   RADIUS:number = Math.min(this.WIDTH, this.HEIGHT) / 2 - this.MARGIN;
@@ -39,11 +39,11 @@ export class PieChartVisualComponent implements OnInit {
     //individual stocks
     else if (flag === 2){
       areaSelection = "#chart-area-2";
-      let chartArr = this.portfolioValues;
-      chartArr.forEach(element => {
-        element[0] = `${element[0]} (${((element[1] / this.portfolioStatisticsWrapper.totalPortfolioValue) * 100).toFixed(2)}%)`;
-        data.push(new Datum(element))
-      })
+      let percentVal = "";
+      for (let element of this.portfolioValues){
+        percentVal = `${element[0]} (${((element[1] / this.portfolioStatisticsWrapper.totalPortfolioValue) * 100).toFixed(2)}%)`;
+        data.push(new Datum(element, percentVal))
+      }
       data = data.length < 5 ? data : data.slice(0, 5);
     }
     let svg = d3.select(areaSelection)
@@ -51,7 +51,7 @@ export class PieChartVisualComponent implements OnInit {
         .attr("width", this.WIDTH)
         .attr("height", this.HEIGHT)
       .append("g")
-        .attr("transform", "translate(" + this.WIDTH / 2 + "," + this.HEIGHT / 2 + ")");
+        .attr("transform", "translate(" + this.WIDTH / 3 + "," + this.HEIGHT / 2 + ")");
 
     let color = d3.scaleOrdinal()
       .domain(data.map(_ => _.k))
@@ -126,8 +126,8 @@ export class PieChartVisualComponent implements OnInit {
       .data(data.map(_ => _.k))
       .enter()
         .append("circle")
-        .attr("cx", 180)
-        .attr("cy", (d, i) => flag === 1 ? -150 + 25*i : -50 + 25*i)
+        .attr("cx", 280)
+        .attr("cy", (d, i) => -150 + 25*i)
         .attr("r", 7)
         .attr('fill', (d:any):any => (color(d)))
 
@@ -135,8 +135,8 @@ export class PieChartVisualComponent implements OnInit {
     .data(data.map(_ => _.k))
     .enter()
     .append("text")
-      .attr("x", 200)
-      .attr("y", (d, i) => flag === 1 ? -150 + 25*i : -50 + 25*i)
+      .attr("x", 300)
+      .attr("y", (d, i) => -150 + 25*i)
       .style("fill", (d:any):any => color(d))
       .text(d => d)
       .attr("text-anchor", "left")

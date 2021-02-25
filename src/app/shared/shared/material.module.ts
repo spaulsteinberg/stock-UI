@@ -19,6 +19,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import {MatTableModule} from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import {MatMenuModule} from '@angular/material/menu';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 
 export const modules = [
@@ -42,7 +43,8 @@ export const modules = [
     MatNativeDateModule,
     MatTableModule,
     MatPaginatorModule,
-    MatMenuModule
+    MatMenuModule,
+    MatButtonToggleModule
   ];
   @NgModule({
     declarations: [],
