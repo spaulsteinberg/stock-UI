@@ -18,14 +18,18 @@
     You need to create a profile. Redirecting to accounts page...
 </ng-container>
 <!--portfolio value will be 0 while we are waiting for the getAccounts to update accountData$-->
-<div *ngIf="loading || portfolioStatisticsWrapper?.totalPortfolioValue === 0">
-    <mat-progress-spinner mode="indeterminate" color="warn"></mat-progress-spinner>
+<div class="row" *ngIf="loading || portfolioStatisticsWrapper?.totalPortfolioValue === 0" class="text-right">
+    <div class="col col-md-4 offset-md-5">
+        <div style="overflow: hidden;">
+            <mat-progress-spinner mode="indeterminate" color="warn"></mat-progress-spinner>
+        </div>
+    </div>
 </div>
 <ng-container *ngIf="!errorOnRetrieval && !loading && portfolioStatisticsWrapper !== undefined && portfolioStatisticsWrapper.totalPortfolioValue !== 0">
     <div class="row">
-        <div class="col col-md-3 offset-md-1">
-            <div class="text-left">
-                <p>Total Value: {{portfolioStatisticsWrapper.totalPortfolioValue | currency}}</p>
+        <div class="col col-md-6 offset-md-3">
+            <div class="text-center mat-display-1 title-stats-text">
+                <p>Profile Portfolio Value: {{portfolioStatisticsWrapper.totalPortfolioValue | currency}}</p>
                 <p>Total Accounts in Portfolio: {{portfolioStatisticsWrapper.totalAccountsInPortfolio}}</p>
             </div>
             <div class="text-danger" *ngIf="errorOnRetrieval">

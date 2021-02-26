@@ -1,6 +1,8 @@
 .jumbotron {
     padding-bottom: 1rem;
 }
-svg {
-  border: 1px solid black;
+.title-stats-text {
+  font-family: 'Roboto', sans-serif;
+  font-weight: lighter;
+  margin-bottom: 3%;
 }

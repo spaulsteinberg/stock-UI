@@ -1,10 +1,9 @@
 <div class="row">
-    <div class="col col-md-8 offset-md-2 text-center" style="padding-bottom: 2%;">
+    <div class="col col-md-8 offset-md-2 text-center" style="padding-bottom: 2%;">   
+        <mat-button-toggle-group [(ngModel)]="buttonGroupValue" appearance="standard" (ngModelChange)="onSelectionChangeUpdate($event)">
+            <mat-button-toggle [value]="FLAGS.ACCOUNT">Accounts</mat-button-toggle>
+            <mat-button-toggle [value]="FLAGS.PORTFOLIO">Positions</mat-button-toggle>
+        </mat-button-toggle-group>
         <div id="chart-area"></div>
     </div>
 </div>
-<div id="chart-area-2"></div>
-<mat-button-toggle-group [(ngModel)]="buttonGroupValue" appearance="standard" (ngModelChange)="onSelectionChange($event)">
-    <mat-button-toggle value="Accounts">Accounts</mat-button-toggle>
-    <mat-button-toggle value="Positions">Positions</mat-button-toggle>
-</mat-button-toggle-group>
