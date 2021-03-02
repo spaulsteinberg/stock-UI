@@ -20,6 +20,7 @@ import {MatTableModule} from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatStepperModule} from '@angular/material/stepper';
 
 
 export const modules = [
@@ -44,7 +45,8 @@ export const modules = [
     MatTableModule,
     MatPaginatorModule,
     MatMenuModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatStepperModule
   ];
   @NgModule({
     declarations: [],

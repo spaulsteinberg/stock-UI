@@ -33,7 +33,7 @@
             <mat-progress-spinner [mode]="mode" [color]="color"></mat-progress-spinner>
         </div>
         <div class="text-center" *ngIf="errorOccurred">
-            <small class="text-danger">Incorrect login credentials. Please try again.</small>
+            <small class="text-danger">{{errorMessage}}</small>
         </div>
     </div>
 </div>

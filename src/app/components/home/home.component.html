@@ -1,20 +1,87 @@
 <div class="jumbotron">
-    <h2 class="display-4 text-center">Stock App</h2>
+    <h2 class="display-4 text-center">StockTrace</h2>
 </div>
-<div class="row" style="height: 1000px">
+<div class="row mat-typography" [ngStyle]="style">
     <div class="col col-md-3 text-center justify-content-center mx-auto">
-       <!-- <div class="card">
-            <div class="card-header">
-                Hello
-            </div>
-            <div class="card-body">
-                description
-            </div>
-            <div class="card-footer">
-                footer
-            </div>
-        </div>-->
-        <h1 class="text-white">Learn</h1>
+        <mat-card>
+            <img [ngStyle]="imgStyle" mat-card-image src="../../../assets/general-images/dash-card.jpeg" alt="dash.jpeg">
+            <mat-card-header>
+                <mat-card-title>Dashboard</mat-card-title>
+                <mat-card-subtitle>Add stocks to your watchlist for real-time price updates</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <p>Compare charts and analysis</p>
+                <p>See the latest trending articles for you companies to watch</p>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div class="col col-md-3 text-center justify-content-center mx-auto">
+        <mat-card>
+            <img [ngStyle]="imgStyle" mat-card-image src="../../../assets/general-images/Google-Calendar-icon.png" alt="google-calendar.jpeg">
+            <mat-card-header>
+                <mat-card-title>Calendar</mat-card-title>
+                <mat-card-subtitle>View Watchlist stock events</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <p>See the latest reported events for your watchlist</p>
+                <p>Add events to watch in calendar</p>
+                <p>Full, up to date calendar</p>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div class="col col-md-3 text-center justify-content-center mx-auto">
+        <mat-card>
+            <img [ngStyle]="imgStyle" mat-card-image src="../../../assets/general-images/some-pic.jpeg" alt="graph.jpeg">
+            <mat-card-header>
+                <mat-card-title>MyGains</mat-card-title>
+                <mat-card-subtitle>Create a profile and explore</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <p>Check a real time table for your watchlist</p>
+                <p>Interact with a table and sort your positions and accounts</p>
+                <p>Interact with your stocks through charts</p>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div class="col col-md-2 offset-md-5 text-center text-white">
+        <p style="padding-left: 1%;">Learn More</p>
+        <button mat-raised-button class="expand-button" (click)="scrollDown()">
+            <mat-icon class="expand-icon" *ngIf="!clicked">expand_more</mat-icon>
+            <mat-icon class="expand-icon" *ngIf="clicked">expand_less</mat-icon>
+        </button>
     </div>
 </div>
-<div class="test" style="height: 1500px"></div>
+<div class="row mat-typography bottom-page text-white" [ngStyle]="style">
+    <div class="col col-md-8 offset-md-2" style="padding-top: 5%;">
+        <h4 class="display-4 text-success" style="font-size: xx-large;">Getting Started...</h4>
+        <mat-horizontal-stepper linear="true" #stepper style="background-color: transparent;">
+            <mat-step label="Register">
+                <div style="padding-left: 32%;">
+                    <img id="register-image" src="../../../assets/home-images/register.PNG" alt="register.png" (click)="nav()">
+                </div>
+            </mat-step>
+            <mat-step label="Add Stocks To Your Watchlist">
+                <div style="padding-left: 25%;">
+                    <img id="watchlist-image" src="../../../assets/home-images/watchlist.PNG" alt="watchlist.png">
+                </div>
+            </mat-step>
+            <mat-step label="Create a Gains Profile">
+                <div style="padding-left: 27%;">
+                    <img id="gains-register-image" src="../../../assets/home-images/gains-create.PNG" alt="gains-register.png">
+                </div>
+            </mat-step>
+            <mat-step label="Customize Your Profile">
+                <div style="padding-left: 27%;">
+                    <img id="gains-image" src="../../../assets/home-images/gains.PNG" alt="gains-table.png">
+                </div>
+            </mat-step>
+        </mat-horizontal-stepper>
+        <ol>
+            <li>Register: Create a valid username and password</li>
+            <li>Add Stocks to Watchlist: Search from all NYSE and NASDAQ companies to build a real-time watchlist</li>
+            <li>Create Gains Profile: Fill out the profile form to create a profil linked to your account</li>
+            <li>Customize Your Profile: Fill in your positions for each of your accounts</li>
+            <li>Lastly, take advantage of all other features there are to offer; such as the Calendar or real-time sandbox table</li>
+        </ol>
+    </div>
+</div>

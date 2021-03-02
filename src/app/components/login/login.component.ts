@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
   reqCompleted:boolean = true;
   mode: ProgressSpinnerMode = "indeterminate";
   color: ThemePalette = "warn";
+  errorMessage:string;
   loginForm = this.fb.group({
     username: ['', [Validators.required]],
     password: ['', [Validators.required]]
@@ -45,7 +46,13 @@ export class LoginComponent implements OnInit {
         this._login.usernameSubject$.next(objSend.username);
         this.router.navigate(['/dash']);
       },
-      error: () => {
+      error: (err) => {
+        console.log(err)
+        if (err.status === 401){
+          this.errorMessage = "Incorrect login credentials. Please try again.";
+        } else {
+          this.errorMessage = "Something went wrong. Please reload the page and try again."
+        }
         this.errorOccurred = true;
         this.reqCompleted = true;
       },

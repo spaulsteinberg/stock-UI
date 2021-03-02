@@ -1,7 +1,5 @@
-import { DepFlags } from '@angular/compiler/src/core';
 import { Component, Input, OnInit } from '@angular/core';
 import * as d3 from 'd3';
-import { scaleBand } from 'd3';
 import { Datum } from 'src/app/shared/interfaces/IDatum';
 import { PortfolioStatistics } from 'src/app/shared/models/PortfolioStatisticsModel';
 import { UtilsService } from 'src/app/shared/services/utilities/utils.service';
@@ -183,9 +181,7 @@ export class BarChartVisualComponent implements OnInit {
 
   // on toggle change, change data
   public onSelectionChangeUpdate = (event) => {
-
     this.enterLabelText(event, event === this.FLAGS.ACCOUNT ? "Value" : "% of Portfolio")
-    
     this.createSvg(event)
   }
 

@@ -59,7 +59,7 @@ export class RegisterUserService {
   }
 
   errorLogin(error: HttpErrorResponse){
-    return throwError(error.message || "Something went wrong logging in. Please try again.");
+    return throwError(error || "Something went wrong logging in. Please try again.");
   }
 
   errorOnGettingLogin(error: HttpErrorResponse){

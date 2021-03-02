@@ -1,7 +1,65 @@
 h1 {
     color: orange;
 }
-.test {
-    background-image: url('../../../assets/general-images/solid-lightblue-back.jpg');
+.bottom-page {
+    background-image: url('../../../assets/general-images/graph.jpg');
     background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#register-image {
+    height: 300px;
+    width: 350px;
+}
+
+#register-image:hover {
+    cursor: pointer;
+}
+
+#gains-image {
+    height: 300px;
+    width: 425px;
+}
+
+#watchlist-image {
+    height: 300px;
+    width: 450px;
+}
+
+#gains-register-image {
+    height: 300px;
+    width: 450px;
+}
+
+.row {
+    margin-bottom: 0;
+}
+
+.mat-card {
+    background: #64b5f6;
+}
+
+.expand-icon {
+    color: red;
+    font-size: 25px;
+}
+
+.expand-icon:hover {
+    cursor: pointer;
+}
+
+.expand-button {
+    background-color: azure;
+    animation: ripple 2s infinite 1s;
+}
+
+/* ripple effect for button */
+@keyframes ripple {
+    0% {
+        box-shadow: 0 0 0 .7rem rgba(255,255,255, 0.2);
+    }
+    100% {
+        box-shadow: 0 0 0 7rem rgba(255,255,255, 0);
+    }
 }

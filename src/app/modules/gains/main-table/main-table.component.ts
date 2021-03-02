@@ -2,7 +2,6 @@ import { ChangeDetectorRef, Component, ElementRef, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router';
 import { timer } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { ICombinationRoute } from 'src/app/shared/interfaces/ICombinationRoute';
 import { ILightWeightQuote } from 'src/app/shared/interfaces/ILightWeightQuote';
 import { IQuote } from 'src/app/shared/interfaces/IQuote';
 import { DashboardService } from 'src/app/shared/services/dashboard.service';
