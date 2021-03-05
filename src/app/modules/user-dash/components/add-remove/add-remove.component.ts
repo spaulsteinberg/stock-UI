@@ -57,7 +57,6 @@ export class AddRemoveComponent implements OnInit {
       return `${fullName} (${symbol})`;
   }
   getItemBoxColor(quote:IQuote){
-   // return {'color': quote.change > 0.00 ? 'green' : quote.change < 0.00 ? 'red' : 'gray', 'float': 'right'}
    return {'color': quote.change > 0.00 ? '#00e600' : quote.change < 0.00 ? 'red' : 'gray'}
   }
 

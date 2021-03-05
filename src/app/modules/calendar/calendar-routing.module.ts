@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router'; // CLI imports router
+import { Routes, RouterModule } from '@angular/router';
 import { CalendarLandingComponent } from './calendar-landing/calendar-landing.component';
 
 const routes: Routes = [

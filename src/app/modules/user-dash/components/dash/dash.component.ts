@@ -22,12 +22,6 @@ export class DashComponent implements OnInit {
   // hydrate the service only init once...or else update the prices on re-visit
   ngOnInit(){
     if (this._stocks.getQuotes() === undefined) this.getUserList();
-    /* this line might just push all the same quotes again...in that case just grab and update price */
-  //  else if (this._stocks.getQuotes.length > 0) this.getBatchQuotesFromStoredPreferences();
-  
-  // init accounts data here
-  // this.account.initData();
-  // this.account.getAccounts();
   }
 
   watchList = [];

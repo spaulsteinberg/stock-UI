@@ -4,12 +4,6 @@ html, body {
     height: 100%;
 }
 html, body{
-    /*background-image: url('assets/general-images/dim-gray-back.jpg');
-    height: 100%;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;*/
-   /* background-color: #424242; */
     background-image: url('assets/general-images/nasdaq-nums.jpg') no-repeat left top, url('assets/general-images/solid-lightblue-back.jpg') no-repeat right bottom;
     background-size: cover;
     background-repeat: no-repeat;

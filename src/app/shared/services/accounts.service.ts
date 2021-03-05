@@ -161,8 +161,6 @@ export class AccountsService {
         );
   }
   
-
-  // TODO: Integrate
   public userHasProfile:boolean = false;
   public hasBeenCheckedForProfile:boolean = false;
   checkForProfile = async ():Promise<boolean> => {

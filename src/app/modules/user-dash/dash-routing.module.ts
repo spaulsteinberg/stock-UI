@@ -13,10 +13,7 @@ const routes: Routes = [
     },
     {
         path: 'dash',
-        component: DashComponent,
-      /*  children: [
-            { path: 'comparelanding', component: MainLandingComponent }
-        ]*/
+        component: DashComponent
     },
     {
         path: 'configstocks',

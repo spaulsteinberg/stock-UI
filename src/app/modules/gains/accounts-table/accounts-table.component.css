@@ -43,7 +43,7 @@ line-height: normal;
 .symbol-text {
     position: relative;
     top: -5px;
-    margin-left: 5px; /* optional */
+    margin-left: 5px;
 }
 .table-col {
     width: 21%;

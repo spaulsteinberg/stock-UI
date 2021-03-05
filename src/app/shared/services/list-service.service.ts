@@ -14,6 +14,8 @@ export class ListServiceService {
 
   private http: HttpClient;
   private _base = "https://cloud.iexapis.com/v1/stock";
+
+  // This token is no longer valid and has been regenerated.
   private _token = "pk_37940397ebe547018bb0721e95c37432";
   private _sandboxToken = "Tpk_fd6c779103b3400b96861977097e17de";
   private _sandboxTokenAlt = "Tpk_5abe84814d2b432f84281d9e38b65317";
@@ -25,7 +27,6 @@ export class ListServiceService {
   constructor(private handler: HttpBackend){
     this.http = new HttpClient(handler);
   }
-  //https://sandbox.iexapis.com/stable/stock/${symbol}/quote?token=Tpk_fd6c779103b3400b96861977097e17de
   getUserListQuotes(symbol){
     const url = `${this._base}/${symbol}/quote?token=${this._token}`;
     return this.http.get<IQuote>(url).pipe(catchError(this.errorOnQuotes));
@@ -45,8 +46,6 @@ export class ListServiceService {
   }
 
   getOneYearData(symbol:string):Observable<IHistoricalQuote[]>{
-   //const url = `${this._base}/${symbol}/batch?types=quote,chart&range=1m&token=${this._token}`;
-   //https://sandbox.iexapis.com/stable/stock/AAPL/chart/1m?token=Tpk_fd6c779103b3400b96861977097e17de
     const url = `https://sandbox.iexapis.com/stable/stock/${symbol}/chart/1m?token=${this._sandboxToken}`;
     return this.http.get<IHistoricalQuote[]>(url);
   }
