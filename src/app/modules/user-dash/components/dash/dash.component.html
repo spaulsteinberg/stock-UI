@@ -10,7 +10,5 @@
     <h2 class="display-2 text-center">Dashboard</h2>
 </div>
 <hr style="background-color: white; width: 70%;" class="text-center">
-<div class="text-danger" *ngIf="isError && finishedLoadingFlag; else success">{{errorOnList}}</div>
-<ng-template #success>
-    <app-dash-navigation></app-dash-navigation>
-</ng-template>
+<div class="text-danger" *ngIf="isError && finishedLoadingFlag">{{errorOnList}}</div>
+<app-dash-navigation></app-dash-navigation>
