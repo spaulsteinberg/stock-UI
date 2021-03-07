@@ -6,4 +6,6 @@ Example real-time stock website featuring a watchlist, calendar, and sample acco
 
 Create an account to get started.  
 
-Uses Angular Material, Full-Calendar, D3.js, Service Store Pattern
+Uses Angular Material, Full-Calendar, D3.js, Service Store Pattern.  
+
+[API link](https://github.com/spaulsteinberg/stock-api)
